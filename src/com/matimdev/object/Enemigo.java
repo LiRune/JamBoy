@@ -17,13 +17,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.matimdev.scene.GameScene;
 
 public class Enemigo extends AnimatedSprite {
-
-
 	GameScene aGameScene;
+	
 	public Enemigo(float pX, float pY,
 			ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager vertexBufferObjectManager) {
 		super(pX, pY, pTiledTextureRegion, vertexBufferObjectManager);
-		}
-	
+	}
 }

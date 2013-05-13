@@ -757,7 +757,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						x1.getBody().setType(BodyType.DynamicBody);
 					}
 
-					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemy")) {
+					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) {
 						health--;
 						if(heart3.isVisible()) {
 							heart3.setVisible(false);
