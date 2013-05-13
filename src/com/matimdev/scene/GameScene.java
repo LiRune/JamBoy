@@ -833,11 +833,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public void disparar(Engine mEngine,float xCoord, float yCoord){
 
 		float xComp;
+		
 		//Aqui se define la potencia de disparo
 		final FixtureDef bulletFixtureDef=PhysicsFactory.createFixtureDef(1, 0.5f,0.5f);
 		//hay que cambiar resourcesManager.platform2_region por otra imagen para la bala
 		//En que coordenadas se creara el sprite y que imagen tendra 
-		this.bala=new Sprite(xCoord,yCoord+10,this.resourcesManager.bala_region, engine.getVertexBufferObjectManager());
+		this.bala=new Sprite(xCoord+8,yCoord,this.resourcesManager.bala_region, engine.getVertexBufferObjectManager());
 		//Se crean las fisicas de la bala
 		this.bala_cuerpo=PhysicsFactory.createBoxBody(this.physicsWorld, this.bala,BodyType.DynamicBody, bulletFixtureDef);
 		//Se le añade el cuerpo ^-- cuerpo
@@ -848,6 +849,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		//Si el jugador no esta girado dispara hacia delante
 		if(!player.isFlippedHorizontal()){
 			xComp=xCoord+5;
+			
 		}
 		else{
 			//Si no, la bala obtiene velocidad negativa
@@ -856,7 +858,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 			bala.setFlippedHorizontal(true);
 		}
 		//Esto es la linea vectorial que sigue la bala, en este caso sale a altura 0 y a 10 pixeles delante del jugador
-		this.bala_cuerpo.setLinearVelocity(new Vector2(1*xComp,0));
+		this.bala_cuerpo.setLinearVelocity(new Vector2(xComp,0));
 		bala_cuerpo.setUserData("bala");
 		//Agrego la bala a la escena:
 		engine.getScene().attachChild(bala);
