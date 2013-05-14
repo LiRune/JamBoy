@@ -50,6 +50,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.matimdev.GameActivity;
 import com.matimdev.base.BaseScene;
 import com.matimdev.extras.LevelCompleteWindow;
 import com.matimdev.extras.LevelCompleteWindow.StarsCount;
@@ -783,6 +784,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						//enemigo.setVisible(false);
 						enemigo.setFlippedVertical(true);
 						enemigo.setFlippedHorizontal(true);
+						
+						GameActivity.enemigo_muerte.play();
 					
 						bala_cuerpo.setActive(false);
 						bala.setVisible(false);
@@ -855,6 +858,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		bala_cuerpo.setUserData("bala");
 		//Agrego la bala a la escena:
 		engine.getScene().attachChild(bala);
+		
+		GameActivity.disparar.play();
 
 	}
 }

@@ -2,6 +2,8 @@ package com.matimdev;
 
 import java.io.IOException;
 
+import org.andengine.audio.sound.Sound;
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
 import org.andengine.engine.camera.BoundCamera;
@@ -26,7 +28,7 @@ import com.matimdev.manager.SceneManager;
 public class GameActivity extends BaseGameActivity
 {
 	private BoundCamera camera;
-	
+	public static Sound salto,disparar,enemigo_muerte;
 
 	@Override
 	public Engine onCreateEngine(EngineOptions pEngineOptions) 
@@ -64,6 +66,22 @@ public class GameActivity extends BaseGameActivity
 		{
 			ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
 			pOnCreateResourcesCallback.onCreateResourcesFinished();
+			
+		    salto = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),
+
+                    "sfx/saltar.wav");    
+          
+
+           disparar = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),
+
+                    "sfx/disparo.mp3");    
+           
+
+           enemigo_muerte = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),
+
+                    "sfx/enemigo_muerte.mp3");
+
+
 		}
 
 		public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException

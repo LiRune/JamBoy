@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.matimdev.GameActivity;
 import com.matimdev.base.BaseScene;
 import com.matimdev.manager.ResourcesManager;
 import com.matimdev.manager.SceneManager;
@@ -159,6 +160,7 @@ public abstract class Player extends AnimatedSprite
 	
 	public void jump()
 	{
+		GameActivity.salto.play();
 		if (footContacts < 1) 
 		{
 			return; 
