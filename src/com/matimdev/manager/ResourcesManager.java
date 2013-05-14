@@ -73,6 +73,7 @@ public class ResourcesManager
 	public ITextureRegion reloj_region;
 	
 	public ITextureRegion fondo_region;
+	public ITextureRegion fondo2_region;
 	
 	
 	public ITiledTextureRegion player_region;
@@ -161,8 +162,9 @@ public class ResourcesManager
 	private void loadGameGraphics()
 	{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-        gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
-        gameTextureAtlas.addEmptyTextureAtlasSource(0, 0, 1024, 1024);
+		//el 1500, 1500 es el espacio del atlas
+        gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1500, 1500, TextureOptions.BILINEAR);
+        gameTextureAtlas.addEmptyTextureAtlasSource(0, 0, 1500, 1500);
        	platform1_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform1.png");
        	platform2_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform2.png");
        	platform3_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform3.png");
@@ -174,7 +176,10 @@ public class ResourcesManager
         llave_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "key.png");
         reloj_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "clock.png");
         
+        fondo2_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "fondo2.png");
+        
         fondo_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "fondo.png");
+       
         
         izquierda_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "izq.png");
         derecha_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "der.png");
@@ -200,7 +205,7 @@ public class ResourcesManager
 	
 	private void loadGameFonts()
 	{
-		
+		 
 	}
 	
 	private void loadGameAudio()

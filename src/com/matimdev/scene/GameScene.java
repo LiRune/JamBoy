@@ -139,7 +139,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	@Override
 	public void createScene()
 	{
-		createBackground();
+		createBackground(MainMenuScene.getIdNivel());
 		createHUD();
 		createPhysics();
 		loadLevel(MainMenuScene.getIdNivel());
@@ -625,20 +625,31 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		camera.setHUD(gameHUD);
 	}
 
-	private void createBackground()
+	private void createBackground(int level)
 	{
 		//setBackground(new Background(Color.GREEN));
-		/*Sprite mBackground = new Sprite(0, 0, getResourcesManager().fondo_region, vbom);
+		
+		/*
+		Sprite mBackground = new Sprite(0, 0, getResourcesManager().fondo_region, vbom);
 
 		//Attach the sprite to the scene. I use getFirstChild() so that I can ensure that the background sprite is the "bottom" child
 		this.attachChild(mBackground);*/
-
-
-
+		
+		
 		ParallaxBackground background = new ParallaxBackground(0, 0, 0);
-		background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.fondo_region, vbom)));
-
+		
+		if(level==1){
+			background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.fondo_region, vbom)));
+		}else{
+			background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.fondo2_region, vbom)));
+		}
+		
 		this.setBackground(background);
+		
+		
+		
+
+		
 
 	}
 
@@ -674,7 +685,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private void pantallaGameOver() {
 		displayGameOverText();
-		player.setVisible(false);   					 
+		player.setVisible(false);
+		player.getBody().setActive(false);
 		left.setVisible(false);
 		right.setVisible(false);
 		jump.setVisible(false);
