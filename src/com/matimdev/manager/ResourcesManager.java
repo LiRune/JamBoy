@@ -161,7 +161,7 @@ public class ResourcesManager
 	{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
         gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
-        
+        gameTextureAtlas.addEmptyTextureAtlasSource(0, 0, 1024, 1024);
        	platform1_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform1.png");
        	platform2_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform2.png");
        	platform3_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform3.png");
@@ -187,11 +187,13 @@ public class ResourcesManager
     	{
 			this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
 			this.gameTextureAtlas.load();
+			
 		} 
     	catch (final TextureAtlasBuilderException e)
     	{
 			Debug.e(e);
 		}
+    	
 	}
 	
 	private void loadGameFonts()
