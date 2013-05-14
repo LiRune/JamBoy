@@ -826,12 +826,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public void disparar(Engine mEngine,float xCoord, float yCoord){
 
 		float xComp;
-		float yComp;
+		
 		//Aqui se define la potencia de disparo
 		final FixtureDef bulletFixtureDef=PhysicsFactory.createFixtureDef(1, 0.5f,0.5f);
 		//hay que cambiar resourcesManager.platform2_region por otra imagen para la bala
 		//En que coordenadas se creara el sprite y que imagen tendra 
-		this.bala=new Sprite(xCoord,yCoord,this.resourcesManager.bala_region, engine.getVertexBufferObjectManager());
+		this.bala=new Sprite(xCoord+8,yCoord,this.resourcesManager.bala_region, engine.getVertexBufferObjectManager());
 		//Se crean las fisicas de la bala
 		this.bala_cuerpo=PhysicsFactory.createBoxBody(this.physicsWorld, this.bala,BodyType.DynamicBody, bulletFixtureDef);
 		//Se le añade el cuerpo ^-- cuerpo
