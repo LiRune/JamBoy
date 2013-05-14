@@ -96,11 +96,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_LEVEL_COMPLETE = "levelComplete";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ENEMY = "enemy";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_KEY = "key";
-	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_IZQ = "izq";
-	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_DER = "der";
-	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_SALT = "salt";
-	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PAUSA = "pausa";
-	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_REANUDAR = "reanudar";
+
 
 	private Player player;
 	private Enemigo enemigo;
@@ -130,6 +126,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private int key=0;
 
 	private DataBase db;
+	private Sprite reloj;
 
 	public PhysicsWorld getPhysicsWorld() {
 		return physicsWorld;
@@ -426,14 +423,17 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	{
 		gameHUD = new HUD();
 
-		scoreText = new Text(20, 420, getResourcesManager().font, "Puntos: 0123456789", new TextOptions(HorizontalAlign.LEFT), getVbom());
-		scoreText.setAnchorCenter(0, 0);	
-		scoreText.setText("Puntos: 0");
+		scoreText = new Text(70, 440, getResourcesManager().font, "0123456789", new TextOptions(HorizontalAlign.LEFT), getVbom());
+		//scoreText.setAnchorCenter(0, 0);	
+		scoreText.setText("0");
 		gameHUD.attachChild(scoreText);
 
-		timeText = new Text(20, 370, getResourcesManager().font, "Tiempo: 0123456789", new TextOptions(HorizontalAlign.LEFT), getVbom());
-		timeText.setAnchorCenter(0,  0);
-		timeText.setText("Tiempo: 20");
+		timeText = new Text(390, 440, getResourcesManager().font, "0123456789", new TextOptions(HorizontalAlign.CENTER), getVbom());
+		//timeText.setAnchorCenter(0,  0);
+		timeText.setText("20");
+		
+		reloj = new Sprite(330, 450, getResourcesManager().reloj_region , getVbom());
+		gameHUD.attachChild(reloj);
 		gameHUD.attachChild(timeText);
 
 		setTouchAreaBindingOnActionDownEnabled(true);
@@ -645,7 +645,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private void addToScore(int i)
 	{
 		score += i;
-		scoreText.setText("Puntos: " + score);
+		scoreText.setText("" + score);
 	}
 
 	private void createPhysics()
@@ -663,7 +663,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 			{
 				if(tiempo > 0 && !PAUSED) {
 					tiempo--;
-					timeText.setText("Tiempo: " + tiempo);
+					timeText.setText("" + tiempo);
 				}
 				else if(tiempo <= 0){
 					pantallaGameOver();

@@ -70,6 +70,7 @@ public class ResourcesManager
 	public ITextureRegion saltar_region;
 	public ITextureRegion pausa_region;
 	public ITextureRegion reanudar_region;
+	public ITextureRegion reloj_region;
 	
 	public ITextureRegion fondo_region;
 	
@@ -171,6 +172,7 @@ public class ResourcesManager
         bala_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "bala25.png");
         enemy_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "player.png", 3, 1);
         llave_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "key.png");
+        reloj_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "clock.png");
         
         fondo_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "fondo.png");
         
