@@ -310,6 +310,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							if (!gameOverDisplayed)
 							{
 								pantallaGameOver();
+								GameActivity.grito.play();
 							}
 						}
 					};
@@ -779,7 +780,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						}
 
 						if(health <= 0) {
-							pantallaGameOver();
+							player.onDie();						
 						}
 					}
 
@@ -792,7 +793,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						enemigo.setFlippedVertical(true);
 						enemigo.setFlippedHorizontal(true);
 						
-						GameActivity.enemigo_muerte.play();
+						
 					
 						bala_cuerpo.setActive(false);
 						bala.setVisible(false);
@@ -841,7 +842,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		final FixtureDef bulletFixtureDef=PhysicsFactory.createFixtureDef(1, 0.5f,0.5f);
 		//hay que cambiar resourcesManager.platform2_region por otra imagen para la bala
 		//En que coordenadas se creara el sprite y que imagen tendra 
-		this.bala=new Sprite(xCoord+8,yCoord,this.resourcesManager.bala_region, engine.getVertexBufferObjectManager());
+		this.bala=new Sprite(xCoord,yCoord+10,this.resourcesManager.bala_region, engine.getVertexBufferObjectManager());
 		//Se crean las fisicas de la bala
 		this.bala_cuerpo=PhysicsFactory.createBoxBody(this.physicsWorld, this.bala,BodyType.DynamicBody, bulletFixtureDef);
 		//Se le añade el cuerpo ^-- cuerpo
