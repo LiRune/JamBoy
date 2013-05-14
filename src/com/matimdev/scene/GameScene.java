@@ -39,6 +39,8 @@ import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
 import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.xml.sax.Attributes;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.badlogic.gdx.math.Vector2;
@@ -52,6 +54,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.matimdev.GameActivity;
 import com.matimdev.base.BaseScene;
+import com.matimdev.database.DataBase;
 import com.matimdev.extras.LevelCompleteWindow;
 import com.matimdev.extras.LevelCompleteWindow.StarsCount;
 import com.matimdev.manager.SceneManager;
@@ -122,12 +125,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	boolean PAUSED = false;
 
-
 	private TimerHandler temporizador;
 
 	private int key=0;
 
-
+	private DataBase db;
 
 	public PhysicsWorld getPhysicsWorld() {
 		return physicsWorld;
@@ -202,7 +204,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		}
 	}
 
-	private void loadLevel(int levelID)
+	private void loadLevel(final int levelID)
 	{
 		final SimpleLevelLoader levelLoader = new SimpleLevelLoader(getVbom());
 
@@ -359,6 +361,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							{
 								levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
 								pantallaLevelComplete();
+								
+								/*DataBase myDB = new DataBase(activity);
+								SQLiteDatabase db = myDB.getWritableDatabase();
+								db.execSQL("INSERT INTO Niveles VALUES(" + levelID + ", " + "'false', " + "'true', " + score + ")");
+								db.close();*/
 
 								if (getResourcesManager().music != null)
 								{
