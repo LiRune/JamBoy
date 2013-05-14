@@ -687,7 +687,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		heart1.setVisible(false);
 		heart2.setVisible(false);
 		heart3.setVisible(false);
-		player.setVisible(false);   					 
+		player.setVisible(false); 
+		player.getBody().setActive(false);
 		left.setVisible(false);
 		right.setVisible(false);
 

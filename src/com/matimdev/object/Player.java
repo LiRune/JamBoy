@@ -50,10 +50,27 @@ public abstract class Player extends AnimatedSprite
 		camera.setChaseEntity(this);
 	}
 	
+	
+	
+	
 	// ---------------------------------------------
 	// CLASS LOGIC
 	// ---------------------------------------------
 	
+	public Body getBody() {
+		return body;
+	}
+
+
+
+
+	public void setBody(Body body) {
+		this.body = body;
+	}
+
+
+
+
 	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
 	{		
 		body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
