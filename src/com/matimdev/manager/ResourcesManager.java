@@ -71,6 +71,7 @@ public class ResourcesManager
 	public ITextureRegion pausa_region;
 	public ITextureRegion reanudar_region;
 	public ITextureRegion reloj_region;
+	public ITiledTextureRegion explosion_region;
 	
 	public ITextureRegion fondo_region;
 	public ITextureRegion fondo2_region;
@@ -163,8 +164,8 @@ public class ResourcesManager
 	{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 		//el 1500, 1500 es el espacio del atlas
-        gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2000, 2000, TextureOptions.BILINEAR);
-        gameTextureAtlas.addEmptyTextureAtlasSource(0, 0, 2000, 2000);
+        gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.BILINEAR);
+        gameTextureAtlas.addEmptyTextureAtlasSource(0, 0, 2048, 2048);
        	platform1_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform1.png");
        	platform2_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform2.png");
        	platform3_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform3.png");
@@ -175,6 +176,7 @@ public class ResourcesManager
         enemy_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "player.png", 4, 1);
         llave_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "key.png");
         reloj_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "clock.png");
+        explosion_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "explosion.png", 3, 1);
         
         fondo2_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "fondo2.png");
         

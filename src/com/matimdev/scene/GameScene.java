@@ -18,6 +18,7 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.sprite.AnimatedSprite;
+import org.andengine.entity.sprite.AnimatedSprite.IAnimationListener;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
 import org.andengine.entity.sprite.Sprite;
@@ -79,7 +80,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private Sprite heart3;
 	private Sprite bala;
 	private Body bala_cuerpo,enemigo_cuerpo;
-	private PhysicsWorld physicsWorld;
+	private PhysicsWorld physicsWorld, fisica;
 	private LevelCompleteWindow levelCompleteWindow;
 
 	private boolean moverPausa=true;
@@ -320,12 +321,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					};
 					levelObject = player;
 				}
-				
+
 				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ENEMY))
 				{
 					enemigo =new Enemigo(x,y, resourcesManager.enemy_region, vbom);
 					enemigo_cuerpo = PhysicsFactory.createBoxBody(physicsWorld,enemigo, BodyType.KinematicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
-					enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
+					//enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
 					enemigo_cuerpo.setUserData("enemigo");
 					final float maxMovementX = 200;
 					physicsWorld.registerPhysicsConnector(new PhysicsConnector(enemigo, enemigo_cuerpo, true, false)
@@ -334,23 +335,24 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						public void onUpdate(float pSecondsElapsed)
 						{
 							super.onUpdate(pSecondsElapsed);
-
-							if (enemigo.getX() <= x - maxMovementX)
+							if (player.getX() - enemigo.getX() > 100)
 							{
-												
-								enemigo.animate(100);
-								enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
-								enemigo.setFlippedHorizontal(false);
+								addToScore(1);
+								if (enemigo.getX() <= x - maxMovementX)
+								{
+									addToScore(1);
+									enemigo.animate(100);
+									enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
+									enemigo.setFlippedHorizontal(false);
+								}
+								if (enemigo.getX() >= x + maxMovementX)
+								{
+									addToScore(1);
+									enemigo.animate(100);
+									enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
+									enemigo.setFlippedHorizontal(true);
+								}
 							}
-							if (enemigo.getX() >= x + maxMovementX)
-							{
-														
-								enemigo.animate(100);
-								enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
-								enemigo.setFlippedHorizontal(true);
-							}
-							
-
 						}
 					});
 					levelObject= enemigo;	
@@ -370,27 +372,27 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							{
 								levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
 								pantallaLevelComplete();
-								
-								DataBase myDB = new DataBase(activity);
+
+								/*DataBase myDB = new DataBase(activity);
 								SQLiteDatabase db = myDB.getWritableDatabase();
 								//db.execSQL("DROP TABLE Niveles");
 								db.execSQL("INSERT INTO Niveles VALUES(1," + "'true', " + "'false', " + score + ")");
 								db.execSQL("INSERT INTO Niveles VALUES(2," + "'true', " + "'false', " + score + ")");
 								db.close();
-								
+
 								SQLiteDatabase db2 = myDB.getReadableDatabase();
-								
+
 								Cursor c = db2.rawQuery(" SELECT COUNT(*) FROM Niveles", null);
 								if (c.moveToFirst()) {
 								     //Recorremos el cursor hasta que no haya más registros
 								     do {
 								          String algo = c.getString(0);
 								          System.out.println(algo);
-								         
+
 								     } while(c.moveToNext());
 								}
-								
-								db2.close();
+
+								db2.close();*/
 
 								if (getResourcesManager().music != null)
 								{
@@ -417,7 +419,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						}
 					};
 					levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1.3f)));
-				}	
+				}
 				else
 				{
 					throw new IllegalArgumentException();
@@ -458,7 +460,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		timeText = new Text(390, 440, getResourcesManager().font, "0123456789", new TextOptions(HorizontalAlign.CENTER), getVbom());
 		//timeText.setAnchorCenter(0,  0);
 		timeText.setText("20");
-		
+
 		reloj = new Sprite(330, 450, getResourcesManager().reloj_region , getVbom());
 		gameHUD.attachChild(reloj);
 		gameHUD.attachChild(timeText);
@@ -578,7 +580,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 				restartJuego.setVisible(true);
 				restartJuego.setEnabled(true);
-				
+
 				moverPausa=false;
 
 
@@ -606,7 +608,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				disp.setVisible(true);
 				disp.setEnabled(true );
 
-				
+
 				moverPausa=true;
 
 				volverMenu.setVisible(false);
@@ -655,28 +657,28 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private void createBackground(int level)
 	{
 		//setBackground(new Background(Color.GREEN));
-		
+
 		/*
 		Sprite mBackground = new Sprite(0, 0, getResourcesManager().fondo_region, vbom);
 
 		//Attach the sprite to the scene. I use getFirstChild() so that I can ensure that the background sprite is the "bottom" child
 		this.attachChild(mBackground);*/
-		
-		
+
+
 		ParallaxBackground background = new ParallaxBackground(0, 0, 0);
-		
+
 		if(level==1){
 			background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.fondo_region, vbom)));
 		}else{
 			background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.fondo2_region, vbom)));
 		}
-		
-		this.setBackground(background);
-		
-		
-		
 
-		
+		this.setBackground(background);
+
+
+
+
+
 
 	}
 
@@ -688,6 +690,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private void createPhysics()
 	{
+		physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -17), false); 
+		physicsWorld.setContactListener(contactListener());
+		registerUpdateHandler(physicsWorld);
+		
+		///FISICAS BALA
 		physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -17), false); 
 		physicsWorld.setContactListener(contactListener());
 		registerUpdateHandler(physicsWorld);
@@ -728,7 +735,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		pausar.setEnabled(false);
 		reanudar.setVisible(false);
 		reanudar.setEnabled(false);
-		
+
 	}
 
 	private void pantallaLevelComplete() {
@@ -776,6 +783,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	{
 		ContactListener contactListener = new ContactListener()
 		{
+			private AnimatedSprite explosion;
+
 			public void beginContact(Contact contact)
 			{
 				final Fixture x1 = contact.getFixtureA();
@@ -827,22 +836,36 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 					if (x1.getBody().getUserData().equals("enemigo") && x2.getBody().getUserData().equals("bala"))
 					{
+
+						explosion = new AnimatedSprite(enemigo.getX(), enemigo.getY(), getResourcesManager().explosion_region, vbom)
+						{
+							@Override
+							protected void onManagedUpdate(float pSecondsElapsed) 
+							{
+								super.onManagedUpdate(pSecondsElapsed);
+								
+								if(!explosion.isAnimationRunning())
+								{
+									
+									detachChild(explosion);
+									explosion.setVisible(false);
+									setIgnoreUpdate(true);
+								}
+							}
+						};
 						
-					
+						attachChild(explosion);
+						explosion.animate(100, 0);
 						enemigo_cuerpo.setActive(false);
-						//enemigo.setVisible(false);
+						enemigo.setVisible(false);
 						enemigo.setFlippedVertical(true);
 						enemigo.setFlippedHorizontal(true);
 						GameActivity.enemigo_muerte.play();
-						
-					
+
 						bala_cuerpo.setActive(false);
 						bala.setVisible(false);
-						
-						
-						
 						addToScore(50);
-			           
+
 					}
 				}
 			}
@@ -878,7 +901,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public void disparar(Engine mEngine,float xCoord, float yCoord){
 
 		float xComp;
-		
+
 		//Aqui se define la potencia de disparo
 		final FixtureDef bulletFixtureDef=PhysicsFactory.createFixtureDef(1, 0.5f,0.5f);
 		//hay que cambiar resourcesManager.platform2_region por otra imagen para la bala
@@ -894,7 +917,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		//Si el jugador no esta girado dispara hacia delante
 		if(!player.isFlippedHorizontal()){
 			xComp=xCoord+5;
-			
+
 		}
 		else{
 			//Si no, la bala obtiene velocidad negativa
@@ -907,7 +930,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		bala_cuerpo.setUserData("bala");
 		//Agrego la bala a la escena:
 		engine.getScene().attachChild(bala);
-		
+
 		GameActivity.disparar.play();
 
 	}
