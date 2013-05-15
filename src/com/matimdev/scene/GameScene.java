@@ -293,6 +293,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 								key++;
 								this.setVisible(false);
 								this.setIgnoreUpdate(true);
+								GameActivity.coger_llave.play();										
 							}
 						}
 					};
@@ -792,7 +793,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						//enemigo.setVisible(false);
 						enemigo.setFlippedVertical(true);
 						enemigo.setFlippedHorizontal(true);
-						
+						GameActivity.enemigo_muerte.play();
 						
 					
 						bala_cuerpo.setActive(false);

@@ -28,7 +28,7 @@ import com.matimdev.manager.SceneManager;
 public class GameActivity extends BaseGameActivity
 {
 	private BoundCamera camera;
-	public static Sound salto,disparar,enemigo_muerte,grito;
+	public static Sound salto,disparar,enemigo_muerte,grito,coger_llave;
 
 	@Override
 	public Engine onCreateEngine(EngineOptions pEngineOptions) 
@@ -84,6 +84,10 @@ public class GameActivity extends BaseGameActivity
           grito = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),
 
                    "sfx/grito.ogg");
+          
+          coger_llave = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),
+
+                  "sfx/coger_llave.wav");
 
 
 		}
