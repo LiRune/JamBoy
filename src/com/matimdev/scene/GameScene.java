@@ -378,8 +378,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 								db.execSQL("INSERT INTO Niveles VALUES(2," + "'true', " + "'false', " + score + ")");
 								db.close();
 								
-								DataBase myDB2 = new DataBase(activity);
-								SQLiteDatabase db2 = myDB2.getReadableDatabase();
+								SQLiteDatabase db2 = myDB.getReadableDatabase();
 								
 								Cursor c = db2.rawQuery(" SELECT COUNT(*) FROM Niveles", null);
 								if (c.moveToFirst()) {

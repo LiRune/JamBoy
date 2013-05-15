@@ -24,9 +24,11 @@ public class DataBase extends SQLiteOpenHelper {
 		// DOING SO WILL CAUSE THE METHOD onUpgrade() TO AUTOMATICALLY GET TRIGGERED
 		super(context, nombreBD, null, 1);
 	}
-
+	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+		
+		
 		// ESTABLISH NEW DATABASE TABLES IF THEY DON'T ALREADY EXIST IN THE DATABASE
 		db.execSQL("CREATE TABLE IF NOT EXISTS "+tablaNiveles+" (" +
 				IDNivel + " INTEGER PRIMARY KEY , " +
