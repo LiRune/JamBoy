@@ -66,28 +66,17 @@ public class GameActivity extends BaseGameActivity
 		{
 			ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
 			pOnCreateResourcesCallback.onCreateResourcesFinished();
-			
-		    salto = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),
+			//Sonidos juego
+			//Cada sonido recoge el manager de sonido del engine,el contexto y una ruta String hacia el archivo que queremos reproducir
+		    salto = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/saltar.wav");             
 
-                    "sfx/saltar.wav");    
-          
+           disparar = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/disparo.mp3");               
 
-           disparar = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),
-
-                    "sfx/disparo.mp3");    
+           enemigo_muerte = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/enemigo_muerte.mp3");
            
-
-           enemigo_muerte = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),
-
-                    "sfx/enemigo_muerte.mp3");
-           
-          grito = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),
-
-                   "sfx/grito.ogg");
+          grito = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/grito.ogg");
           
-          coger_llave = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),
-
-                  "sfx/coger_llave.wav");
+          coger_llave = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/coger_llave.wav");
 
 
 		}
