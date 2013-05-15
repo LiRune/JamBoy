@@ -117,7 +117,7 @@ public abstract class Player extends AnimatedSprite
 		body.setLinearVelocity(new Vector2(-5, body.getLinearVelocity().y)); 
 		final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100 };
 		
-		animate(PLAYER_ANIMATE, 0, 2, true);
+		animate(100);
 	}
 	
 	public void runRight(){
@@ -128,7 +128,7 @@ public abstract class Player extends AnimatedSprite
 		body.setLinearVelocity(new Vector2(5, body.getLinearVelocity().y)); 
 		final long[] PLAYER_ANIMATE = new long[] {100,100,100 };
 		
-		animate(PLAYER_ANIMATE, 0, 2, true);
+		animate(100);
 		
 	}
 	

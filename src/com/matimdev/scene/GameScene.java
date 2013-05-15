@@ -331,15 +331,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 							if (enemigo.getX() <= x - maxMovementX)
 							{
-								final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100 };								
-								enemigo.animate(PLAYER_ANIMATE, 0, 2, true);
+												
+								enemigo.animate(100);
 								enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
 								enemigo.setFlippedHorizontal(false);
 							}
 							if (enemigo.getX() >= x + maxMovementX)
 							{
-								final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100 };								
-								enemigo.animate(PLAYER_ANIMATE, 0, 2, true);
+														
+								enemigo.animate(100);
 								enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
 								enemigo.setFlippedHorizontal(true);
 							}
