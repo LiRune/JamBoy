@@ -1,5 +1,8 @@
 package com.matimdev.database;
 
+import com.matimdev.base.BaseScene;
+import com.matimdev.scene.GameScene;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -32,7 +35,27 @@ public class DataBase extends SQLiteOpenHelper {
 				score + " TEXT" +
 				")");
 
-		// OPTIONALLY PREPOPULATE THE TABLE WITH SOME VALUES   
+		
+		/*DataBase myDB2 = new DataBase(BaseScene.getActivity());
+		db = myDB2.getReadableDatabase();
+		Cursor c = db.rawQuery(" SELECT COUNT(*) FROM Niveles", null);
+		int numNiveles = Integer.parseInt(c.getString(0));
+		System.out.println("ID Niveles: " + numNiveles);
+		if (numNiveles < GameScene.getNumNiveles())
+		{
+			int nuevosNiveles = GameScene.getNumNiveles() - numNiveles;
+			
+			for (int i = numNiveles + 1; i < numNiveles + nuevosNiveles; i++)
+			{
+				cv.put(IDNivel, i);
+				cv.put(unlocked, "false");
+				cv.put(beat, "false");
+				cv.put(score, "0");
+				db.insert(tablaNiveles, null, cv);
+			}
+		}		
+		c.close();*/
+		
 		/*ContentValues cv = new ContentValues();
 		cv.put(IDNivel, 1);
 		cv.put(unlocked, "true");

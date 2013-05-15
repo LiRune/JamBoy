@@ -16,40 +16,12 @@ public abstract class BaseScene extends Scene
 	//---------------------------------------------
 	// VARIABLES
 	//---------------------------------------------
-	
+
 	protected Engine engine;
-	protected Activity activity;
+	protected static Activity activity;
 	protected ResourcesManager resourcesManager;
 	protected VertexBufferObjectManager vbom;
 	protected BoundCamera camera;
-	
-	//---------------------------------------------
-	// CONSTRUCTOR
-	//---------------------------------------------
-	
-	public BaseScene()
-	{
-		this.setResourcesManager(ResourcesManager.getInstance());
-		this.engine = resourcesManager.engine;
-		this.activity = resourcesManager.activity;
-		this.setVbom(resourcesManager.vbom);
-		this.camera = resourcesManager.camera;
-		createScene();
-	}
-	
-	//---------------------------------------------
-	// ABSTRACTION
-	//---------------------------------------------
-	
-	public abstract void createScene();
-	
-	public abstract void onBackKeyPressed();
-	
-	public abstract void onHomeKeyPressed();
-	
-	public abstract SceneType getSceneType();
-	
-	public abstract void disposeScene();
 
 	public VertexBufferObjectManager getVbom() {
 		return vbom;
@@ -66,5 +38,43 @@ public abstract class BaseScene extends Scene
 	public void setResourcesManager(ResourcesManager resourcesManager) {
 		this.resourcesManager = resourcesManager;
 	}
-	
+
+	public static Activity getActivity() {
+		return activity;
+	}
+
+	public void setActivity(Activity activity) {
+		this.activity = activity;
+	}
+
+	//---------------------------------------------
+	// CONSTRUCTOR
+	//---------------------------------------------
+
+
+
+	public BaseScene()
+	{
+		this.setResourcesManager(ResourcesManager.getInstance());
+		this.engine = resourcesManager.engine;
+		this.activity = resourcesManager.activity;
+		this.setVbom(resourcesManager.vbom);
+		this.camera = resourcesManager.camera;
+		createScene();
+	}
+
+	//---------------------------------------------
+	// ABSTRACTION
+	//---------------------------------------------
+
+	public abstract void createScene();
+
+	public abstract void onBackKeyPressed();
+
+	public abstract void onHomeKeyPressed();
+
+	public abstract SceneType getSceneType();
+
+	public abstract void disposeScene();
+
 }

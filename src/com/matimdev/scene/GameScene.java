@@ -40,6 +40,7 @@ import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.xml.sax.Attributes;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
@@ -65,6 +66,7 @@ import com.matimdev.object.Player;
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener
 {
+	private final static int NUM_NIVELES=3;
 	private int score = 0;
 	private int health = 3;
 	private int tiempo = 20;
@@ -134,6 +136,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	public void setPhysicsWorld(PhysicsWorld physicsWorld) {
 		this.physicsWorld = physicsWorld;
+	}
+
+	public static int getNumNiveles() {
+		return NUM_NIVELES;
 	}
 
 	@Override
@@ -365,10 +371,27 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 								levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
 								pantallaLevelComplete();
 								
-								/*DataBase myDB = new DataBase(activity);
+								DataBase myDB = new DataBase(activity);
 								SQLiteDatabase db = myDB.getWritableDatabase();
-								db.execSQL("INSERT INTO Niveles VALUES(" + levelID + ", " + "'false', " + "'true', " + score + ")");
-								db.close();*/
+								//db.execSQL("DROP TABLE Niveles");
+								db.execSQL("INSERT INTO Niveles VALUES(1," + "'true', " + "'false', " + score + ")");
+								db.execSQL("INSERT INTO Niveles VALUES(2," + "'true', " + "'false', " + score + ")");
+								db.close();
+								
+								DataBase myDB2 = new DataBase(activity);
+								SQLiteDatabase db2 = myDB2.getReadableDatabase();
+								
+								Cursor c = db2.rawQuery(" SELECT COUNT(*) FROM Niveles", null);
+								if (c.moveToFirst()) {
+								     //Recorremos el cursor hasta que no haya más registros
+								     do {
+								          String algo = c.getString(0);
+								          System.out.println(algo);
+								         
+								     } while(c.moveToNext());
+								}
+								
+								db2.close();
 
 								if (getResourcesManager().music != null)
 								{
