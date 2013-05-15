@@ -18,7 +18,7 @@
 	<entity x="970" y="380" type="coin"/>
 	<entity x="1280" y="200" type="levelComplete"/>
 	<entity x="60" y="140" type="player"/>
-	<entity x="500" y="140" type="enemy"/>
+	<entity x="500" y="145" type="enemy"/>
 	
 	
 	<entity x="500" y="140" type="key"/>

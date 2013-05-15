@@ -331,11 +331,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 							if (enemigo.getX() <= x - maxMovementX)
 							{
+								final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100 };								
+								enemigo.animate(PLAYER_ANIMATE, 0, 2, true);
 								enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
 								enemigo.setFlippedHorizontal(false);
 							}
 							if (enemigo.getX() >= x + maxMovementX)
 							{
+								final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100 };								
+								enemigo.animate(PLAYER_ANIMATE, 0, 2, true);
 								enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
 								enemigo.setFlippedHorizontal(true);
 							}
@@ -702,6 +706,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		pausar.setEnabled(false);
 		reanudar.setVisible(false);
 		reanudar.setEnabled(false);
+		
 	}
 
 	private void pantallaLevelComplete() {
@@ -713,7 +718,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		player.getBody().setActive(false);
 		left.setVisible(false);
 		right.setVisible(false);
-
+		reloj.setVisible(false);
 		jump.setVisible(false);		
 		jump.setEnabled(false);
 		disp.setVisible(false);
@@ -782,6 +787,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) {
 						health--;
+						player.impacto();
 						if(heart3.isVisible()) {
 							heart3.setVisible(false);
 						}
