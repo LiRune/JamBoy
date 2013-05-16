@@ -307,7 +307,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 							if (player.collidesWith(this))
 							{
-								addToScore(20);
+								addToScore(50);
 								this.setVisible(false);
 								this.setIgnoreUpdate(true);
 							}
@@ -421,7 +421,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 									if(score==300){
 										levelCompleteWindow.display(StarsCount.ONE, GameScene.this, camera);
 									}
-									if(score>400 && score<400){
+									if(score>400 && score<500){
 										levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
 									}
 									if(score>500){
