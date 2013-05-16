@@ -200,7 +200,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		}else if (pausaBackKey==2){
 			SceneManager.getInstance().loadMenuScene(engine);
 		}
-		
+
 	}
 
 	@Override
@@ -314,7 +314,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						}
 					};
 					levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1f)));
-					
+
 				}	
 
 
@@ -371,9 +371,58 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						public void onUpdate(float pSecondsElapsed)
 						{
 							super.onUpdate(pSecondsElapsed);
-							if (player.getX() - enemigo.getX() > 100)
+
+
+							if(camera.isEntityVisible(enemigo)){
+								//enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
+
+								if(player.getX() > enemigo.getX()+100){
+									enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
+
+									enemigo.animate(100);
+									enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
+									enemigo.setFlippedHorizontal(true);
+
+								}
+								else if(player.getX() < enemigo.getX()-100){
+									enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
+
+									enemigo.animate(100);
+									enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
+									enemigo.setFlippedHorizontal(true);
+
+								}
+
+								//ANTERIOR (INTENTO FALLIDO)
+								/*    //DER
+	   							 if (enemigo.getX() - player.getX() <= 200 )
+	   							 {   									 
+
+	   								 if(player.getX() <= enemigo.getX() - 100){
+	   									 enemigo.animate(100);
+	   									 enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
+	   									 enemigo.setFlippedHorizontal(true);
+	   								 }
+
+	   							 }   							 
+	   							 //IZQ
+	   							 if (enemigo.getX() - player.getX() >= -200)
+	   							 {
+	   								 if(player.getX() >= enemigo.getX() + 100 ){
+	   									 enemigo.animate(100);
+	   									 enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
+	   									 enemigo.setFlippedHorizontal(false);
+	   								 }
+
+
+	   							 }
+								 */
+							}
+
+							//INTENTO FALLIDO INICIAL (QUIETO)
+							/*if (player.getX() - enemigo.getX() > 100)
 							{
-								
+
 								if (enemigo.getX() <= x - maxMovementX)
 								{
 									addToScore(1);
@@ -388,7 +437,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 									enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
 									enemigo.setFlippedHorizontal(true);
 								}
-							}
+							}*/
 						}
 					});
 					levelObject= enemigo;	
@@ -407,28 +456,28 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							if (player.collidesWith(this) && key==3)
 							{
 								if(MainMenuScene.getIdNivel()==1){
-									if(score>300 && score<400){
+									if(score>=300 && score<400){
 										levelCompleteWindow.display(StarsCount.ONE, GameScene.this, camera);
 									}
-									if(score>400 && score<500){
+									if(score>=400 && score<500){
 										levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
 									}
-									if(score>500){
+									if(score>=500){
 										levelCompleteWindow.display(StarsCount.THREE, GameScene.this, camera);
 									}
 								}
 								else if(MainMenuScene.getIdNivel()==2){
-									if(score==300){
+									if(score>=300 && score<400){
 										levelCompleteWindow.display(StarsCount.ONE, GameScene.this, camera);
 									}
-									if(score>400 && score<500){
+									if(score>=400 && score<500){
 										levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
 									}
-									if(score>500){
+									if(score>=500){
 										levelCompleteWindow.display(StarsCount.THREE, GameScene.this, camera);
 									}
 								}
-								
+
 								pantallaLevelComplete();
 
 								guardarPuntuacion();
