@@ -128,6 +128,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private int key=0;
 
+	private int pausaBackKey = 0;
+
+
 	private DataBase db;
 	private Sprite reloj;
 
@@ -162,7 +165,42 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	@Override
 	public void onBackKeyPressed()
 	{
-		SceneManager.getInstance().loadMenuScene(engine);
+		pausaBackKey++;
+		//SceneManager.getInstance().loadMenuScene(engine);
+
+		if(pausaBackKey==1){
+			PAUSED=true;
+			pausar.setVisible(false);
+			pausar.setEnabled(false);
+			reanudar.setVisible(true);
+			reanudar.setEnabled(true);
+			left.setVisible(false);
+			right.setVisible(false);
+
+			jump.setVisible(false);		
+			jump.setEnabled(false);
+
+			disp.setVisible(false);
+			disp.setEnabled(false);
+
+			volverMenu.setVisible(true);
+			volverMenu.setEnabled(true);
+
+			restartJuego.setVisible(true);
+			restartJuego.setEnabled(true);
+
+			moverPausa=false;
+
+
+
+			if (getResourcesManager().music != null)
+			{
+				getResourcesManager().music.pause();
+			}
+		}else if (pausaBackKey==2){
+			SceneManager.getInstance().loadMenuScene(engine);
+		}
+		
 	}
 
 	@Override
@@ -275,10 +313,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							}
 						}
 					};
-					//levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1.3f)));
-					final Body body = PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, FIXTURE_DEF);
-					body.setUserData("coin");
-					physicsWorld.registerPhysicsConnector(new PhysicsConnector(levelObject, body, true, false));
+					levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1f)));
+					
 				}	
 
 
@@ -925,36 +961,37 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		final String unlocked = "Bloqueado";
 		final String beat = "Superado";
 		final String score1 = "Puntuacion";
-		
+
 		db.execSQL("CREATE TABLE IF NOT EXISTS Niveles (" +
 				IDNivel +" INTEGER PRIMARY KEY , " +
 				unlocked + " TEXT, " +
 				beat + " TEXT, " +
 				score1 + " TEXT" +
 				")");*/
-		
+
 		/*db.execSQL("INSERT INTO Niveles VALUES(1," + "'true', " + "'false', " + score + ")");
 		db.execSQL("INSERT INTO Niveles VALUES(2," + "'true', " + "'false', " + score + ")");
 		db.close();*/
-		
-		
+
+
 		if(!DataBase.nivelSuperado(MainMenuScene.getIdNivel()))
 		{
+			int nivelDesbloqueado=MainMenuScene.getIdNivel()+1;
 			db.execSQL("UPDATE Niveles SET Superado = 'true' WHERE Numero = "+MainMenuScene.getIdNivel());
-			db.execSQL("UPDATE Niveles SET Desbloqueado = 'true' WHERE Numero = "+MainMenuScene.getIdNivel()+1);
+			db.execSQL("UPDATE Niveles SET Desbloqueado = 'true' WHERE Numero = "+nivelDesbloqueado);
 		}
-			
+
 		if(DataBase.compararPuntuacion(MainMenuScene.getIdNivel(), score)){
 			db.execSQL("UPDATE Niveles SET Puntuacion = "+score+" WHERE Numero = "+MainMenuScene.getIdNivel());
 		}
 		db.close();
-		
-		
+
+
 
 		/*if(MainMenuScene.getIdNivel()==1){
-			
+
 			SQLiteDatabase bd = myDB.getWritableDatabase();
-			
+
 			ContentValues registro = new ContentValues();
 			registro.put("unlocked", false);
 			registro.put("beat", true);
@@ -974,12 +1011,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 		Cursor c = db2.rawQuery(" SELECT Puntuacion FROM Niveles", null);
 		if (c.moveToFirst()) {
-		     //Recorremos el cursor hasta que no haya más registros
-		     do {
-		          String algo = c.getString(0);
-		          System.out.println("PUNTUACION: "+algo);
+			//Recorremos el cursor hasta que no haya más registros
+			do {
+				String algo = c.getString(0);
+				System.out.println("PUNTUACION: "+algo);
 
-		     } while(c.moveToNext());
+			} while(c.moveToNext());
 		}
 
 		db2.close();

@@ -40,7 +40,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private final int NIVEL1 = 3;
 	private final int NIVEL2 = 4;
 	private final int JUGAR = 5;
-	
+
 	private Text puntuaciones;
 	private Text puntosText; 
 
@@ -223,9 +223,12 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		puntuaciones = new Text(0, 0, getResourcesManager().font, "01234567892", getVbom());
 		puntosText = new Text(0, 0, getResourcesManager().font, "Puntos: ", getVbom());
 		puntosText.setText("Puntos: ");
-		puntuaciones.setText("0");
-		
-		
+		if(idNivel!=0){
+			puntuaciones.setText(mostrarPuntuacion(idNivel));
+		}else{
+			puntuaciones.setText("0");
+		}
+
 		seleccionNivelChildScene.addMenuItem(Nivel1);
 		seleccionNivelChildScene.addMenuItem(Nivel2);
 		seleccionNivelChildScene.addMenuItem(Jugar);

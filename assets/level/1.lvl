@@ -11,8 +11,8 @@
 	<entity x="1060" y="100" type="platform1"/>
 	<entity x="1180" y="100" type="platform1"/>
 	<entity x="1300" y="100" type="platform1"/>
-	<entity x="400" y="360" type="coin"/>
-	<entity x="500" y="450" type="coin"/>
+	<entity x="400" y="160" type="coin"/>
+	<entity x="500" y="150" type="coin"/>
 	<entity x="670" y="380" type="coin"/>
 	<entity x="870" y="380" type="coin"/>
 	<entity x="970" y="380" type="coin"/>
