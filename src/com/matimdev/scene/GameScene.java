@@ -373,26 +373,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 								levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
 								pantallaLevelComplete();
 
-								/*DataBase myDB = new DataBase(activity);
-								SQLiteDatabase db = myDB.getWritableDatabase();
-								//db.execSQL("DROP TABLE Niveles");
-								db.execSQL("INSERT INTO Niveles VALUES(1," + "'true', " + "'false', " + score + ")");
-								db.execSQL("INSERT INTO Niveles VALUES(2," + "'true', " + "'false', " + score + ")");
-								db.close();
-
-								SQLiteDatabase db2 = myDB.getReadableDatabase();
-
-								Cursor c = db2.rawQuery(" SELECT COUNT(*) FROM Niveles", null);
-								if (c.moveToFirst()) {
-								     //Recorremos el cursor hasta que no haya más registros
-								     do {
-								          String algo = c.getString(0);
-								          System.out.println(algo);
-
-								     } while(c.moveToNext());
-								}
-
-								db2.close();*/
+								guardarPuntuacion();
 
 								if (getResourcesManager().music != null)
 								{
@@ -693,7 +674,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -17), false); 
 		physicsWorld.setContactListener(contactListener());
 		registerUpdateHandler(physicsWorld);
-		
+
 		///FISICAS BALA
 		physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -17), false); 
 		physicsWorld.setContactListener(contactListener());
@@ -843,17 +824,17 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							protected void onManagedUpdate(float pSecondsElapsed) 
 							{
 								super.onManagedUpdate(pSecondsElapsed);
-								
+
 								if(!explosion.isAnimationRunning())
 								{
-									
+
 									detachChild(explosion);
 									explosion.setVisible(false);
 									setIgnoreUpdate(true);
 								}
 							}
 						};
-						
+
 						attachChild(explosion);
 						explosion.animate(100, 0);
 						enemigo_cuerpo.setActive(false);
@@ -933,5 +914,74 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 		GameActivity.disparar.play();
 
+	}
+
+	public void guardarPuntuacion(){
+		DataBase myDB = new DataBase(activity);
+		SQLiteDatabase db = myDB.getWritableDatabase();
+		//db.execSQL("DROP TABLE Niveles");
+		/*final String tablaNiveles = "Niveles";
+		final String IDNivel = "Numero";
+		final String unlocked = "Bloqueado";
+		final String beat = "Superado";
+		final String score1 = "Puntuacion";
+		
+		db.execSQL("CREATE TABLE IF NOT EXISTS Niveles (" +
+				IDNivel +" INTEGER PRIMARY KEY , " +
+				unlocked + " TEXT, " +
+				beat + " TEXT, " +
+				score1 + " TEXT" +
+				")");*/
+		
+		/*db.execSQL("INSERT INTO Niveles VALUES(1," + "'true', " + "'false', " + score + ")");
+		db.execSQL("INSERT INTO Niveles VALUES(2," + "'true', " + "'false', " + score + ")");
+		db.close();*/
+		
+		
+		if(!DataBase.nivelSuperado(MainMenuScene.getIdNivel()))
+		{
+			db.execSQL("UPDATE Niveles SET Superado = 'true' WHERE Numero = "+MainMenuScene.getIdNivel());
+			db.execSQL("UPDATE Niveles SET Desbloqueado = 'true' WHERE Numero = "+MainMenuScene.getIdNivel()+1);
+		}
+			
+		if(DataBase.compararPuntuacion(MainMenuScene.getIdNivel(), score)){
+			db.execSQL("UPDATE Niveles SET Puntuacion = "+score+" WHERE Numero = "+MainMenuScene.getIdNivel());
+		}
+		db.close();
+		
+		
+
+		/*if(MainMenuScene.getIdNivel()==1){
+			
+			SQLiteDatabase bd = myDB.getWritableDatabase();
+			
+			ContentValues registro = new ContentValues();
+			registro.put("unlocked", false);
+			registro.put("beat", true);
+			registro.put("score", score);
+			int cant = bd.update("Niveles", registro, "IDNivel=" + MainMenuScene.getIdNivel() , null);
+			bd.close();
+			if (cant == 1){
+				pantallaGameOver();
+			}
+
+			else{
+
+			}
+
+		}*/
+		SQLiteDatabase db2 = myDB.getReadableDatabase();
+
+		Cursor c = db2.rawQuery(" SELECT Puntuacion FROM Niveles", null);
+		if (c.moveToFirst()) {
+		     //Recorremos el cursor hasta que no haya más registros
+		     do {
+		          String algo = c.getString(0);
+		          System.out.println("PUNTUACION: "+algo);
+
+		     } while(c.moveToNext());
+		}
+
+		db2.close();
 	}
 }

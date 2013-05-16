@@ -22,6 +22,7 @@ import android.content.Context;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
+import com.matimdev.database.DataBase;
 import com.matimdev.manager.ResourcesManager;
 import com.matimdev.manager.SceneManager;
 
@@ -36,101 +37,103 @@ public class GameActivity extends BaseGameActivity
 		return new LimitedFPSEngine(pEngineOptions, 60);
 	}
 
-	
-		public EngineOptions onCreateEngineOptions()
-		{
-			camera = new BoundCamera(0, 0, 800, 480);
-			EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new FillResolutionPolicy(), this.camera);
-			engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
-			engineOptions.getRenderOptions().getConfigChooserOptions().setRequestedMultiSampling(true);
-			engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
-			engineOptions.getTouchOptions().setNeedsMultiTouch(true);
-			return engineOptions;
-		}
 
-		@Override
-		public boolean onKeyDown(int keyCode, KeyEvent event) 
-		{  
-			if (keyCode == KeyEvent.KEYCODE_BACK)
+	public EngineOptions onCreateEngineOptions()
+	{
+		camera = new BoundCamera(0, 0, 800, 480);
+		EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new FillResolutionPolicy(), this.camera);
+		engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
+		engineOptions.getRenderOptions().getConfigChooserOptions().setRequestedMultiSampling(true);
+		engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
+		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
+		return engineOptions;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) 
+	{  
+		if (keyCode == KeyEvent.KEYCODE_BACK)
+		{
+			SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+		}
+		else if(keyCode == KeyEvent.KEYCODE_HOME)
+		{
+			SceneManager.getInstance().getCurrentScene().onHomeKeyPressed();
+		}
+		return false; 
+	}
+
+	public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws IOException
+	{
+		ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
+		pOnCreateResourcesCallback.onCreateResourcesFinished();
+		
+		DataBase game = new DataBase(this);
+		//Sonidos juego
+		//Cada sonido recoge el manager de sonido del engine,el contexto y una ruta String hacia el archivo que queremos reproducir
+		salto = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/saltar.wav");             
+
+		disparar = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/disparo.mp3");               
+
+		enemigo_muerte = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/enemigo_muerte.mp3");
+
+		grito = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/grito.ogg");
+
+		coger_llave = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/coger_llave.wav");
+
+
+	}
+
+	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException
+	{
+		SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
+	}
+
+	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException
+	{
+		mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() 
+		{
+			public void onTimePassed(final TimerHandler pTimerHandler) 
 			{
-				SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
-			}
-			else if(keyCode == KeyEvent.KEYCODE_HOME)
-			{
-				SceneManager.getInstance().getCurrentScene().onHomeKeyPressed();
-			}
-			return false; 
-		}
-
-		public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws IOException
-		{
-			ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
-			pOnCreateResourcesCallback.onCreateResourcesFinished();
-			//Sonidos juego
-			//Cada sonido recoge el manager de sonido del engine,el contexto y una ruta String hacia el archivo que queremos reproducir
-		    salto = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/saltar.wav");             
-
-           disparar = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/disparo.mp3");               
-
-           enemigo_muerte = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/enemigo_muerte.mp3");
-           
-          grito = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/grito.ogg");
-          
-          coger_llave = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/coger_llave.wav");
-
-
-		}
-
-		public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException
-		{
-			SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
-		}
-
-		public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException
-		{
-			mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() 
-			{
-				public void onTimePassed(final TimerHandler pTimerHandler) 
-				{
-					mEngine.unregisterUpdateHandler(pTimerHandler);
-					try {
-						SceneManager.getInstance().createMenuScene();
-					} catch (IllegalStateException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				try {
+					SceneManager.getInstance().createMenuScene();
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			}));
-			pOnPopulateSceneCallback.onPopulateSceneFinished();
-		}
-
-		@Override
-		protected void onDestroy()
-		{
-			super.onDestroy();
-			if (this.isGameLoaded())
-			{
-				System.exit(0);	
-			}	
-		}
-
-		@Override
-		public void onPauseGame()
-		{
-			super.onPauseGame();
-			SceneManager.getInstance().getCurrentScene().getResourcesManager().music.pause();
-		}
-
-		@Override
-		public void onResumeGame()
-		{
-			super.onResumeGame();
-			if (isGamePaused ())
-			{
-				SceneManager.getInstance().getCurrentScene().getResourcesManager().music.resume();
 			}
+		}));
+		pOnPopulateSceneCallback.onPopulateSceneFinished();
+	}
+
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		if (this.isGameLoaded())
+		{
+			System.exit(0);	
+		}	
+	}
+
+	@Override
+	public void onPauseGame()
+	{
+		super.onPauseGame();
+		SceneManager.getInstance().getCurrentScene().getResourcesManager().music.pause();
+	}
+
+	@Override
+	public void onResumeGame()
+	{
+		super.onResumeGame();
+		if (isGamePaused ())
+		{
+			SceneManager.getInstance().getCurrentScene().getResourcesManager().music.resume();
 		}
 	}
+}

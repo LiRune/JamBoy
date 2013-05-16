@@ -35,7 +35,7 @@ public class ResourcesManager
 	private static final ResourcesManager INSTANCE = new ResourcesManager();
 	
 	public Engine engine;
-	public GameActivity activity;
+	public static GameActivity activity;
 	public BoundCamera camera;
 	public VertexBufferObjectManager vbom;
 	
@@ -87,9 +87,22 @@ public class ResourcesManager
 	public ITextureRegion complete_window_region;
 	public ITiledTextureRegion complete_stars_region;
 	
+	
+	
+	public static GameActivity getActivity() {
+		return activity;
+	}
+
+	public void setActivity(GameActivity activity) {
+		this.activity = activity;
+	}
+	
+	
 	//---------------------------------------------
 	// CLASS LOGIC
 	//---------------------------------------------
+
+	
 
 	public void loadMenuResources()
 	{
@@ -112,6 +125,7 @@ public class ResourcesManager
         menu_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_background.png");
         play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play.png");
         options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "options.png");
+        derecha_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "der.png");
        
     	try 
     	{

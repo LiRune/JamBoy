@@ -1,6 +1,7 @@
 package com.matimdev.database;
 
 import com.matimdev.base.BaseScene;
+import com.matimdev.manager.ResourcesManager;
 import com.matimdev.scene.GameScene;
 
 import android.content.ContentValues;
@@ -14,7 +15,7 @@ public class DataBase extends SQLiteOpenHelper {
 	static final String nombreBD = "JamBoyDB";	
 	static final String tablaNiveles = "Niveles";
 	static final String IDNivel = "Numero";
-	static final String unlocked = "Bloqueado";
+	static final String unlocked = "Desbloqueado";
 	static final String beat = "Superado";
 	static final String score = "Puntuacion";
 
@@ -24,11 +25,11 @@ public class DataBase extends SQLiteOpenHelper {
 		// DOING SO WILL CAUSE THE METHOD onUpgrade() TO AUTOMATICALLY GET TRIGGERED
 		super(context, nombreBD, null, 1);
 	}
-	
+
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		
-		
+
+
 		// ESTABLISH NEW DATABASE TABLES IF THEY DON'T ALREADY EXIST IN THE DATABASE
 		db.execSQL("CREATE TABLE IF NOT EXISTS "+tablaNiveles+" (" +
 				IDNivel + " INTEGER PRIMARY KEY , " +
@@ -37,7 +38,11 @@ public class DataBase extends SQLiteOpenHelper {
 				score + " TEXT" +
 				")");
 
-		
+		db.execSQL("INSERT INTO Niveles VALUES(1," + "'true', " + "'false', 0)");
+		db.execSQL("INSERT INTO Niveles VALUES(2," + "'false', " + "'false', 0)");
+		//db.close();
+
+
 		/*DataBase myDB2 = new DataBase(BaseScene.getActivity());
 		db = myDB2.getReadableDatabase();
 		Cursor c = db.rawQuery(" SELECT COUNT(*) FROM Niveles", null);
@@ -46,7 +51,7 @@ public class DataBase extends SQLiteOpenHelper {
 		if (numNiveles < GameScene.getNumNiveles())
 		{
 			int nuevosNiveles = GameScene.getNumNiveles() - numNiveles;
-			
+
 			for (int i = numNiveles + 1; i < numNiveles + nuevosNiveles; i++)
 			{
 				cv.put(IDNivel, i);
@@ -57,7 +62,7 @@ public class DataBase extends SQLiteOpenHelper {
 			}
 		}		
 		c.close();*/
-		
+
 		/*ContentValues cv = new ContentValues();
 		cv.put(IDNivel, 1);
 		cv.put(unlocked, "true");
@@ -106,103 +111,82 @@ public class DataBase extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
-	public String isLevelUnLocked(int ID) {
-		// THIS METHOD IS CALLED BY YOUR MAIN ACTIVITY TO READ A VALUE FROM THE DATABASE                 
-		SQLiteDatabase myDB = this.getReadableDatabase();
-		String[] mySearch = new String[]{String.valueOf(ID)};
-		Cursor myCursor = myDB.rawQuery("SELECT "+ unlocked +" FROM "+ tablaNiveles +" WHERE "+ IDNivel +"=?",mySearch);
-		myCursor.moveToFirst();
-		int index = myCursor.getColumnIndex(unlocked);
-		String myAnswer = myCursor.getString(index);
-		myCursor.close();
-		return myAnswer;
+
+	public static boolean nivelDesbloqueado(int id){
+		String desb = null;
+		DataBase myDB = new DataBase(ResourcesManager.getActivity());
+
+		SQLiteDatabase db = myDB.getReadableDatabase();
+
+		Cursor c = db.rawQuery(" SELECT Desbloqueado FROM Niveles WHERE Numero ="+id, null);
+		if (c.moveToFirst()) {
+			//Recorremos el cursor hasta que no haya más registros
+			do {
+				desb = c.getString(0);
+				System.out.println("NIVEL "+id+" DESBLOQUEADO: "+desb);
+
+			} while(c.moveToNext());
+		}
+
+		db.close();
+
+		if(desb.equals("true")){
+			return true;
+		}else{
+			return false;
+		}		
 	}
 
-	public int unLockLevel(int ID, String isUnLocked)
-	{
-		// THIS METHOD IS CALLED BY YOUR MAIN ACTIVITY TO WRITE A VALUE TO THE DATABASE          
-		SQLiteDatabase myDB = this.getWritableDatabase();
-		ContentValues cv = new ContentValues();
-		cv.put(unlocked, isUnLocked);
-		int numRowsAffected = myDB.update(tablaNiveles, cv, IDNivel+"=?", new String []{String.valueOf(ID)});
-		return numRowsAffected;
+	public static boolean nivelSuperado(int id){
+		String sup=null;
+		DataBase myDB = new DataBase(ResourcesManager.getActivity());
+
+		SQLiteDatabase db = myDB.getReadableDatabase();
+
+		Cursor c = db.rawQuery(" SELECT Superado FROM Niveles WHERE Numero ="+id, null);
+		if (c.moveToFirst()) {
+			//Recorremos el cursor hasta que no haya más registros
+			do {
+				sup = c.getString(0);
+				System.out.println("NIVEL "+id+" SUPERADO: "+sup);
+
+			} while(c.moveToNext());
+		}
+
+		db.close();
+
+		if(sup.equals("true")){
+			return true;
+		}else{
+			return false;
+		}		
 	}
 
+	public static boolean compararPuntuacion(int id, int puntos){
+		int punt = 0;
+		DataBase myDB = new DataBase(ResourcesManager.getActivity());
 
-	/*       
-	 * MORE ADVANCED EXAMPLES OF USAGE
-	 *
-         void AddEmployee(String _name, int _age, int _dept) {
-                SQLiteDatabase db= this.getWritableDatabase();
-                ContentValues cv=new ContentValues();
-                        cv.put(colName, _name);
-                        cv.put(colAge, _age);
-                        cv.put(colDept, _dept);
-                        //cv.put(colDept,2);
-                db.insert(employeeTable, colName, cv);
-                db.close();
-        }
+		SQLiteDatabase db = myDB.getReadableDatabase();
 
-         int getEmployeeCount()
-         {
-                SQLiteDatabase db=this.getWritableDatabase();
-                Cursor cur= db.rawQuery("Select * from "+employeeTable, null);
-                int x= cur.getCount();
-                cur.close();
-                return x;
-         }
+		Cursor c = db.rawQuery(" SELECT Puntuacion FROM Niveles WHERE Numero ="+id, null);
+		if (c.moveToFirst()) {
+			//Recorremos el cursor hasta que no haya más registros
+			do {
+				punt = Integer.parseInt(c.getString(0));
+				System.out.println("PUNTUACION DE LA BD: "+punt);
 
-         Cursor getAllEmployees()
-         {
-                 SQLiteDatabase db=this.getWritableDatabase();
-                 //Cursor cur= db.rawQuery("Select "+colID+" as _id , "+colName+", "+colAge+" from "+employeeTable, new String [] {});
-                 Cursor cur= db.rawQuery("SELECT * FROM "+viewEmps,null);
-                 return cur;
-         }
+			} while(c.moveToNext());
+		}
 
-         public int GetDeptID(String Dept)
-         {
-                 SQLiteDatabase db=this.getReadableDatabase();
-                 Cursor c=db.query(deptTable, new String[]{colDeptID+" as _id",colDeptName},colDeptName+"=?", new String[]{Dept}, null, null, null);
-                 //Cursor c=db.rawQuery("SELECT "+colDeptID+" as _id FROM "+deptTable+" WHERE "+colDeptName+"=?", new String []{Dept});
-                 c.moveToFirst();
-                 return c.getInt(c.getColumnIndex("_id"));
-         }
+		db.close();
+		
+		
+		if(puntos>punt){
+			return true;
+		}else{
+			return false;
+		}
+		
 
-         public String GetDept(int ID)
-         {
-                 SQLiteDatabase db=this.getReadableDatabase();
-                 String[] params=new String[]{String.valueOf(ID)};
-                 Cursor c=db.rawQuery("SELECT "+colDeptName+" FROM"+ deptTable+" WHERE "+colDeptID+"=?",params);
-                 c.moveToFirst();
-                 int index= c.getColumnIndex(colDeptName);
-                 return c.getString(index);
-         }
-
-         public Cursor getEmpByDept(String Dept)
-         {
-                 SQLiteDatabase db=this.getReadableDatabase();
-                 String [] columns=new String[]{"_id",colName,colAge,colDeptName};
-                 Cursor c=db.query(viewEmps, columns, colDeptName+"=?", new String[]{Dept}, null, null, null);
-                 return c;
-         }
-
-         public int UpdateEmp(String _name, int _age, int _dept, int _eid)
-         {
-                 SQLiteDatabase db=this.getWritableDatabase();
-                 ContentValues cv=new ContentValues();
-                 cv.put(colName, _name);
-                 cv.put(colAge, _age);
-                 cv.put(colDept, _dept);
-                 return db.update(employeeTable, cv, colID+"=?", new String []{String.valueOf(_eid)});
-         }
-
-         public void DeleteEmp(String _name, int _age, int _dept, int _eid)
-         {
-                 SQLiteDatabase db=this.getWritableDatabase();
-                 db.delete(employeeTable,colID+"=?", new String [] {String.valueOf(_eid)});
-                 db.close();           
-         }
-	 */       
-
+	}
 }
