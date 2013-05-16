@@ -307,7 +307,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 							if (player.collidesWith(this))
 							{
-								addToScore(10);
+								addToScore(20);
 								this.setVisible(false);
 								this.setIgnoreUpdate(true);
 							}
@@ -373,7 +373,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							super.onUpdate(pSecondsElapsed);
 							if (player.getX() - enemigo.getX() > 100)
 							{
-								addToScore(1);
+								
 								if (enemigo.getX() <= x - maxMovementX)
 								{
 									addToScore(1);
@@ -406,7 +406,29 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 							if (player.collidesWith(this) && key==3)
 							{
-								levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
+								if(MainMenuScene.getIdNivel()==1){
+									if(score>300 && score<400){
+										levelCompleteWindow.display(StarsCount.ONE, GameScene.this, camera);
+									}
+									if(score>400 && score<500){
+										levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
+									}
+									if(score>500){
+										levelCompleteWindow.display(StarsCount.THREE, GameScene.this, camera);
+									}
+								}
+								else if(MainMenuScene.getIdNivel()==2){
+									if(score==300){
+										levelCompleteWindow.display(StarsCount.ONE, GameScene.this, camera);
+									}
+									if(score>400 && score<400){
+										levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
+									}
+									if(score>500){
+										levelCompleteWindow.display(StarsCount.THREE, GameScene.this, camera);
+									}
+								}
+								
 								pantallaLevelComplete();
 
 								guardarPuntuacion();

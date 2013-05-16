@@ -173,8 +173,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		menuChildScene = new MenuScene(camera);
 		menuChildScene.setPosition(0, 0);
 
-		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, getResourcesManager().play_region, getVbom()), 1.2f, 1);
-		final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, getResourcesManager().options_region, getVbom()), 1.2f, 1);
+		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, getResourcesManager().play_region, getVbom()), 0.8f, 1);
+		final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, getResourcesManager().options_region, getVbom()), 0.8f, 1);
 
 		menuChildScene.addMenuItem(playMenuItem);
 		menuChildScene.addMenuItem(optionsMenuItem);
@@ -215,10 +215,10 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		seleccionNivelChildScene = new MenuScene(camera);
 		seleccionNivelChildScene.setPosition(0, 0);
 
-		final IMenuItem Nivel1 = new ScaleMenuItemDecorator(new SpriteMenuItem(NIVEL1, getResourcesManager().options_region, getVbom()), 1.2f, 1);
-		final IMenuItem Nivel2 = new ScaleMenuItemDecorator(new SpriteMenuItem(NIVEL2, getResourcesManager().play_region, getVbom()), 1.2f, 1);
+		final IMenuItem Nivel1 = new ScaleMenuItemDecorator(new SpriteMenuItem(NIVEL1, getResourcesManager().options_region, getVbom()), 0.8f, 1);
+		final IMenuItem Nivel2 = new ScaleMenuItemDecorator(new SpriteMenuItem(NIVEL2, getResourcesManager().play_region, getVbom()), 0.8f, 1);
 
-		final IMenuItem Jugar = new ScaleMenuItemDecorator(new SpriteMenuItem(JUGAR, getResourcesManager().derecha_region, getVbom()), 1.2f, 1);
+		final IMenuItem Jugar = new ScaleMenuItemDecorator(new SpriteMenuItem(JUGAR, getResourcesManager().derecha_region, getVbom()), 0.8f, 1);
 
 		puntuaciones = new Text(0, 0, getResourcesManager().font, "01234567892", getVbom());
 		puntosText = new Text(0, 0, getResourcesManager().font, "Puntos: ", getVbom());
