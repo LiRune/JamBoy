@@ -24,6 +24,7 @@ import org.andengine.util.debug.Debug;
 import android.graphics.Color;
 
 import com.matimdev.GameActivity;
+import com.matimdev.database.DataBase;
 import com.matimdev.scene.MainMenuScene;
 
 public class ResourcesManager
@@ -87,8 +88,18 @@ public class ResourcesManager
 	public ITextureRegion complete_window_region;
 	public ITiledTextureRegion complete_stars_region;
 	
+	public DataBase game;
 	
 	
+	
+	public DataBase getGame() {
+		return game;
+	}
+
+	public void setGame(DataBase game) {
+		this.game = game;
+	}
+
 	public static GameActivity getActivity() {
 		return activity;
 	}
@@ -109,6 +120,7 @@ public class ResourcesManager
 		loadMenuGraphics();
 		loadMenuAudio();
 		loadMenuFonts();
+		game = new DataBase(activity);
 	}
 	
 	public void loadGameResources()

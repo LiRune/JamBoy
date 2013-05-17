@@ -18,6 +18,7 @@ public class DataBase extends SQLiteOpenHelper {
 	static final String unlocked = "Desbloqueado";
 	static final String beat = "Superado";
 	static final String score = "Puntuacion";
+	static final String stars = "Estrellas";
 
 	public DataBase(Context context) {
 		// THE VALUE OF 1 ON THE NEXT LINE REPRESENTS THE VERSION NUMBER OF THE DATABASE
@@ -29,17 +30,19 @@ public class DataBase extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 
-
+		//SI NO FUNCIONA HAY QUE REVISAR QUE ESTEN LAS COMAS Y ESPACIOS
 		// ESTABLISH NEW DATABASE TABLES IF THEY DON'T ALREADY EXIST IN THE DATABASE
-		db.execSQL("CREATE TABLE IF NOT EXISTS "+tablaNiveles+" (" +
+		db.execSQL("CREATE TABLE "+tablaNiveles+" (" +
 				IDNivel + " INTEGER PRIMARY KEY , " +
 				unlocked + " TEXT, " +
 				beat + " TEXT, " +
-				score + " TEXT" +
+				score + " TEXT, " +
+				stars + " INTEGER" +
 				")");
+		
 
-		db.execSQL("INSERT INTO Niveles VALUES(1," + "'true', " + "'false', 0)");
-		db.execSQL("INSERT INTO Niveles VALUES(2," + "'false', " + "'false', 0)");
+		db.execSQL("INSERT INTO Niveles VALUES(1, 'true', 'false', 0, 0)");
+		db.execSQL("INSERT INTO Niveles VALUES(2, 'false', 'false', 0, 0)");
 		//db.close();
 
 

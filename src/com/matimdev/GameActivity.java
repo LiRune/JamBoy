@@ -30,6 +30,9 @@ public class GameActivity extends BaseGameActivity
 {
 	private BoundCamera camera;
 	public static Sound salto,disparar,enemigo_muerte,grito,coger_llave;
+	
+	
+
 
 	@Override
 	public Engine onCreateEngine(EngineOptions pEngineOptions) 
@@ -68,7 +71,7 @@ public class GameActivity extends BaseGameActivity
 		ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 		
-		DataBase game = new DataBase(this);
+		
 		//Sonidos juego
 		//Cada sonido recoge el manager de sonido del engine,el contexto y una ruta String hacia el archivo que queremos reproducir
 		salto = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/saltar.wav");             

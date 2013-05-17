@@ -74,10 +74,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private boolean isTouchedFlag = false;
 	private HUD gameHUD;
 	private Text scoreText;
+	private Text faltankeysText;
 	private Text timeText;
 	private Sprite heart1;
 	private Sprite heart2;
 	private Sprite heart3;
+	private Sprite heart;
 	private Sprite bala;
 	private Body bala_cuerpo,enemigo_cuerpo;
 	private PhysicsWorld physicsWorld, fisica;
@@ -99,13 +101,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_LEVEL_COMPLETE = "levelComplete";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ENEMY = "enemy";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_KEY = "key";
+	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_HEART = "heart";
 
 
 	private Player player;
 	private Enemigo enemigo;
 
 	private Text gameOverText;
-	private Text faltanKeyText;
+
 
 	private boolean gameOverDisplayed = false;
 
@@ -123,6 +126,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public ButtonSprite disp;
 
 	boolean PAUSED = false;
+
+	private int estrellas;
 
 	private TimerHandler temporizador;
 
@@ -317,6 +322,37 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 				}	
 
+				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_HEART))
+				{
+					levelObject = new Sprite(x, y, getResourcesManager().heart_region, getVbom())					
+					{
+						@Override
+						protected void onManagedUpdate(float pSecondsElapsed) 
+						{
+							super.onManagedUpdate(pSecondsElapsed);
+
+							if (player.collidesWith(this))
+							{
+
+								if(heart3.isVisible()==false && heart2.isVisible()==true){
+									health++;
+									heart3.setVisible(true);									
+								}
+								if(heart3.isVisible()==false && heart2.isVisible()==false){
+									health++;
+									heart2.setVisible(true);									
+								}
+
+								this.setVisible(false);
+								this.setIgnoreUpdate(true);
+
+							}
+						}
+					};
+					levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1f)));
+
+				}	
+
 
 				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_KEY))
 				{
@@ -373,7 +409,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							super.onUpdate(pSecondsElapsed);
 
 							if(camera.isEntityVisible(enemigo)){
-								
+
 								//Si la distancia de enemigo esta a 200 o mas positivo
 								if(enemigo.getX() - player.getX() <= 200){
 									//enemigo_cuerpo.setLinearVelocity(5 * -1, 0);									
@@ -414,74 +450,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 									}
 								}
 							}
-
-
-							/*if(camera.isEntityVisible(enemigo)){
-								//enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
-
-								if(player.getX() > enemigo.getX()+100){
-									enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
-
-									enemigo.animate(100);
-									enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
-									enemigo.setFlippedHorizontal(true);
-
-								}
-								else if(player.getX() < enemigo.getX()-100){
-									enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
-
-									enemigo.animate(100);
-									enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
-									enemigo.setFlippedHorizontal(true);
-
-								}*/
-
-							//ANTERIOR (INTENTO FALLIDO)
-							/*    //DER
-	   							 if (enemigo.getX() - player.getX() <= 200 )
-	   							 {   									 
-
-	   								 if(player.getX() <= enemigo.getX() - 100){
-	   									 enemigo.animate(100);
-	   									 enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
-	   									 enemigo.setFlippedHorizontal(true);
-	   								 }
-
-	   							 }   							 
-	   							 //IZQ
-	   							 if (enemigo.getX() - player.getX() >= -200)
-	   							 {
-	   								 if(player.getX() >= enemigo.getX() + 100 ){
-	   									 enemigo.animate(100);
-	   									 enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
-	   									 enemigo.setFlippedHorizontal(false);
-	   								 }
-
-
-	   							 }
-							 */
 						}
-
-						//INTENTO FALLIDO INICIAL (QUIETO)
-						/*if (player.getX() - enemigo.getX() > 100)
-							{
-
-								if (enemigo.getX() <= x - maxMovementX)
-								{
-									addToScore(1);
-									enemigo.animate(100);
-									enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
-									enemigo.setFlippedHorizontal(false);
-								}
-								if (enemigo.getX() >= x + maxMovementX)
-								{
-									addToScore(1);
-									enemigo.animate(100);
-									enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
-									enemigo.setFlippedHorizontal(true);
-								}
-							}*/
-						//}
 					});
 					levelObject= enemigo;	
 
@@ -496,56 +465,76 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						{
 							super.onManagedUpdate(pSecondsElapsed);
 
-							if (player.collidesWith(this) && key==3)
+							if (player.collidesWith(this))
 							{
-								if(MainMenuScene.getIdNivel()==1){
-									if(score>=300 && score<400){
-										levelCompleteWindow.display(StarsCount.ONE, GameScene.this, camera);
-									}
-									if(score>=400 && score<500){
-										levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
-									}
-									if(score>=500){
-										levelCompleteWindow.display(StarsCount.THREE, GameScene.this, camera);
-									}
-								}
-								else if(MainMenuScene.getIdNivel()==2){
-									if(score>=300 && score<400){
-										levelCompleteWindow.display(StarsCount.ONE, GameScene.this, camera);
-									}
-									if(score>=400 && score<500){
-										levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
-									}
-									if(score>=500){
-										levelCompleteWindow.display(StarsCount.THREE, GameScene.this, camera);
-									}
-								}
+								if(key==3){
 
-								pantallaLevelComplete();
+									if(MainMenuScene.getIdNivel()==1){
+										if(score>=300 && score<400){
+											levelCompleteWindow.display(StarsCount.ONE, GameScene.this, camera);
+											estrellas=1;
+										}
+										if(score>=400 && score<500){
+											levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
+											estrellas=2;
+										}
+										if(score>=500){
+											levelCompleteWindow.display(StarsCount.THREE, GameScene.this, camera);
+											estrellas=3;
+										}
+									}
+									else if(MainMenuScene.getIdNivel()==2){
+										if(score>=300 && score<400){
+											levelCompleteWindow.display(StarsCount.ONE, GameScene.this, camera);
+											estrellas=1;
+										}
+										if(score>=400 && score<500){
+											levelCompleteWindow.display(StarsCount.TWO, GameScene.this, camera);
+											estrellas=2;
+										}
+										if(score>=500){
+											levelCompleteWindow.display(StarsCount.THREE, GameScene.this, camera);
+											estrellas=3;
+										}
+									}
 
-								guardarPuntuacion();
+									pantallaLevelComplete();
 
-								if (getResourcesManager().music != null)
-								{
-									if (getResourcesManager().music.isPlaying())
+									guardarPuntuacion();
+
+									if (getResourcesManager().music != null)
 									{
-										getResourcesManager().music.stop();
+										if (getResourcesManager().music.isPlaying())
+										{
+											getResourcesManager().music.stop();
+										}
 									}
-								}
 
-								try {
-									getResourcesManager().music = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity, "mfx/victory.mp3");
-									getResourcesManager().music.play();
-								} catch (IllegalStateException e) {
-									e.printStackTrace();
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
+									try {
+										getResourcesManager().music = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity, "mfx/victory.mp3");
+										getResourcesManager().music.play();
+									} catch (IllegalStateException e) {
+										e.printStackTrace();
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
 
-								this.setVisible(false);
-								this.setIgnoreUpdate(true);
-								player.setVisible(false);
-								finish = true;
+									this.setVisible(false);
+									this.setIgnoreUpdate(true);
+									player.setVisible(false);
+									finish = true;
+								}else{
+									if(key==2){
+										faltankeysText.setText("Falta 1 llave");
+									}else if(key==1){
+										faltankeysText.setText("Faltan 2 llaves");
+									}else if(key==0){
+										faltankeysText.setText("Faltan 3 llaves");
+									}
+									faltankeysText.setVisible(true);
+								}
+							}else{
+								faltankeysText.setVisible(false);
 							}
 						}
 					};
@@ -593,6 +582,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		timeText.setText("20");
 
 		reloj = new Sprite(330, 450, getResourcesManager().reloj_region , getVbom());
+		
+		faltankeysText = new Text(390, 300, getResourcesManager().font, "Faltan llaves", new TextOptions(HorizontalAlign.CENTER), getVbom());
+		//timeText.setAnchorCenter(0,  0);
+		faltankeysText.setText("Faltan llaves");
+		faltankeysText.setVisible(false);
+		gameHUD.attachChild(faltankeysText);
 		gameHUD.attachChild(reloj);
 		gameHUD.attachChild(timeText);
 
@@ -760,6 +755,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		heart1 = new Sprite(660, 450, getResourcesManager().heart_region, getVbom());
 		heart2 = new Sprite(710, 450, getResourcesManager().heart_region, getVbom());
 		heart3 = new Sprite(760, 450, getResourcesManager().heart_region, getVbom());
+
 
 
 		gameHUD.registerTouchArea(reanudar);
@@ -1067,25 +1063,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	}
 
 	public void guardarPuntuacion(){
-		DataBase myDB = new DataBase(activity);
-		SQLiteDatabase db = myDB.getWritableDatabase();
-		//db.execSQL("DROP TABLE Niveles");
-		/*final String tablaNiveles = "Niveles";
-		final String IDNivel = "Numero";
-		final String unlocked = "Bloqueado";
-		final String beat = "Superado";
-		final String score1 = "Puntuacion";
 
-		db.execSQL("CREATE TABLE IF NOT EXISTS Niveles (" +
-				IDNivel +" INTEGER PRIMARY KEY , " +
-				unlocked + " TEXT, " +
-				beat + " TEXT, " +
-				score1 + " TEXT" +
-				")");*/
-
-		/*db.execSQL("INSERT INTO Niveles VALUES(1," + "'true', " + "'false', " + score + ")");
-		db.execSQL("INSERT INTO Niveles VALUES(2," + "'true', " + "'false', " + score + ")");
-		db.close();*/
+		SQLiteDatabase db = getResourcesManager().getGame().getWritableDatabase();
 
 
 		if(!DataBase.nivelSuperado(MainMenuScene.getIdNivel()))
@@ -1096,43 +1075,34 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		}
 
 		if(DataBase.compararPuntuacion(MainMenuScene.getIdNivel(), score)){
-			db.execSQL("UPDATE Niveles SET Puntuacion = "+score+" WHERE Numero = "+MainMenuScene.getIdNivel());
+			db.execSQL("UPDATE Niveles SET Puntuacion = "+score+", Estrellas= "+estrellas+" WHERE Numero = "+MainMenuScene.getIdNivel());
 		}
 		db.close();
 
 
+		/*SQLiteDatabase db2 = getResourcesManager().getGame().getReadableDatabase();
 
-		/*if(MainMenuScene.getIdNivel()==1){
-
-			SQLiteDatabase bd = myDB.getWritableDatabase();
-
-			ContentValues registro = new ContentValues();
-			registro.put("unlocked", false);
-			registro.put("beat", true);
-			registro.put("score", score);
-			int cant = bd.update("Niveles", registro, "IDNivel=" + MainMenuScene.getIdNivel() , null);
-			bd.close();
-			if (cant == 1){
-				pantallaGameOver();
-			}
-
-			else{
-
-			}
-
-		}*/
-		SQLiteDatabase db2 = myDB.getReadableDatabase();
-
-		Cursor c = db2.rawQuery(" SELECT Puntuacion FROM Niveles", null);
+		Cursor c = db2.rawQuery(" SELECT Puntuacion, Estrellas FROM Niveles", null);
 		if (c.moveToFirst()) {
 			//Recorremos el cursor hasta que no haya más registros
 			do {
 				String algo = c.getString(0);
-				System.out.println("PUNTUACION: "+algo);
+				String algo2 = c.getString(1);
+				System.out.println("PUNTUACION: "+algo);				
+				System.out.println("ESTRELLAS: "+algo2);
 
 			} while(c.moveToNext());
 		}
 
-		db2.close();
+		db2.close();*/
+	}
+
+	public void gameToast(final String mensaje) {
+		activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Toast.makeText(activity, mensaje, Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 }

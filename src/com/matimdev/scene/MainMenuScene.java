@@ -15,6 +15,7 @@ import org.andengine.util.adt.color.Color;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.matimdev.base.BaseScene;
 import com.matimdev.database.DataBase;
@@ -43,6 +44,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 	private Text puntuaciones;
 	private Text puntosText; 
+	private Text estrellas; 
 
 	private static boolean musica = true;
 	private float volume = engine.getMusicManager().getMasterVolume();
@@ -135,15 +137,24 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		case NIVEL1:
 			idNivel = 1;
 			puntuaciones.setText(mostrarPuntuacion(idNivel));
+			estrellas.setText(mostrarEstrellas(idNivel));
+			gameToast("Nivel 1 seleccionado");
 			return true;
 		case NIVEL2:				
 			idNivel = 2;
 			puntuaciones.setText(mostrarPuntuacion(idNivel));
+			estrellas.setText(mostrarEstrellas(idNivel));
+			gameToast("Nivel 2 seleccionado");
 			return true;
 		case JUGAR:
-			if(DataBase.nivelDesbloqueado(idNivel)){
-				SceneManager.getInstance().loadGameScene(engine);
-			}	
+			if(idNivel!=0){
+				if(DataBase.nivelDesbloqueado(idNivel)){
+					SceneManager.getInstance().loadGameScene(engine);
+				}
+			}else{
+				gameToast("¡Tienes que seleccionar un nivel!");
+			}
+
 
 			return true;
 		default:
@@ -215,11 +226,14 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		seleccionNivelChildScene = new MenuScene(camera);
 		seleccionNivelChildScene.setPosition(0, 0);
 
+		//BOTONES NIVELES
 		final IMenuItem Nivel1 = new ScaleMenuItemDecorator(new SpriteMenuItem(NIVEL1, getResourcesManager().options_region, getVbom()), 0.8f, 1);
 		final IMenuItem Nivel2 = new ScaleMenuItemDecorator(new SpriteMenuItem(NIVEL2, getResourcesManager().play_region, getVbom()), 0.8f, 1);
 
+		//BOTON PLAY
 		final IMenuItem Jugar = new ScaleMenuItemDecorator(new SpriteMenuItem(JUGAR, getResourcesManager().derecha_region, getVbom()), 0.8f, 1);
 
+		//TEXTO PUNTUACIONES
 		puntuaciones = new Text(0, 0, getResourcesManager().font, "01234567892", getVbom());
 		puntosText = new Text(0, 0, getResourcesManager().font, "Puntos: ", getVbom());
 		puntosText.setText("Puntos: ");
@@ -229,11 +243,21 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			puntuaciones.setText("0");
 		}
 
+		//ESTRELLAS
+
+		estrellas = new Text(0, 0, getResourcesManager().font, "01234567892", getVbom());
+		if(idNivel!=0){
+			estrellas.setText(mostrarEstrellas(idNivel));
+		}else{
+			estrellas.setText("0");
+		}
+
 		seleccionNivelChildScene.addMenuItem(Nivel1);
 		seleccionNivelChildScene.addMenuItem(Nivel2);
 		seleccionNivelChildScene.addMenuItem(Jugar);
 		seleccionNivelChildScene.attachChild(puntuaciones);
 		seleccionNivelChildScene.attachChild(puntosText);
+		seleccionNivelChildScene.attachChild(estrellas);
 
 		seleccionNivelChildScene.buildAnimations();
 		seleccionNivelChildScene.setBackgroundEnabled(true);
@@ -244,7 +268,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 		Jugar.setPosition(750, 50);
 		puntosText.setPosition(500, 450);
-		puntuaciones.setPosition(puntosText.getX() + 200, puntosText.getY());		
+		puntuaciones.setPosition(puntosText.getX() + 200, puntosText.getY());			
+		estrellas.setPosition(20, 450);
 
 		seleccionNivelChildScene.setOnMenuItemClickListener(this);
 
@@ -272,6 +297,36 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		return punt;
 	}
 
+
+	private String mostrarEstrellas(int id)
+	{
+		String estr= null;
+		DataBase myDB = new DataBase(ResourcesManager.getActivity());
+
+		SQLiteDatabase db = myDB.getReadableDatabase();
+
+		Cursor c = db.rawQuery(" SELECT Estrellas FROM Niveles WHERE Numero ="+id, null);
+		if (c.moveToFirst()) {
+			//Recorremos el cursor hasta que no haya más registros
+			do {
+				estr = c.getString(0);
+				System.out.println("ESTRELLAS DE LA BD: "+estr);
+
+			} while(c.moveToNext());
+		}
+
+		db.close();		
+		return estr;
+	}
+
+	public void gameToast(final String mensaje) {
+		activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Toast.makeText(activity, mensaje, Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
 
 
 }
