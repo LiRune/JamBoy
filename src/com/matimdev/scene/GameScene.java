@@ -372,8 +372,45 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						{
 							super.onUpdate(pSecondsElapsed);
 
-
 							if(camera.isEntityVisible(enemigo)){
+								if(enemigo.getX() - player.getX() <= 200){
+									//enemigo_cuerpo.setLinearVelocity(5 * -1, 0);
+
+									if (player.getX() > enemigo.getX()+150)
+									{
+										enemigo.animate(100);
+										enemigo_cuerpo.setLinearVelocity(5, 0);
+										enemigo.setFlippedHorizontal(false);
+									}
+									else if(player.getX() < enemigo.getX()-150)
+									{
+										enemigo.animate(100);
+										enemigo_cuerpo.setLinearVelocity(-5, 0);
+										enemigo.setFlippedHorizontal(true);
+									}
+
+
+								}
+								if(enemigo.getX() - player.getX() <= -200){
+									//enemigo_cuerpo.setLinearVelocity(5 * -1, 0);
+
+									if (player.getX() > enemigo.getX()+150)
+									{
+										enemigo.animate(100);
+										enemigo_cuerpo.setLinearVelocity(5, 0);
+										enemigo.setFlippedHorizontal(false);
+									}
+									else if(player.getX() < enemigo.getX()-150)
+									{
+										enemigo.animate(100);
+										enemigo_cuerpo.setLinearVelocity(-5, 0);
+										enemigo.setFlippedHorizontal(true);
+									}
+								}
+							}
+
+
+							/*if(camera.isEntityVisible(enemigo)){
 								//enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
 
 								if(player.getX() > enemigo.getX()+100){
@@ -391,10 +428,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 									enemigo_cuerpo.setLinearVelocity(enemigo_cuerpo.getLinearVelocity().x * -1, 0);
 									enemigo.setFlippedHorizontal(true);
 
-								}
+								}*/
 
-								//ANTERIOR (INTENTO FALLIDO)
-								/*    //DER
+							//ANTERIOR (INTENTO FALLIDO)
+							/*    //DER
 	   							 if (enemigo.getX() - player.getX() <= 200 )
 	   							 {   									 
 
@@ -416,11 +453,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 
 	   							 }
-								 */
-							}
+							 */
+						}
 
-							//INTENTO FALLIDO INICIAL (QUIETO)
-							/*if (player.getX() - enemigo.getX() > 100)
+						//INTENTO FALLIDO INICIAL (QUIETO)
+						/*if (player.getX() - enemigo.getX() > 100)
 							{
 
 								if (enemigo.getX() <= x - maxMovementX)
@@ -438,7 +475,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 									enemigo.setFlippedHorizontal(true);
 								}
 							}*/
-						}
+						//}
 					});
 					levelObject= enemigo;	
 

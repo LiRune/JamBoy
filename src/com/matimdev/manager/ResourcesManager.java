@@ -179,8 +179,8 @@ public class ResourcesManager
 	{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 		//el 1500, 1500 es el espacio del atlas
-        gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.BILINEAR);
-        gameTextureAtlas.addEmptyTextureAtlasSource(0, 0, 2048, 2048);
+        gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1500, 1500, TextureOptions.BILINEAR);
+        gameTextureAtlas.addEmptyTextureAtlasSource(0, 0, 1500, 1500);
        	platform1_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform1.png");
        	platform2_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform2.png");
        	platform3_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform3.png");
