@@ -397,7 +397,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ENEMY))
 				{
 					enemigo =new Enemigo(x,y, resourcesManager.enemy_region, vbom);
-					enemigo_cuerpo = PhysicsFactory.createBoxBody(physicsWorld,enemigo, BodyType.KinematicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+					enemigo_cuerpo = PhysicsFactory.createBoxBody(physicsWorld,enemigo, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
 					//enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
 					enemigo_cuerpo.setUserData("enemigo");
 					final float maxMovementX = 200;
@@ -582,7 +582,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		timeText.setText("20");
 
 		reloj = new Sprite(330, 450, getResourcesManager().reloj_region , getVbom());
-		
+
 		faltankeysText = new Text(390, 300, getResourcesManager().font, "Faltan llaves", new TextOptions(HorizontalAlign.CENTER), getVbom());
 		//timeText.setAnchorCenter(0,  0);
 		faltankeysText.setText("Faltan llaves");
@@ -945,7 +945,17 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) {
 						health--;
-						player.impacto();
+
+
+						//Si el jugador choca con el enemigo pega un salto hacia atras
+						if(player.getX() - enemigo.getX() >= -10){
+							player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x +8, 6));
+						}
+						if(player.getX() - enemigo.getX() <= 10){
+							player.setX(player.getBody().getLinearVelocity().x-8);
+						}
+
+
 						if(heart3.isVisible()) {
 							heart3.setVisible(false);
 						}
@@ -1013,7 +1023,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 			public void preSolve(Contact contact, Manifold oldManifold)
 			{
+				final Fixture x1 = contact.getFixtureA();
+				final Fixture x2 = contact.getFixtureB();
 
+				if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
+				{					
+					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) {
+						contact.setEnabled(false);
+					}					
+				}
 			}
 
 			public void postSolve(Contact contact, ContactImpulse impulse)

@@ -160,24 +160,18 @@ public abstract class Player extends AnimatedSprite
 	
 	public void jump()
 	{
-		GameActivity.salto.play();
+		
 		if (footContacts < 1) 
 		{
 			return; 
+		}
+		else{
+			GameActivity.salto.play();
 		}
 		body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, 12)); 
 	}
 	
 	
-	public void impacto()
-	{
-		GameActivity.salto.play();
-		if (footContacts < 1) 
-		{
-			return; 
-		}
-		body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, 6)); 
-	}
 	
 	public void increaseFootContacts()
 	{
