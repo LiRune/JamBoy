@@ -373,15 +373,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							super.onUpdate(pSecondsElapsed);
 
 							if(camera.isEntityVisible(enemigo)){
+								
+								//Si la distancia de enemigo esta a 200 o mas positivo
 								if(enemigo.getX() - player.getX() <= 200){
-									//enemigo_cuerpo.setLinearVelocity(5 * -1, 0);
-
+									//enemigo_cuerpo.setLinearVelocity(5 * -1, 0);									
+									//Se compara a cuanto esta de cerca del enemigo, si esta a  150, empieza a correr hacia la derecha
 									if (player.getX() > enemigo.getX()+150)
 									{
 										enemigo.animate(100);
 										enemigo_cuerpo.setLinearVelocity(5, 0);
 										enemigo.setFlippedHorizontal(false);
 									}
+									//Sino, obtiene velocidad negativa
 									else if(player.getX() < enemigo.getX()-150)
 									{
 										enemigo.animate(100);
@@ -391,15 +394,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 
 								}
+								//Si la distancia del jugador es -200 o menos
 								if(enemigo.getX() - player.getX() <= -200){
 									//enemigo_cuerpo.setLinearVelocity(5 * -1, 0);
-
+									// Si el jugador esta a 150 mas se gira el enemigo
 									if (player.getX() > enemigo.getX()+150)
 									{
 										enemigo.animate(100);
 										enemigo_cuerpo.setLinearVelocity(5, 0);
 										enemigo.setFlippedHorizontal(false);
 									}
+
+									//Sino, obtiene velocidad negativa
 									else if(player.getX() < enemigo.getX()-150)
 									{
 										enemigo.animate(100);
