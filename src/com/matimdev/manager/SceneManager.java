@@ -52,6 +52,7 @@ public class SceneManager
 		SCENE_GAME,
 		SCENE_LOADING,
 		SCENE_OPTIONS,
+		SCENE_CHARACTER,
 	}
 	
 	//---------------------------------------------

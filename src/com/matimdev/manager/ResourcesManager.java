@@ -52,6 +52,8 @@ public class ResourcesManager
 	public ITextureRegion menu_background_region;
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
+	public ITextureRegion personaje1_region;
+	public ITextureRegion personaje2_region;
 	
 	// Game Texture
 	public BuildableBitmapTextureAtlas gameTextureAtlas;
@@ -139,6 +141,8 @@ public class ResourcesManager
         play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play.png");
         options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "options.png");
         derecha_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "der.png");
+        personaje1_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje1.png");
+        personaje2_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje2.png");
        
     	try 
     	{
@@ -197,10 +201,21 @@ public class ResourcesManager
        	platform2_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform2.png");
        	platform3_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform3.png");
         coin_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "coin.png");
-        player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "player.png", 4, 1);
+        
+        System.out.println("PERSONAJE SELECCIONADO:" +MainMenuScene.getIdPersonaje());
+        if(MainMenuScene.getIdPersonaje()==1){
+        	player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "personaje1.png", 4, 1);
+        }if(MainMenuScene.getIdPersonaje()==2){
+        	player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "personaje2.png", 4, 1);
+        }
+        
+       
+        
+        
+        
         heart_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "heart.png");
         bala_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "bala25.png");
-        enemy_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "player.png", 4, 1);
+        enemy_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "personaje1.png", 4, 1);
         llave_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "key.png");
         reloj_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "clock.png");
         explosion_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "explosion.png", 3, 1);
