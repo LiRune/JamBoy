@@ -29,11 +29,7 @@ import com.matimdev.manager.SceneManager;
 public class GameActivity extends BaseGameActivity
 {
 	private BoundCamera camera;
-	public static Sound salto,disparar,enemigo_muerte,grito,coger_llave;
 	
-	
-
-
 	@Override
 	public Engine onCreateEngine(EngineOptions pEngineOptions) 
 	{
@@ -70,21 +66,6 @@ public class GameActivity extends BaseGameActivity
 	{
 		ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
-		
-		
-		//Sonidos juego
-		//Cada sonido recoge el manager de sonido del engine,el contexto y una ruta String hacia el archivo que queremos reproducir
-		salto = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/saltar.wav");             
-
-		disparar = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/disparo.mp3");               
-
-		enemigo_muerte = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/enemigo_muerte.mp3");
-
-		grito = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/grito.ogg");
-
-		coger_llave = SoundFactory.createSoundFromAsset(this.getSoundManager(), this.getApplicationContext(),"sfx/coger_llave.wav");
-
-
 	}
 
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException
@@ -124,17 +105,20 @@ public class GameActivity extends BaseGameActivity
 	}
 
 	@Override
-	public void onPauseGame()
+	public void onPause()
 	{
-		super.onPauseGame();
-		SceneManager.getInstance().getCurrentScene().getResourcesManager().music.pause();
+		super.onPause();
+		if (this.isGameLoaded())
+		{
+			SceneManager.getInstance().getCurrentScene().getResourcesManager().music.pause();
+		}
 	}
 
 	@Override
-	public void onResumeGame()
+	public synchronized void onResume()
 	{
-		super.onResumeGame();
-		if (isGamePaused ())
+		super.onResume();
+		if (this.isGameLoaded())
 		{
 			SceneManager.getInstance().getCurrentScene().getResourcesManager().music.resume();
 		}

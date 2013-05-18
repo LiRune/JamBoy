@@ -59,15 +59,16 @@ import com.matimdev.base.BaseScene;
 import com.matimdev.database.DataBase;
 import com.matimdev.extras.LevelCompleteWindow;
 import com.matimdev.extras.LevelCompleteWindow.StarsCount;
+import com.matimdev.manager.ResourcesManager;
 import com.matimdev.manager.SceneManager;
 import com.matimdev.manager.SceneManager.SceneType;
+import com.matimdev.object.Bala;
 import com.matimdev.object.Enemigo;
 import com.matimdev.object.Player;
 
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener
 {
-	private final static int NUM_NIVELES=3;
 	private int score = 0;
 	private int health = 3;
 	private int tiempo = 20;
@@ -79,10 +80,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private Sprite heart1;
 	private Sprite heart2;
 	private Sprite heart3;
-	private Sprite heart;
-	private Sprite bala;
-	private Body bala_cuerpo,enemigo_cuerpo;
-	private PhysicsWorld physicsWorld, fisica;
+	private Bala bala;
+	private float balaX;
+	private PhysicsWorld physicsWorld;
 	private LevelCompleteWindow levelCompleteWindow;
 
 	private boolean moverPausa=true;
@@ -106,6 +106,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private Player player;
 	private Enemigo enemigo;
+	private int vidaEnemigo;
 
 	private Text gameOverText;
 
@@ -131,12 +132,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private TimerHandler temporizador;
 
-	private int key=0;
+	private int key = 0;
 
 	private int pausaBackKey = 0;
 
-
-	private DataBase db;
 	private Sprite reloj;
 
 	public PhysicsWorld getPhysicsWorld() {
@@ -145,10 +144,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	public void setPhysicsWorld(PhysicsWorld physicsWorld) {
 		this.physicsWorld = physicsWorld;
-	}
-
-	public static int getNumNiveles() {
-		return NUM_NIVELES;
 	}
 
 	@Override
@@ -171,41 +166,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public void onBackKeyPressed()
 	{
 		pausaBackKey++;
-		//SceneManager.getInstance().loadMenuScene(engine);
 
 		if(pausaBackKey==1){
-			PAUSED=true;
-			pausar.setVisible(false);
-			pausar.setEnabled(false);
-			reanudar.setVisible(true);
-			reanudar.setEnabled(true);
-			left.setVisible(false);
-			right.setVisible(false);
-
-			jump.setVisible(false);		
-			jump.setEnabled(false);
-
-			disp.setVisible(false);
-			disp.setEnabled(false);
-
-			volverMenu.setVisible(true);
-			volverMenu.setEnabled(true);
-
-			restartJuego.setVisible(true);
-			restartJuego.setEnabled(true);
-
-			moverPausa=false;
-
-
-
-			if (getResourcesManager().music != null)
-			{
-				getResourcesManager().music.pause();
-			}
+			pausa();
 		}else if (pausaBackKey==2){
 			SceneManager.getInstance().loadMenuScene(engine);
 		}
-
 	}
 
 	@Override
@@ -287,6 +253,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					levelObject = new Sprite(x, y, getResourcesManager().platform1_region, getVbom());
 					PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("platform1");
 				} 
+
 				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLATFORM2))
 				{
 					levelObject = new Sprite(x, y, getResourcesManager().platform2_region, getVbom());
@@ -294,6 +261,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					body.setUserData("platform2");
 					physicsWorld.registerPhysicsConnector(new PhysicsConnector(levelObject, body, true, false));
 				}
+
 				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLATFORM3))
 				{
 					levelObject = new Sprite(x, y, getResourcesManager().platform3_region, getVbom());
@@ -301,6 +269,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					body.setUserData("platform3");
 					physicsWorld.registerPhysicsConnector(new PhysicsConnector(levelObject, body, true, false));
 				}
+
 				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_COIN))
 				{
 					levelObject = new Sprite(x, y, getResourcesManager().coin_region, getVbom())					
@@ -318,8 +287,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							}
 						}
 					};
-					levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1f)));
 
+					levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1f)));
 				}	
 
 				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_HEART))
@@ -349,10 +318,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							}
 						}
 					};
+
 					levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1f)));
-
 				}	
-
 
 				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_KEY))
 				{
@@ -369,17 +337,17 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 								key++;
 								this.setVisible(false);
 								this.setIgnoreUpdate(true);
-								GameActivity.coger_llave.play();										
+								ResourcesManager.coger_llave.play();										
 							}
 						}
 					};
-					levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1.3f)));
-				}	
 
+					levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1.3f)));
+				}
 
 				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER))
 				{
-					player = new Player(x, y, getVbom(), camera, physicsWorld)
+					player = new Player(x, y, vbom, camera, physicsWorld)
 					{
 						@Override
 						public void onDie()
@@ -387,75 +355,41 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							if (!gameOverDisplayed)
 							{
 								pantallaGameOver();
-								GameActivity.grito.play();
+								ResourcesManager.grito.play();
 							}
 						}
 					};
+
 					levelObject = player;
 				}
 
 				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ENEMY))
 				{
-					enemigo =new Enemigo(x,y, resourcesManager.enemy_region, vbom);
-					enemigo_cuerpo = PhysicsFactory.createBoxBody(physicsWorld,enemigo, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
-					//enemigo_cuerpo.setLinearVelocity(-1 * 5, 0);
-					enemigo_cuerpo.setUserData("enemigo");
-					final float maxMovementX = 200;
-					physicsWorld.registerPhysicsConnector(new PhysicsConnector(enemigo, enemigo_cuerpo, true, false)
+					enemigo = new Enemigo(x, y, vbom, camera, physicsWorld, 1)
+					{
+						@Override
+						public void onDie()
+						{
+							enemigo.getBody().setActive(false);
+							enemigo.detachSelf();
+							enemigo.setVisible(false);
+						}
+					};
+
+					physicsWorld.registerPhysicsConnector(new PhysicsConnector(enemigo, enemigo.getBody(), true, false)
 					{
 						@Override
 						public void onUpdate(float pSecondsElapsed)
 						{
 							super.onUpdate(pSecondsElapsed);
-
-							if(camera.isEntityVisible(enemigo)){
-
-								//Si la distancia de enemigo esta a 200 o mas positivo
-								if(enemigo.getX() - player.getX() <= 200){
-									//enemigo_cuerpo.setLinearVelocity(5 * -1, 0);									
-									//Se compara a cuanto esta de cerca del enemigo, si esta a  150, empieza a correr hacia la derecha
-									if (player.getX() > enemigo.getX()+150)
-									{
-										enemigo.animate(100);
-										enemigo_cuerpo.setLinearVelocity(5, 0);
-										enemigo.setFlippedHorizontal(false);
-									}
-									//Sino, obtiene velocidad negativa
-									else if(player.getX() < enemigo.getX()-150)
-									{
-										enemigo.animate(100);
-										enemigo_cuerpo.setLinearVelocity(-5, 0);
-										enemigo.setFlippedHorizontal(true);
-									}
-
-
-								}
-								//Si la distancia del jugador es -200 o menos
-								if(enemigo.getX() - player.getX() <= -200){
-									//enemigo_cuerpo.setLinearVelocity(5 * -1, 0);
-									// Si el jugador esta a 150 mas se gira el enemigo
-									if (player.getX() > enemigo.getX()+150)
-									{
-										enemigo.animate(100);
-										enemigo_cuerpo.setLinearVelocity(5, 0);
-										enemigo.setFlippedHorizontal(false);
-									}
-
-									//Sino, obtiene velocidad negativa
-									else if(player.getX() < enemigo.getX()-150)
-									{
-										enemigo.animate(100);
-										enemigo_cuerpo.setLinearVelocity(-5, 0);
-										enemigo.setFlippedHorizontal(true);
-									}
-								}
-							}
+							camera.onUpdate(0.1f);
+							enemigo.seguirJugador(camera, player);
 						}
 					});
-					levelObject= enemigo;	
 
-
+					levelObject= enemigo;
 				}
+
 				else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_LEVEL_COMPLETE))
 				{
 					levelObject = new Sprite(x, y, getResourcesManager().complete_stars_region, getVbom())
@@ -608,7 +542,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 					case TouchEvent.ACTION_UP:  
 						isTouchedFlag = false;
-						player.stop2();
+						player.stop();
 
 						break;
 
@@ -672,8 +606,19 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 
 		disp = new ButtonSprite(620, 50, getResourcesManager().saltar_region , getVbom(), new OnClickListener() {
-			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) { 	 
-				disparar(engine, player.getX(), player.getY());
+			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+				if(player.isFlippedHorizontal())
+				{
+					balaX = player.getX() - 30;
+				}
+				else
+				{
+					balaX = player.getX() + 30;
+				}
+
+				bala = new Bala(balaX, player.getY(), vbom, camera, physicsWorld);
+
+				player.disparar(player.getX(), player.getY(), engine, bala);
 			}
 		});
 
@@ -687,34 +632,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 		pausar = new ButtonSprite(750, 380, getResourcesManager().pausa_region , getVbom(), new OnClickListener() {
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) { 	 
-				PAUSED=true;
-				pausar.setVisible(false);
-				pausar.setEnabled(false);
-				reanudar.setVisible(true);
-				reanudar.setEnabled(true);
-				left.setVisible(false);
-				right.setVisible(false);
-
-				jump.setVisible(false);		
-				jump.setEnabled(false);
-
-				disp.setVisible(false);
-				disp.setEnabled(false);
-
-				volverMenu.setVisible(true);
-				volverMenu.setEnabled(true);
-
-				restartJuego.setVisible(true);
-				restartJuego.setEnabled(true);
-
-				moverPausa=false;
-
-
-
-				if (getResourcesManager().music != null)
-				{
-					getResourcesManager().music.pause();
-				}
+				pausa();
 			}
 		});
 
@@ -820,11 +738,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -17), false); 
 		physicsWorld.setContactListener(contactListener());
 		registerUpdateHandler(physicsWorld);
-
-		///FISICAS BALA
-		physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -17), false); 
-		physicsWorld.setContactListener(contactListener());
-		registerUpdateHandler(physicsWorld);
 	}
 
 	private void crearTemporizador()
@@ -896,9 +809,36 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	public void onHomeKeyPressed()
 	{
-		if(getResourcesManager().music != null)
+
+	}
+
+	public void pausa()
+	{
+		PAUSED=true;
+		pausar.setVisible(false);
+		pausar.setEnabled(false);
+		reanudar.setVisible(true);
+		reanudar.setEnabled(true);
+		left.setVisible(false);
+		right.setVisible(false);
+
+		jump.setVisible(false);		
+		jump.setEnabled(false);
+
+		disp.setVisible(false);
+		disp.setEnabled(false);
+
+		volverMenu.setVisible(true);
+		volverMenu.setEnabled(true);
+
+		restartJuego.setVisible(true);
+		restartJuego.setEnabled(true);
+
+		moverPausa=false;
+
+		if (getResourcesManager().music != null)
 		{
-			getResourcesManager().music.stop();
+			getResourcesManager().music.pause();
 		}
 	}
 
@@ -946,15 +886,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) {
 						health--;
 
-
 						//Si el jugador choca con el enemigo pega un salto hacia atras
-						if(player.getX() - enemigo.getX() >= -10){
+						if(player.getX() > enemigo.getX()){
 							player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x +8, 6));
 						}
-						if(player.getX() - enemigo.getX() <= 10){
-							player.setX(player.getBody().getLinearVelocity().x-8);
+						if(player.getX() < enemigo.getX()){
+							player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x -8, 6));
 						}
-
 
 						if(heart3.isVisible()) {
 							heart3.setVisible(false);
@@ -973,7 +911,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 					if (x1.getBody().getUserData().equals("enemigo") && x2.getBody().getUserData().equals("bala"))
 					{
-
+						vidaEnemigo = enemigo.getVida() - 1;
+						enemigo.setVida(vidaEnemigo);
+						
+						if(vidaEnemigo == 0)
+						{
+							ResourcesManager.enemigo_muerte.play();
+							enemigo.getBody().setActive(false);
+							enemigo.detachSelf();
+							enemigo.setVisible(false);							
+							addToScore(50);
+						}
+						
 						explosion = new AnimatedSprite(enemigo.getX(), enemigo.getY(), getResourcesManager().explosion_region, vbom)
 						{
 							@Override
@@ -983,7 +932,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 								if(!explosion.isAnimationRunning())
 								{
-
 									detachChild(explosion);
 									explosion.setVisible(false);
 									setIgnoreUpdate(true);
@@ -993,16 +941,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 						attachChild(explosion);
 						explosion.animate(100, 0);
-						enemigo_cuerpo.setActive(false);
-						enemigo.setVisible(false);
-						enemigo.setFlippedVertical(true);
-						enemigo.setFlippedHorizontal(true);
-						GameActivity.enemigo_muerte.play();
-
-						bala_cuerpo.setActive(false);
+						
+						bala.getBody().setActive(false);
+						bala.detachSelf();
 						bala.setVisible(false);
-						addToScore(50);
-
 					}
 				}
 			}
@@ -1030,54 +972,20 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				{					
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) {
 						contact.setEnabled(false);
-					}					
+					}				
+
+					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("bala")) {
+						contact.setEnabled(false);
+					}	
 				}
 			}
 
 			public void postSolve(Contact contact, ContactImpulse impulse)
 			{
-
+				
 			}
 		};
 		return contactListener;
-	}
-
-	//Metodo disparo:
-	public void disparar(Engine mEngine,float xCoord, float yCoord){
-
-		float xComp;
-
-		//Aqui se define la potencia de disparo
-		final FixtureDef bulletFixtureDef=PhysicsFactory.createFixtureDef(1, 0.5f,0.5f);
-		//hay que cambiar resourcesManager.platform2_region por otra imagen para la bala
-		//En que coordenadas se creara el sprite y que imagen tendra 
-		this.bala=new Sprite(xCoord,yCoord+10,this.resourcesManager.bala_region, engine.getVertexBufferObjectManager());
-		//Se crean las fisicas de la bala
-		this.bala_cuerpo=PhysicsFactory.createBoxBody(this.physicsWorld, this.bala,BodyType.DynamicBody, bulletFixtureDef);
-		//Se le añade el cuerpo ^-- cuerpo
-		this.bala_cuerpo.setBullet(true);
-
-		this.physicsWorld.registerPhysicsConnector(new PhysicsConnector(this.bala, this.bala_cuerpo,true,false));
-
-		//Si el jugador no esta girado dispara hacia delante
-		if(!player.isFlippedHorizontal()){
-			xComp=xCoord+5;
-
-		}
-		else{
-			//Si no, la bala obtiene velocidad negativa
-			xComp=-xCoord;
-			//Si esta girado el spirte tambien saldra al reves
-			bala.setFlippedHorizontal(true);
-		}
-		//Esto es la linea vectorial que sigue la bala, en este caso sale a altura 0 y a 10 pixeles delante del jugador
-		this.bala_cuerpo.setLinearVelocity(new Vector2(xComp,0));
-		bala_cuerpo.setUserData("bala");
-		//Agrego la bala a la escena:
-		engine.getScene().attachChild(bala);
-
-		GameActivity.disparar.play();
-
 	}
 
 	public void guardarPuntuacion(){
@@ -1113,14 +1021,5 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		}
 
 		db2.close();*/
-	}
-
-	public void gameToast(final String mensaje) {
-		activity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				Toast.makeText(activity, mensaje, Toast.LENGTH_SHORT).show();
-			}
-		});
 	}
 }

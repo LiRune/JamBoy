@@ -19,9 +19,17 @@ public abstract class BaseScene extends Scene
 
 	protected Engine engine;
 	protected static Activity activity;
-	protected ResourcesManager resourcesManager;
+	protected static ResourcesManager resourcesManager;
 	protected VertexBufferObjectManager vbom;
 	protected BoundCamera camera;
+
+	public Engine getEngine() {
+		return engine;
+	}
+
+	public void setEngine(Engine engine) {
+		this.engine = engine;
+	}
 
 	public VertexBufferObjectManager getVbom() {
 		return vbom;
@@ -31,7 +39,7 @@ public abstract class BaseScene extends Scene
 		this.vbom = vbom;
 	}
 
-	public ResourcesManager getResourcesManager() {
+	public static ResourcesManager getResourcesManager() {
 		return resourcesManager;
 	}
 
