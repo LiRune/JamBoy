@@ -9,11 +9,23 @@ import com.matimdev.manager.SceneManager.SceneType;
 
 public class LoadingScene extends BaseScene
 {
+	private static Text cargandoText;
+	
+	public static Text getCargandoText() {
+		return cargandoText;
+	}
+
+	public void setCargandoText(Text cargandoText) {
+		this.cargandoText = cargandoText;
+	}
+
 	@Override
 	public void createScene()
 	{
+		
+		cargandoText = new Text(400, 240, getResourcesManager().font, "Cargando...", getVbom());		
 		setBackground(new Background(Color.WHITE));
-		attachChild(new Text(400, 240, getResourcesManager().font, "Cargando...", getVbom()));
+		attachChild(cargandoText);
 	}
 
 	@Override

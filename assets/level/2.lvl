@@ -20,7 +20,7 @@
 	<entity x="60" y="140" type="player"/>
 	<entity x="500" y="140" type="enemy"/>
 	
-	
 	<entity x="500" y="140" type="key"/>
+	<entity x="600" y="140" type="key"/>
 	<entity x="700" y="140" type="key"/>
 </level>

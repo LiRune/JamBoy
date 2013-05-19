@@ -62,12 +62,26 @@ public class ResourcesManager
 	public ITextureRegion options_region;
 	public ITextureRegion personaje1_region;
 	public ITextureRegion personaje2_region;
+	public ITextureRegion personaje3_region;
+	
+	public ITiledTextureRegion personajeSelec1_region;
+	public ITiledTextureRegion personajeSelec2_region;
+	public ITiledTextureRegion personajeSelec3_region;
+	
+	public ITiledTextureRegion numeroEstrellas;
+	
 
 	/// Game Texture ///
 	public BuildableBitmapTextureAtlas gameTextureAtlas;
+	public BitmapTextureAtlas paralaxTextureAtlas;
 	private BitmapTextureAtlas splashTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
 
+	
+	public ITextureRegion paralax1;
+	public ITextureRegion paralax2;
+	public ITextureRegion paralax3;
+	
 	/// Game Texture Regions ///
 	public ITextureRegion platform1_region;
 	public ITextureRegion platform2_region;
@@ -84,6 +98,7 @@ public class ResourcesManager
 	public ITextureRegion reloj_region;
 	public ITextureRegion fondo_region;
 	public ITextureRegion fondo2_region;
+	
 	public ITiledTextureRegion player_region;
 	public ITiledTextureRegion  enemy_region;
 	public ITiledTextureRegion explosion_region;
@@ -140,9 +155,18 @@ public class ResourcesManager
 		play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play.png");
 		options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "options.png");
 		derecha_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "der.png");
+		
+		
 		personaje1_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje1.png");
 		personaje2_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje2.png");
-
+		personaje3_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje3.png");
+		
+		personajeSelec1_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "personaje1.png", 7, 1);
+		personajeSelec2_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "personaje2.png", 7, 1);
+		personajeSelec3_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "personaje3.png", 7, 1);
+		
+		
+		numeroEstrellas = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "stars.png", 2, 1);
 		try 
 		{
 			this.menuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
@@ -196,6 +220,18 @@ public class ResourcesManager
 		//el 1500, 1500 es el espacio del atlas
 		gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1500, 1500, TextureOptions.BILINEAR);
 		gameTextureAtlas.addEmptyTextureAtlasSource(0, 0, 1500, 1500);
+
+
+
+
+		paralaxTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),1024, 1024, TextureOptions.DEFAULT);
+		
+		//paralax1= BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.paralaxTextureAtlas, activity, "paralax1.png", 0, 0);
+		paralax2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.paralaxTextureAtlas, activity, "paralax2.png", 0, 188);
+		//paralax3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.paralaxTextureAtlas, activity, "paralax3.png", 0, 669);
+
+
+
 		platform1_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform1.png");
 		platform2_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform2.png");
 		platform3_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "platform3.png");
@@ -204,10 +240,13 @@ public class ResourcesManager
 		System.out.println("PERSONAJE SELECCIONADO:" +MainMenuScene.getIdPersonaje());
 		if(MainMenuScene.getIdPersonaje()==1){
 			player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "personaje1.png", 7, 1);
-		}if(MainMenuScene.getIdPersonaje()==2){
+		}
+		if(MainMenuScene.getIdPersonaje()==2){
 			player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "personaje2.png", 7, 1);
 		}
-
+		if(MainMenuScene.getIdPersonaje()==3){
+			player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "personaje3.png", 7, 1);
+		}
 
 
 
@@ -237,6 +276,7 @@ public class ResourcesManager
 		{
 			this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
 			this.gameTextureAtlas.load();
+			this.paralaxTextureAtlas.load();
 
 		} 
 		catch (final TextureAtlasBuilderException e)
@@ -272,7 +312,7 @@ public class ResourcesManager
 			{
 				engine.getMusicManager().setMasterVolume(0);
 			}
-			
+
 			// Sonido //
 			SoundFactory.setAssetBasePath("sfx/");
 			salto = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity, "saltar.wav");   

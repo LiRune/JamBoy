@@ -18,7 +18,7 @@ public abstract class Enemigo extends AnimatedSprite
 	// ---------------------------------------------
 
 	private Body body;
-	private int vida;
+	private int vida = 3;
 
 	// ---------------------------------------------
 	// CONSTRUCTOR

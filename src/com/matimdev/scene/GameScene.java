@@ -14,6 +14,7 @@ import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
@@ -65,6 +66,7 @@ import com.matimdev.manager.SceneManager;
 import com.matimdev.manager.SceneManager.SceneType;
 import com.matimdev.object.Bala;
 import com.matimdev.object.Enemigo;
+
 import com.matimdev.object.Player;
 import com.matimdev.pools.BalasPool;
 
@@ -133,9 +135,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private int key = 0;
 
-	private Sprite reloj;
-
 	private BalasPool balasPool;
+
+	private Sprite reloj;
+	private Text llavesText;
+
 
 	public static PhysicsWorld getPhysicsWorld() {
 		return physicsWorld;
@@ -148,6 +152,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	@Override
 	public void createScene()
 	{
+
 		createBackground(MainMenuScene.getIdNivel());
 		createHUD();
 		createPhysics();
@@ -335,7 +340,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							if (player.collidesWith(this))
 							{
 								addToScore(100);								
-								key++;
+								addToKey(1);
+								
 								this.setVisible(false);
 								this.setIgnoreUpdate(true);
 								ResourcesManager.coger_llave.play();										
@@ -373,7 +379,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							enemigo.clearUpdateHandlers();
 							physicsWorld.unregisterPhysicsConnector(physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(enemigo));
 							physicsWorld.destroyBody(enemigo.getBody());
-							enemigo.getBody().setUserData("borrado");
 							ResourcesManager.enemigo_muerte.play();
 						}
 					};
@@ -511,6 +516,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		scoreText = new Text(70, 440, getResourcesManager().font, "0123456789", new TextOptions(HorizontalAlign.LEFT), getVbom());
 		//scoreText.setAnchorCenter(0, 0);	
 		scoreText.setText("0");
+		
+		llavesText = new Text(70, 400, getResourcesManager().font, "0123456789", new TextOptions(HorizontalAlign.LEFT), getVbom());
+		//scoreText.setAnchorCenter(0, 0);	
+		llavesText.setText("0");
+		
 		gameHUD.attachChild(scoreText);
 
 		timeText = new Text(390, 440, getResourcesManager().font, "0123456789", new TextOptions(HorizontalAlign.CENTER), getVbom());
@@ -523,6 +533,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		//timeText.setAnchorCenter(0,  0);
 		faltankeysText.setText("Faltan llaves");
 		faltankeysText.setVisible(false);
+		
+		gameHUD.attachChild(llavesText);
 		gameHUD.attachChild(faltankeysText);
 		gameHUD.attachChild(reloj);
 		gameHUD.attachChild(timeText);
@@ -588,7 +600,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		this.registerTouchArea(right);
 
 		volverMenu = new ButtonSprite(500, 50, getResourcesManager().reanudar_region , getVbom(), new OnClickListener() {
-			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) { 	 
+			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) { 
+				LoadingScene.getCargandoText().setPosition(400, 240);
 				SceneManager.getInstance().loadMenuScene(engine);
 			}
 		});
@@ -597,7 +610,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		volverMenu.setEnabled(false);
 
 		restartJuego = new ButtonSprite(300, 50, getResourcesManager().reanudar_region , getVbom(), new OnClickListener() {
-			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) { 	
+				LoadingScene.getCargandoText().setPosition(camera.getCenterX(), camera.getCenterY());
 				SceneManager.getInstance().loadGameScene(engine);
 			}
 		});
@@ -609,20 +623,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 		disp = new ButtonSprite(620, 50, getResourcesManager().saltar_region , getVbom(), new OnClickListener() {
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				/*if(player.isFlippedHorizontal())
-				{
-					balaX = player.getX() - 30;
-				}
-				else
-				{
-					balaX = player.getX() + 30;
-				}
-
-				bala = new Bala(balaX, player.getY(), vbom, camera, physicsWorld, balasPool);*/
-
-				//balasPool.obtainPoolItem();
 				bala = balasPool.obtainPoolItem();
-
 				player.disparar(player.getX(), player.getY(), engine, bala);
 			}
 		});
@@ -689,6 +690,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		gameHUD.registerTouchArea(volverMenu);
 		gameHUD.registerTouchArea(restartJuego);
 		gameHUD.registerTouchArea(disp);
+		
 		gameHUD.attachChild(left);
 		gameHUD.attachChild(right);
 		gameHUD.attachChild(jump);
@@ -704,7 +706,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		camera.setHUD(gameHUD);
 	}
 
-	private void createBackground(int level)
+
+
+
+	private void createBackground(final int level)
 	{
 		//setBackground(new Background(Color.GREEN));
 
@@ -715,20 +720,30 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		this.attachChild(mBackground);*/
 
 
-		ParallaxBackground background = new ParallaxBackground(0, 0, 0);
 
-		if(level==1){
+
+		final ParallaxBackground background = new AutoParallaxBackground(0, 0, 0, 3);
+
+		if(level==1){						
 			background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.fondo_region, vbom)));
+			background.attachParallaxEntity(new ParallaxEntity(-8.0f, new Sprite(400, 240, getResourcesManager().paralax2, vbom)));
+			//background.attachParallaxEntity(new ParallaxEntity(-10.0f, new Sprite(400, 240, getResourcesManager().paralax3, vbom)));
 		}else{
 			background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.fondo2_region, vbom)));
+			background.attachParallaxEntity(new ParallaxEntity(-8.0f, new Sprite(400, 240, getResourcesManager().paralax2, vbom)));
 		}
+
+
+
 
 		this.setBackground(background);
 
 
-
-
-
+		/* final AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
+        autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0.0f, new Sprite(400, 240, getResourcesManager().paralax1, vbom)));
+        autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-5.0f, new Sprite(400, 240, getResourcesManager().paralax2, vbom)));
+        autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f, new Sprite(400, 240, getResourcesManager().paralax3, vbom)));
+        this.setBackground(autoParallaxBackground);*/
 
 	}
 
@@ -736,6 +751,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	{
 		score += i;
 		scoreText.setText("" + score);
+	}
+	
+	private void addToKey(int i)
+	{
+		key += i;
+		llavesText.setText("" + key);
 	}
 
 	private void createPhysics()
@@ -755,7 +776,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					tiempo--;
 					timeText.setText("" + tiempo);
 				}
-				else if(tiempo < 0){
+				else if(tiempo <= 0 && !PAUSED){
 					pantallaGameOver();
 				}
 			}
@@ -769,7 +790,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		player.clearUpdateHandlers();
 		physicsWorld.unregisterPhysicsConnector(physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(player));
 		physicsWorld.destroyBody(player.getBody());
-		player.getBody().setUserData("borrado");
 		left.setVisible(false);
 		right.setVisible(false);
 		jump.setVisible(false);
@@ -890,12 +910,16 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					if (x1.getBody().getUserData().equals("platform3") && x2.getBody().getUserData().equals("player"))
 					{
 						x1.getBody().setType(BodyType.DynamicBody);
+
+						
+
+
 					}
 
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo"))
 					{
 						player.setVida(player.getVida() - 1);
-
+						
 						//Si el jugador choca con el enemigo pega un salto hacia atras
 						if(player.getX() > enemigo.getX()){
 							player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x +8, 6));
@@ -922,6 +946,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						enemigo.setVida(enemigo.getVida() - 1);
 
 						bala.setColisionEnemigo(true);
+
+						if(enemigo.getVida() == 0)
+						//enemigo.setVida(vidaEnemigo);
+
+						//System.out.println("VIDA ENEMIGO: "+enemigo.getVida());
 
 						if(enemigo.getVida() == 0)
 						{
@@ -1021,6 +1050,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				}
 			}
 		};
+		
 		return contactListener;
 	}
 
