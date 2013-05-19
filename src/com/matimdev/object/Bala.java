@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.matimdev.manager.ResourcesManager;
+import com.matimdev.pools.BalasPool;
 
 public class Bala extends Sprite{
 	// ---------------------------------------------
@@ -18,14 +19,18 @@ public class Bala extends Sprite{
 	// ---------------------------------------------
 
 	private Body body;
+	private Bala bala;
+	private BalasPool balasPool;
+	private boolean colisionEnemigo = false;
 
 	// ---------------------------------------------
 	// CONSTRUCTOR
 	// ---------------------------------------------
 
-	public Bala(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld)
+	public Bala(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld, BalasPool balasPool)
 	{
-		super(pX, pY+5, ResourcesManager.getInstance().bala_region, vbo);
+		super(pX+15, pY+5, ResourcesManager.getInstance().bala_region, vbo);
+		this.balasPool = balasPool;
 		createPhysics(camera, physicsWorld);
 	}
 
@@ -40,13 +45,22 @@ public class Bala extends Sprite{
 	public void setBody(Body body) {
 		this.body = body;
 	}
+	
+	public boolean isColisionEnemigo() {
+		return colisionEnemigo;
+	}
+
+	public void setColisionEnemigo(boolean colisionEnemigo) {
+		this.colisionEnemigo = colisionEnemigo;
+	}
 
 	// ---------------------------------------------
 	// CLASS LOGIC
 	// ---------------------------------------------
 
-	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
+	public void createPhysics(final Camera camera, final PhysicsWorld physicsWorld)
 	{
+		bala = this;
 		body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.KinematicBody, PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f));
 		body.setUserData("bala");
 		body.setFixedRotation(true);
@@ -60,29 +74,15 @@ public class Bala extends Sprite{
 				super.onUpdate(pSecondsElapsed);
 				camera.onUpdate(0.1f);
 				
-				if (balaFueraCamara(camera))
+				if ((!camera.isEntityVisible(bala) && bala.isVisible()) || colisionEnemigo)
 				{
-					onDie();
+					balasPool.recyclePoolItem(bala);
+					if(colisionEnemigo)
+					{
+						colisionEnemigo = false;
+					}
 				}
 			}
 		});
-	}
-	
-	private boolean balaFueraCamara(final Camera camera)
-	{
-		if(!camera.isEntityVisible(this))
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
-	}
-	
-	public void onDie()
-	{
-		this.getBody().setActive(false);
-		this.detachSelf();
 	}
 }

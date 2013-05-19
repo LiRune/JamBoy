@@ -47,7 +47,7 @@ public abstract class Enemigo extends AnimatedSprite
 		return vida;
 	}
 	
-	public void setVida(int Vida) {
+	public void setVida(int vida) {
 		this.vida = vida;
 	}
 
@@ -70,7 +70,7 @@ public abstract class Enemigo extends AnimatedSprite
 				super.onUpdate(pSecondsElapsed);
 				camera.onUpdate(0.1f);
 
-				if (getY() <= 0)
+				if (getY() <= 0 || vida == 0)
 				{					
 					onDie();
 				}

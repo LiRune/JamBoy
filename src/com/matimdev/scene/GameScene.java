@@ -24,6 +24,7 @@ import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
+import org.andengine.entity.util.FPSCounter;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -65,12 +66,12 @@ import com.matimdev.manager.SceneManager.SceneType;
 import com.matimdev.object.Bala;
 import com.matimdev.object.Enemigo;
 import com.matimdev.object.Player;
+import com.matimdev.pools.BalasPool;
 
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener
 {
 	private int score = 0;
-	private int health = 3;
 	private int tiempo = 20;
 	private boolean isTouchedFlag = false;
 	private HUD gameHUD;
@@ -82,7 +83,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private Sprite heart3;
 	private Bala bala;
 	private float balaX;
-	private PhysicsWorld physicsWorld;
+	private static PhysicsWorld physicsWorld;
 	private LevelCompleteWindow levelCompleteWindow;
 
 	private boolean moverPausa=true;
@@ -106,10 +107,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private Player player;
 	private Enemigo enemigo;
-	private int vidaEnemigo;
 
 	private Text gameOverText;
-
 
 	private boolean gameOverDisplayed = false;
 
@@ -134,11 +133,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private int key = 0;
 
-	private int pausaBackKey = 0;
-
 	private Sprite reloj;
 
-	public PhysicsWorld getPhysicsWorld() {
+	private BalasPool balasPool;
+
+	public static PhysicsWorld getPhysicsWorld() {
 		return physicsWorld;
 	}
 
@@ -157,6 +156,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		//createControllers();
 		crearTemporizador();
 
+		balasPool = new BalasPool(vbom, camera, physicsWorld, player);
 		levelCompleteWindow = new LevelCompleteWindow(getVbom());
 
 		//setOnSceneTouchListener(this); 
@@ -165,11 +165,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	@Override
 	public void onBackKeyPressed()
 	{
-		pausaBackKey++;
-
-		if(pausaBackKey==1){
+		if(!PAUSED)
+		{
 			pausa();
-		}else if (pausaBackKey==2){
+		}
+		else
+		{
 			SceneManager.getInstance().loadMenuScene(engine);
 		}
 	}
@@ -304,11 +305,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							{
 
 								if(heart3.isVisible()==false && heart2.isVisible()==true){
-									health++;
+									player.setVida(player.getVida() + 1);
 									heart3.setVisible(true);									
 								}
 								if(heart3.isVisible()==false && heart2.isVisible()==false){
-									health++;
+									player.setVida(player.getVida() + 1);
 									heart2.setVisible(true);									
 								}
 
@@ -352,11 +353,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						@Override
 						public void onDie()
 						{
-							if (!gameOverDisplayed)
-							{
-								pantallaGameOver();
-								ResourcesManager.grito.play();
-							}
+							pantallaGameOver();
+							ResourcesManager.grito.play();
 						}
 					};
 
@@ -370,9 +368,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						@Override
 						public void onDie()
 						{
-							enemigo.getBody().setActive(false);
-							enemigo.detachSelf();
 							enemigo.setVisible(false);
+							enemigo.detachSelf();
+							enemigo.clearUpdateHandlers();
+							physicsWorld.unregisterPhysicsConnector(physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(enemigo));
+							physicsWorld.destroyBody(enemigo.getBody());
+							enemigo.getBody().setUserData("borrado");
+							ResourcesManager.enemigo_muerte.play();
 						}
 					};
 
@@ -595,7 +597,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		volverMenu.setEnabled(false);
 
 		restartJuego = new ButtonSprite(300, 50, getResourcesManager().reanudar_region , getVbom(), new OnClickListener() {
-			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) { 	 
+			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				SceneManager.getInstance().loadGameScene(engine);
 			}
 		});
@@ -607,7 +609,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 		disp = new ButtonSprite(620, 50, getResourcesManager().saltar_region , getVbom(), new OnClickListener() {
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				if(player.isFlippedHorizontal())
+				/*if(player.isFlippedHorizontal())
 				{
 					balaX = player.getX() - 30;
 				}
@@ -616,7 +618,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					balaX = player.getX() + 30;
 				}
 
-				bala = new Bala(balaX, player.getY(), vbom, camera, physicsWorld);
+				bala = new Bala(balaX, player.getY(), vbom, camera, physicsWorld, balasPool);*/
+
+				//balasPool.obtainPoolItem();
+				bala = balasPool.obtainPoolItem();
 
 				player.disparar(player.getX(), player.getY(), engine, bala);
 			}
@@ -750,7 +755,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					tiempo--;
 					timeText.setText("" + tiempo);
 				}
-				else if(tiempo <= 0){
+				else if(tiempo < 0){
 					pantallaGameOver();
 				}
 			}
@@ -760,7 +765,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private void pantallaGameOver() {
 		displayGameOverText();
 		player.setVisible(false);
-		player.getBody().setActive(false);
+		player.detachSelf();
+		player.clearUpdateHandlers();
+		physicsWorld.unregisterPhysicsConnector(physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(player));
+		physicsWorld.destroyBody(player.getBody());
+		player.getBody().setUserData("borrado");
 		left.setVisible(false);
 		right.setVisible(false);
 		jump.setVisible(false);
@@ -883,8 +892,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						x1.getBody().setType(BodyType.DynamicBody);
 					}
 
-					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) {
-						health--;
+					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo"))
+					{
+						player.setVida(player.getVida() - 1);
 
 						//Si el jugador choca con el enemigo pega un salto hacia atras
 						if(player.getX() > enemigo.getX()){
@@ -904,25 +914,20 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							heart1.setVisible(false);
 						}
 
-						if(health <= 0) {
-							player.onDie();						
-						}
+						player.getBody().getFixtureList().get(0).setFriction(100);
 					}
 
 					if (x1.getBody().getUserData().equals("enemigo") && x2.getBody().getUserData().equals("bala"))
 					{
-						vidaEnemigo = enemigo.getVida() - 1;
-						enemigo.setVida(vidaEnemigo);
-						
-						if(vidaEnemigo == 0)
+						enemigo.setVida(enemigo.getVida() - 1);
+
+						bala.setColisionEnemigo(true);
+
+						if(enemigo.getVida() == 0)
 						{
-							ResourcesManager.enemigo_muerte.play();
-							enemigo.getBody().setActive(false);
-							enemigo.detachSelf();
-							enemigo.setVisible(false);							
 							addToScore(50);
 						}
-						
+
 						explosion = new AnimatedSprite(enemigo.getX(), enemigo.getY(), getResourcesManager().explosion_region, vbom)
 						{
 							@Override
@@ -941,10 +946,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 						attachChild(explosion);
 						explosion.animate(100, 0);
-						
-						bala.getBody().setActive(false);
-						bala.detachSelf();
-						bala.setVisible(false);
 					}
 				}
 			}
@@ -967,7 +968,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 			{
 				final Fixture x1 = contact.getFixtureA();
 				final Fixture x2 = contact.getFixtureB();
-
+				
 				if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
 				{					
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) {
@@ -976,13 +977,48 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("bala")) {
 						contact.setEnabled(false);
-					}	
+					}
+					
+					if (x1.getBody().getUserData().equals("platform1") && x2.getBody().getUserData().equals("player"))
+					{
+						if(player.getBody().getFixtureList().get(0).getFriction() > 0)
+						{
+							player.getBody().getFixtureList().get(0).setFriction(0);
+						}	
+					}
+					
+					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("platform1"))
+					{
+						if(player.getBody().getFixtureList().get(0).getFriction() > 0)
+						{
+							player.getBody().getFixtureList().get(0).setFriction(0);
+						}	
+					}
 				}
 			}
 
 			public void postSolve(Contact contact, ContactImpulse impulse)
 			{
-				
+				final Fixture x1 = contact.getFixtureA();
+				final Fixture x2 = contact.getFixtureB();
+				if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
+				{
+					if (x1.getBody().getUserData().equals("platform1") && x2.getBody().getUserData().equals("player"))
+					{
+						if(player.getBody().getFixtureList().get(0).getFriction() > 0)
+						{
+							player.getBody().getFixtureList().get(0).setFriction(0);
+						}	
+					}
+					
+					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("platform1"))
+					{
+						if(player.getBody().getFixtureList().get(0).getFriction() > 0)
+						{
+							player.getBody().getFixtureList().get(0).setFriction(0);
+						}	
+					}
+				}
 			}
 		};
 		return contactListener;

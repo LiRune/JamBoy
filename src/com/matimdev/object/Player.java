@@ -23,6 +23,7 @@ public abstract class Player extends AnimatedSprite
 	
 	private Body body;
     private int footContacts = 0;
+    private int vida = 3;
 	
 	// ---------------------------------------------
 	// CONSTRUCTOR
@@ -55,6 +56,14 @@ public abstract class Player extends AnimatedSprite
 		this.footContacts = footContacts;
 	}
 	
+	public int getVida() {
+		return vida;
+	}
+
+	public void setVida(int vida) {
+		this.vida = vida;
+	}
+	
 	// ---------------------------------------------
 	// CLASS LOGIC
 	// ---------------------------------------------
@@ -74,7 +83,7 @@ public abstract class Player extends AnimatedSprite
 				super.onUpdate(pSecondsElapsed);
 				camera.onUpdate(0.1f);
 				
-				if (getY() <= 0)
+				if (getY() <= 0 || vida == 0)
 				{					
 					onDie();
 				}

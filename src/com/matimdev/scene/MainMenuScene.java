@@ -11,8 +11,10 @@ import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
 import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.util.GLState;
+import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 
 import android.database.Cursor;
@@ -283,7 +285,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 		//TEXTO PUNTUACIONES
 		puntuaciones = new Text(0, 0, getResourcesManager().font, "01234567892", getVbom());
-		puntosText = new Text(0, 0, getResourcesManager().font, "Puntos: ", getVbom());
+		puntosText = new Text(0, 0, getResourcesManager().font, "Puntos: ", new TextOptions(HorizontalAlign.RIGHT), getVbom());
 		puntosText.setText("Puntos: ");
 		if(idNivel!=0){
 			puntuaciones.setText(mostrarPuntuacion(idNivel));

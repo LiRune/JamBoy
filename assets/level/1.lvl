@@ -12,7 +12,6 @@
 	<entity x="1180" y="100" type="platform1"/>
 	<entity x="1300" y="100" type="platform1"/>
 	<entity x="400" y="160" type="coin"/>
-	<entity x="100" y="160" type="coin"/>
 	<entity x="200" y="160" type="coin"/>
 	<entity x="300" y="160" type="coin"/>
 	<entity x="500" y="150" type="coin"/>

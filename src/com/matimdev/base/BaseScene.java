@@ -2,6 +2,7 @@ package com.matimdev.base;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -21,7 +22,7 @@ public abstract class BaseScene extends Scene
 	protected static Activity activity;
 	protected static ResourcesManager resourcesManager;
 	protected VertexBufferObjectManager vbom;
-	protected BoundCamera camera;
+	protected static BoundCamera camera;
 
 	public Engine getEngine() {
 		return engine;
@@ -54,6 +55,14 @@ public abstract class BaseScene extends Scene
 	public void setActivity(Activity activity) {
 		this.activity = activity;
 	}
+	
+	public BoundCamera getCamera() {
+		return camera;
+	}
+
+	public void setCamera(BoundCamera camera) {
+		this.camera = camera;
+	}
 
 	//---------------------------------------------
 	// CONSTRUCTOR
@@ -84,5 +93,4 @@ public abstract class BaseScene extends Scene
 	public abstract SceneType getSceneType();
 
 	public abstract void disposeScene();
-
 }
