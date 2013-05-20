@@ -55,7 +55,7 @@ public class ResourcesManager
 
 	// Música y sonido //
 	public Music music;
-	public static Sound salto, disparar, enemigo_muerte, grito, coger_llave;
+	public static Sound salto, disparar, enemigo_muerte, grito, coger_llave,win,gameover,coger_corazon,coger_moneda;
 
 	// Base de Datos //
 	public DataBase db;
@@ -386,6 +386,10 @@ public class ResourcesManager
 			enemigo_muerte = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "enemigo_muerte.ogg");
 			grito = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "grito.ogg");
 			coger_llave = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "coger_llave.ogg");
+			coger_moneda = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "moneda.ogg");
+			coger_corazon = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "corazon.ogg");
+			win = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "win.ogg");
+			gameover = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "gameover.ogg");
 		} 
 		catch (IOException e)
 		{
