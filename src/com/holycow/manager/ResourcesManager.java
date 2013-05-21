@@ -67,6 +67,8 @@ public class ResourcesManager
 	public ITextureRegion menu_background_region;
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
+	public ITextureRegion musica_region;
+	public ITextureRegion sonido_region;
 	public ITextureRegion personaje1_region;
 	public ITextureRegion personaje2_region;
 	public ITextureRegion personaje3_region;
@@ -102,6 +104,9 @@ public class ResourcesManager
 	public ITextureRegion saltar_region;
 	public ITextureRegion pausa_region;
 	public ITextureRegion reanudar_region;
+	public ITextureRegion atacar_region;
+	public ITextureRegion reiniciar_region;
+	public ITextureRegion volver_menu_region;
 	public ITextureRegion reloj_region;
 	public ITextureRegion fondo_region;
 	public ITextureRegion fondo2_region;
@@ -169,6 +174,8 @@ public class ResourcesManager
 		menu_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_background.png");
 		play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play.png");
 		options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "options.png");
+		musica_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "musica1.png");
+		sonido_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "musica2.png");
 		derecha_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "der.png");
 		
 		
@@ -283,7 +290,7 @@ public class ResourcesManager
 		llave_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "key.png");
 		reloj_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "clock.png");
 		explosion_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "explosion.png", 3, 1);
-
+		
 		fondo2_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "fondo2.png");
 
 		fondo_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "fondo.png");
@@ -293,8 +300,11 @@ public class ResourcesManager
 		derecha_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "der.png");
 		saltar_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "salt.png");
 		pausa_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "pausa.png");
-		reanudar_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "reiniciar.png");
-
+		reanudar_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "reanudar.png");
+		volver_menu_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "volvermenu.png");
+		atacar_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "atacar.png");
+		reiniciar_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "reiniciar.png");
+		
 		complete_window_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "levelCompleteWindow.png");
 		complete_stars_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "star.png", 2, 1);
 

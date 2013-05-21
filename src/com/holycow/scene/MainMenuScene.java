@@ -328,8 +328,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		optionsChildScene = new MenuScene(camera);
 		optionsChildScene.setPosition(0, 0);
 
-		final IMenuItem musicaMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSICA, getResourcesManager().options_region, getVbom()), 0.9f, 1);
-		final IMenuItem sonidoMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(SONIDO, getResourcesManager().options_region, getVbom()), 0.9f, 1);
+		final IMenuItem musicaMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSICA, getResourcesManager().musica_region, getVbom()), 0.9f, 1);
+		final IMenuItem sonidoMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(SONIDO, getResourcesManager().sonido_region, getVbom()), 0.9f, 1);
 
 		optionsChildScene.addMenuItem(musicaMenuItem);
 		optionsChildScene.addMenuItem(sonidoMenuItem);

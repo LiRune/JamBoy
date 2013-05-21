@@ -642,7 +642,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 		this.registerTouchArea(right);
 
-		volverMenu = new ButtonSprite(500, 50, getResourcesManager().reanudar_region , getVbom(), new OnClickListener() {
+		volverMenu = new ButtonSprite(500, 50, getResourcesManager().volver_menu_region , getVbom(), new OnClickListener() {
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) { 
 				LoadingScene.getCargandoText().setPosition(400, 240);
 				SceneManager.getInstance().loadMenuScene(engine);
@@ -652,7 +652,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		volverMenu.setVisible(false);
 		volverMenu.setEnabled(false);
 
-		restartJuego = new ButtonSprite(300, 50, getResourcesManager().reanudar_region , getVbom(), new OnClickListener() {
+		restartJuego = new ButtonSprite(300, 50, getResourcesManager().reiniciar_region , getVbom(), new OnClickListener() {
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) { 	
 				LoadingScene.getCargandoText().setPosition(camera.getCenterX(), camera.getCenterY());				
 				SceneManager.getInstance().loadGameScene(engine);			
