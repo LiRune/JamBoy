@@ -1,4 +1,4 @@
-package com.matimdev.object;
+package com.holycow.object;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.Sprite;
@@ -10,8 +10,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.matimdev.manager.ResourcesManager;
-import com.matimdev.pools.BalasPool;
+import com.holycow.manager.ResourcesManager;
+import com.holycow.pool.BalasPool;
 
 public class Bala extends Sprite{
 	// ---------------------------------------------

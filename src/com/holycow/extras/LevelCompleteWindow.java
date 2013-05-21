@@ -1,4 +1,4 @@
-package com.matimdev.extras;
+package com.holycow.extras;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
@@ -6,7 +6,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import com.matimdev.manager.ResourcesManager;
+import com.holycow.manager.ResourcesManager;
 
 public class LevelCompleteWindow extends Sprite
 {

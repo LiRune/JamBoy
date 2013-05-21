@@ -1,4 +1,4 @@
-package com.matimdev.scene;
+package com.holycow.scene;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.background.Background;
@@ -25,13 +25,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
-import com.matimdev.base.BaseScene;
-import com.matimdev.database.DataBase;
-import com.matimdev.extras.LevelCompleteWindow;
-import com.matimdev.extras.LevelCompleteWindow.StarsCount;
-import com.matimdev.manager.ResourcesManager;
-import com.matimdev.manager.SceneManager;
-import com.matimdev.manager.SceneManager.SceneType;
+import com.holycow.base.BaseScene;
+import com.holycow.database.DataBase;
+import com.holycow.extras.LevelCompleteWindow;
+import com.holycow.extras.LevelCompleteWindow.StarsCount;
+import com.holycow.manager.ResourcesManager;
+import com.holycow.manager.SceneManager;
+import com.holycow.manager.SceneManager.SceneType;
 
 public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 {

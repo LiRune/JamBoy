@@ -1,4 +1,4 @@
-package com.matimdev.manager;
+package com.holycow.manager;
 
 import java.io.IOException;
 
@@ -16,11 +16,11 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import org.andengine.engine.camera.hud.HUD;
 
-import com.matimdev.base.BaseScene;
-import com.matimdev.scene.GameScene;
-import com.matimdev.scene.LoadingScene;
-import com.matimdev.scene.MainMenuScene;
-import com.matimdev.scene.SplashScene;
+import com.holycow.base.BaseScene;
+import com.holycow.scene.GameScene;
+import com.holycow.scene.LoadingScene;
+import com.holycow.scene.MainMenuScene;
+import com.holycow.scene.SplashScene;
 
 public class SceneManager
 {

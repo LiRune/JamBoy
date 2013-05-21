@@ -1,4 +1,4 @@
-package com.matimdev.base;
+package com.holycow.base;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
@@ -9,8 +9,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.app.Activity;
 
-import com.matimdev.manager.ResourcesManager;
-import com.matimdev.manager.SceneManager.SceneType;
+import com.holycow.manager.ResourcesManager;
+import com.holycow.manager.SceneManager.SceneType;
 
 public abstract class BaseScene extends Scene
 {

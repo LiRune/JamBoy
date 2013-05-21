@@ -1,4 +1,4 @@
-package com.matimdev.manager;
+package com.holycow.manager;
 
 import java.io.IOException;
 
@@ -25,9 +25,9 @@ import org.andengine.util.debug.Debug;
 
 import android.graphics.Color;
 
-import com.matimdev.GameActivity;
-import com.matimdev.database.DataBase;
-import com.matimdev.scene.MainMenuScene;
+import com.holycow.GameActivity;
+import com.holycow.database.DataBase;
+import com.holycow.scene.MainMenuScene;
 
 public class ResourcesManager
 {

@@ -1,4 +1,4 @@
-package com.matimdev.object;
+package com.holycow.object;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.matimdev.manager.ResourcesManager;
+import com.holycow.manager.ResourcesManager;
 
 public abstract class Player extends AnimatedSprite
 {

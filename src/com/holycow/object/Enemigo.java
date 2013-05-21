@@ -1,4 +1,4 @@
-package com.matimdev.object;
+package com.holycow.object;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.AnimatedSprite;
@@ -9,7 +9,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.matimdev.manager.ResourcesManager;
+import com.holycow.manager.ResourcesManager;
 
 public abstract class Enemigo extends AnimatedSprite
 {

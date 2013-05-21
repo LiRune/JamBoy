@@ -1,4 +1,4 @@
-package com.matimdev.pools;
+package com.holycow.pool;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
@@ -14,11 +14,11 @@ import org.andengine.util.adt.pool.GenericPool;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.matimdev.manager.ResourcesManager;
-import com.matimdev.manager.SceneManager;
-import com.matimdev.object.Bala;
-import com.matimdev.object.Player;
-import com.matimdev.scene.GameScene;
+import com.holycow.manager.ResourcesManager;
+import com.holycow.manager.SceneManager;
+import com.holycow.object.Bala;
+import com.holycow.object.Player;
+import com.holycow.scene.GameScene;
 
 public class BalasPool extends GenericPool<Bala> {
 	// ---------------------------------------------

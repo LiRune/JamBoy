@@ -1,11 +1,11 @@
-package com.matimdev.scene;
+package com.holycow.scene;
 
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 import org.andengine.util.adt.color.Color;
 
-import com.matimdev.base.BaseScene;
-import com.matimdev.manager.SceneManager.SceneType;
+import com.holycow.base.BaseScene;
+import com.holycow.manager.SceneManager.SceneType;
 
 public class LoadingScene extends BaseScene
 {

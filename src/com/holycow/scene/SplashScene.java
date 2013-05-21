@@ -1,11 +1,11 @@
-package com.matimdev.scene;
+package com.holycow.scene;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.util.GLState;
 
-import com.matimdev.base.BaseScene;
-import com.matimdev.manager.SceneManager.SceneType;
+import com.holycow.base.BaseScene;
+import com.holycow.manager.SceneManager.SceneType;
 
 public class SplashScene extends BaseScene
 {

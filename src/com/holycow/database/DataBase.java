@@ -1,8 +1,8 @@
-package com.matimdev.database;
+package com.holycow.database;
 
-import com.matimdev.base.BaseScene;
-import com.matimdev.manager.ResourcesManager;
-import com.matimdev.scene.GameScene;
+import com.holycow.base.BaseScene;
+import com.holycow.manager.ResourcesManager;
+import com.holycow.scene.GameScene;
 
 import android.content.ContentValues;
 import android.content.Context;

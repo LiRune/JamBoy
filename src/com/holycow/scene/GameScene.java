@@ -1,4 +1,4 @@
-package com.matimdev.scene;
+package com.holycow.scene;
 
 import java.io.IOException;
 
@@ -56,19 +56,19 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.matimdev.GameActivity;
-import com.matimdev.base.BaseScene;
-import com.matimdev.database.DataBase;
-import com.matimdev.extras.LevelCompleteWindow;
-import com.matimdev.extras.LevelCompleteWindow.StarsCount;
-import com.matimdev.manager.ResourcesManager;
-import com.matimdev.manager.SceneManager;
-import com.matimdev.manager.SceneManager.SceneType;
-import com.matimdev.object.Bala;
-import com.matimdev.object.Enemigo;
+import com.holycow.GameActivity;
+import com.holycow.base.BaseScene;
+import com.holycow.database.DataBase;
+import com.holycow.extras.LevelCompleteWindow;
+import com.holycow.extras.LevelCompleteWindow.StarsCount;
+import com.holycow.manager.ResourcesManager;
+import com.holycow.manager.SceneManager;
+import com.holycow.manager.SceneManager.SceneType;
+import com.holycow.object.Bala;
+import com.holycow.object.Enemigo;
+import com.holycow.object.Player;
+import com.holycow.pool.BalasPool;
 
-import com.matimdev.object.Player;
-import com.matimdev.pools.BalasPool;
 
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener

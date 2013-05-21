@@ -1,4 +1,4 @@
-package com.matimdev;
+package com.holycow;
 
 import java.io.IOException;
 
@@ -22,9 +22,9 @@ import android.content.Context;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import com.matimdev.database.DataBase;
-import com.matimdev.manager.ResourcesManager;
-import com.matimdev.manager.SceneManager;
+import com.holycow.database.DataBase;
+import com.holycow.manager.ResourcesManager;
+import com.holycow.manager.SceneManager;
 
 public class GameActivity extends BaseGameActivity
 {
