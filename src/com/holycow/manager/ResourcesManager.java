@@ -249,7 +249,7 @@ public class ResourcesManager
 
 
 		paralaxTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),1024, 1024, TextureOptions.DEFAULT);
-		
+		paralaxTextureAtlas.addEmptyTextureAtlasSource(0, 0, 1024, 1024);
 		//paralax1= BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.paralaxTextureAtlas, activity, "paralax1.png", 0, 0);
 		paralax2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.paralaxTextureAtlas, activity, "paralax2.png", 0, 188);
 		//paralax3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.paralaxTextureAtlas, activity, "paralax3.png", 0, 669);
