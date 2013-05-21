@@ -7,9 +7,16 @@ import org.andengine.util.adt.color.Color;
 import com.holycow.base.BaseScene;
 import com.holycow.manager.SceneManager.SceneType;
 
+/**Clase que crea la escena Cargando...
+ * @author Holy Cow
+ *
+ */
+
+
 public class LoadingScene extends BaseScene
 {
 	private static Text cargandoText;
+	
 	
 	public static Text getCargandoText() {
 		return cargandoText;
@@ -19,6 +26,10 @@ public class LoadingScene extends BaseScene
 		this.cargandoText = cargandoText;
 	}
 
+	
+	/**
+	 * Crea la escena Cargando... anadiendo el texto centrado y colo de fondo blanco
+	 */
 	@Override
 	public void createScene()
 	{
@@ -28,6 +39,10 @@ public class LoadingScene extends BaseScene
 		attachChild(cargandoText);
 	}
 
+	
+	/**
+	 * Accion que realiza al pulsar el boton de atras del movil
+	 */
 	@Override
 	public void onBackKeyPressed()
 	{
@@ -40,12 +55,19 @@ public class LoadingScene extends BaseScene
 		return SceneType.SCENE_LOADING;
 	}
 
+	/**
+	 * Eliminacion de la escena
+	 */
 	@Override
 	public void disposeScene()
 	{
 
 	}
 
+	
+	/**
+	 * Accion que realiza al pulsar el boton de Home del movil
+	 */
 	@Override
 	public void onHomeKeyPressed() 
 	{

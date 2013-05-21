@@ -12,6 +12,11 @@ import android.app.Activity;
 import com.holycow.manager.ResourcesManager;
 import com.holycow.manager.SceneManager.SceneType;
 
+/**Esta clase es la representacion basica de cada escena
+ * 
+ * @author Holy Cow
+ *
+ */
 public abstract class BaseScene extends Scene
 {
 	//---------------------------------------------

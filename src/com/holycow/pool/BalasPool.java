@@ -20,6 +20,11 @@ import com.holycow.object.Bala;
 import com.holycow.object.Player;
 import com.holycow.scene.GameScene;
 
+/**
+ * @author Holy Cow
+ *
+ */
+
 public class BalasPool extends GenericPool<Bala> {
 	// ---------------------------------------------
 	// VARIABLES
@@ -43,7 +48,7 @@ public class BalasPool extends GenericPool<Bala> {
 	}
 
 	/**
-	 * Called when a Bullet is required but there isn't one in the pool
+	 * Llamado cuando Bala es requerida pero no hay en el pool
 	 */
 	@Override
 	protected Bala onAllocatePoolItem() {
@@ -60,7 +65,7 @@ public class BalasPool extends GenericPool<Bala> {
 	}
 
 	/**
-	 * Called when a Bullet is sent to the pool
+	 * Llamada cuando Bala se envia a pool
 	 */
 	@Override
 	protected void onHandleRecycleItem(final Bala pBullet) {
@@ -72,8 +77,8 @@ public class BalasPool extends GenericPool<Bala> {
 	}
 
 	/**
-	 * Called just before a Bullet is returned to the caller, this is where you write your initialize code
-	 * i.e. set location, rotation, etc.
+	 * Llama antes de que Bala sea devuelta
+	 * 
 	 */
 	@Override
 	protected void onHandleObtainItem(final Bala pBullet) {
@@ -82,6 +87,10 @@ public class BalasPool extends GenericPool<Bala> {
 		pBullet.getBody().setTransform(new Vector2((posicionBalaX()+15) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT, (player.getY()+5) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT),0);
 	}
 	
+	/**
+	 * Posicion de Bala
+	 * @return
+	 */
 	public float posicionBalaX()
 	{
 		if(player.isFlippedHorizontal())

@@ -29,6 +29,11 @@ import com.holycow.GameActivity;
 import com.holycow.database.DataBase;
 import com.holycow.scene.MainMenuScene;
 
+/**
+ * @author Holy Cow
+ *
+ */
+
 public class ResourcesManager
 {
 	//---------------------------------------------
@@ -130,7 +135,9 @@ public class ResourcesManager
 	//---------------------------------------------
 	// CLASS LOGIC
 	//---------------------------------------------
-
+	/**
+	 * Carga las texturas, sonidos y fuentes del menu. Crea la base de datos.
+	 */
 	public void loadMenuResources()
 	{
 		loadMenuGraphics();
@@ -138,7 +145,10 @@ public class ResourcesManager
 		loadMenuFonts();
 		db = new DataBase(activity);
 	}
-
+	
+	/**
+	 * Carga las texturas, sonidos y fuentes del juego.
+	 */
 	public void loadGameResources()
 	{
 		loadGameGraphics();
@@ -146,6 +156,9 @@ public class ResourcesManager
 		loadGameAudio();
 	}
 
+	/**
+	 * Se crea el atlas y en el se anade las texturas creadas para el menu
+	 */
 	private void loadMenuGraphics()
 	{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
@@ -178,6 +191,9 @@ public class ResourcesManager
 		}
 	}
 
+	/**
+	 * Especifica la ruta del audio y distintas opciones. Audio del menu
+	 */
 	protected void loadMenuAudio()
 	{
 		try {
@@ -205,6 +221,10 @@ public class ResourcesManager
 		}
 	}
 
+	
+	/**
+	 * Crea la fuente del menu y la carga
+	 */
 	private void loadMenuFonts()
 	{
 		FontFactory.setAssetBasePath("font/");
@@ -214,6 +234,10 @@ public class ResourcesManager
 		font.load();
 	}
 
+	
+	/**
+	 * Se crea el atlas y en el se anade las texturas creadas para el juego
+	 */
 	private void loadGameGraphics()
 	{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
@@ -286,11 +310,18 @@ public class ResourcesManager
 
 	}
 
+	/**
+	 * 
+	 * Se crea la fuente para el juego
+	 */	 
 	private void loadGameFonts()
 	{
 
 	}
 
+	/**
+	 * Especifica la ruta del audio y diferentes opciones. Audio del juego
+	 */
 	private void loadGameAudio()
 	{
 		try {
@@ -327,11 +358,18 @@ public class ResourcesManager
 		}
 	}
 
+	/**
+	 * Deja de cargar las texturas del Splash
+	 */
 	public void unloadGameTextures()
 	{
 		// TODO (Since we did not create any textures for game scene yet)
 	}
 
+	
+	/**
+	 * Se crea el atlas y en el se anade las texturas creadas para el splash.
+	 */	 
 	public void loadSplashScreen()
 	{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -340,17 +378,26 @@ public class ResourcesManager
 		splashTextureAtlas.load();	
 	}
 
+	 /**
+	  * Deja de cargar las texturas del Splash
+	  */
 	public void unloadSplashScreen()
 	{
 		splashTextureAtlas.unload();
 		splash_region = null;
 	}
 
+	/**
+	 * Carga texturas del menu
+	 */
 	public void loadMenuTextures()
 	{
 		menuTextureAtlas.load();
 	}
 
+	/**
+	 * Dejar de cargar las texturas del menu
+	 */
 	public void unloadMenuTextures()
 	{
 		menuTextureAtlas.unload();
@@ -362,8 +409,8 @@ public class ResourcesManager
 	 * @param camera
 	 * @param vbom
 	 * <br><br>
-	 * We use this method at beginning of game loading, to prepare Resources Manager properly,
-	 * setting all needed parameters, so we can latter access them from different classes (eg. scenes)
+	 * Se utiliza para cargar el juego al principio, prepara el Resources Manager apropiadamente,
+	 * Despues podremos acceder a las diferentes clases, por ejemplo escenas.
 	 */
 	public static void prepareManager(Engine engine, GameActivity activity, BoundCamera camera, VertexBufferObjectManager vbom)
 	{

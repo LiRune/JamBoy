@@ -8,11 +8,17 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.holycow.manager.ResourcesManager;
 
+/**
+ * @author Holy Cow
+ *
+ */
+
 public class LevelCompleteWindow extends Sprite
 {
 	private TiledSprite star1;
 	private TiledSprite star2;
 	private TiledSprite star3;
+	
 	
 	public enum StarsCount
 	{
@@ -21,12 +27,21 @@ public class LevelCompleteWindow extends Sprite
 		THREE
 	}
 	
+	/**
+	 * Define la textura y el tamano se mostrara
+	 * @param pSpriteVertexBufferObject
+	 */
 	public LevelCompleteWindow(VertexBufferObjectManager pSpriteVertexBufferObject)
 	{
 		super(0, 0, 650, 400, ResourcesManager.getInstance().complete_window_region, pSpriteVertexBufferObject);
 		attachStars(pSpriteVertexBufferObject);
 	}
 	
+	
+	/**
+	 * Crea las estrellas y las anade la escena
+	 * @param pSpriteVertexBufferObject
+	 */
 	private void attachStars(VertexBufferObjectManager pSpriteVertexBufferObject)
 	{
 		star1 = new TiledSprite(150, 150, ResourcesManager.getInstance().complete_stars_region, pSpriteVertexBufferObject);
@@ -39,7 +54,7 @@ public class LevelCompleteWindow extends Sprite
 	}
 	
 	/**
-	 * Change star`s tile index, depends on stars count.
+	 * Cambia el tipo de estrella dependiendo del numero de estrellas obtenidas.
 	 * @param starsCount
 	 */
 	public void display(StarsCount starsCount, Scene scene, Camera camera)

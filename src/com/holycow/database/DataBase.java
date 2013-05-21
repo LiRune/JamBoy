@@ -10,6 +10,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * En esta clase se crea la base de datos y se gestiona
+ * 
+ * @author Holy Cow
+ *
+ */
+
 public class DataBase extends SQLiteOpenHelper {
 
 	static final String nombreBD = "JamBoyDB";	
@@ -20,6 +27,10 @@ public class DataBase extends SQLiteOpenHelper {
 	static final String score = "Puntuacion";
 	static final String stars = "Estrellas";
 
+	/**
+	 * Crea la base de datos
+	 * @param context
+	 */
 	public DataBase(Context context) {
 		// THE VALUE OF 1 ON THE NEXT LINE REPRESENTS THE VERSION NUMBER OF THE DATABASE
 		// IN THE FUTURE IF YOU MAKE CHANGES TO THE DATABASE, YOU NEED TO INCREMENT THIS NUMBER
@@ -27,6 +38,10 @@ public class DataBase extends SQLiteOpenHelper {
 		super(context, nombreBD, null, 1);
 	}
 
+	/**
+	 * Crea las tablas y su contenido
+	 *  
+	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 
@@ -105,6 +120,7 @@ public class DataBase extends SQLiteOpenHelper {
 		 */                             
 	}
 
+	
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// THIS METHOD DELETES THE EXISTING TABLE AND THEN CALLS THE METHOD onCreate() AGAIN TO RECREATE A NEW TABLE
@@ -115,6 +131,11 @@ public class DataBase extends SQLiteOpenHelper {
 	}
 
 
+	/**
+	 * Hace una consulta a la bd para saber si el nivel esta desbloqueado
+	 * @param id
+	 * @return true/false
+	 */
 	public static boolean nivelDesbloqueado(int id){
 		String desb = null;
 		DataBase myDB = new DataBase(ResourcesManager.getActivity());
@@ -140,6 +161,12 @@ public class DataBase extends SQLiteOpenHelper {
 		}		
 	}
 
+	
+	/**
+	 * Hace una consulta a la bd para saber si el nivel esta superado
+	 * @param id
+	 * @return true/false
+	 */
 	public static boolean nivelSuperado(int id){
 		String sup=null;
 		DataBase myDB = new DataBase(ResourcesManager.getActivity());
@@ -165,6 +192,13 @@ public class DataBase extends SQLiteOpenHelper {
 		}		
 	}
 
+	
+	/**
+	 * Hace una consulta de la puntuacion para saber si la puntuacion de la bd es mayor a la obtenida
+	 * @param id
+	 * @param puntos
+	 * @return true/false
+	 */
 	public static boolean compararPuntuacion(int id, int puntos){
 		int punt = 0;
 		DataBase myDB = new DataBase(ResourcesManager.getActivity());

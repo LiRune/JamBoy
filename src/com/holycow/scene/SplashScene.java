@@ -7,10 +7,19 @@ import org.andengine.opengl.util.GLState;
 import com.holycow.base.BaseScene;
 import com.holycow.manager.SceneManager.SceneType;
 
+/**Clase que crea las escena Splash
+ * @author Holy Cow
+ *
+ */
+
+
 public class SplashScene extends BaseScene
 {
 	private Sprite splash;
 	
+	/**
+	 * Crea la escena de Splash
+	 */
 	@Override
 	public void createScene()
 	{
@@ -29,6 +38,9 @@ public class SplashScene extends BaseScene
     	attachChild(splash);
 	}
 
+	/**
+	 * Accion que realiza al pulsar el boton de atras del movil
+	 */
 	@Override
 	public void onBackKeyPressed()
 	{
@@ -41,6 +53,9 @@ public class SplashScene extends BaseScene
 		return SceneType.SCENE_SPLASH;
 	}
 
+	/**
+	 * Eliminacion de la escena
+	 */
 	@Override
 	public void disposeScene()
 	{
@@ -50,6 +65,9 @@ public class SplashScene extends BaseScene
 		this.dispose();
 	}
 
+	/**
+	 * Accion que realiza al pulsar el boton de Home del movil
+	 */
 	@Override
 	public void onHomeKeyPressed()
 	{

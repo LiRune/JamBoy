@@ -69,7 +69,10 @@ import com.holycow.object.Enemigo;
 import com.holycow.object.Player;
 import com.holycow.pool.BalasPool;
 
-
+/**
+ * @author Holy Cow
+ *
+ */
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener
 {
@@ -149,6 +152,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		this.physicsWorld = physicsWorld;
 	}
 
+	
+	/**
+	 * Crea la escena 
+	 */
 	@Override
 	public void createScene()
 	{
@@ -167,6 +174,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		//setOnSceneTouchListener(this); 
 	}
 
+	
+	/**
+	 * Realiza una accion al pulsar el boton de atras del mobil
+	 */
 	@Override
 	public void onBackKeyPressed()
 	{
@@ -186,6 +197,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		return SceneType.SCENE_GAME;
 	}
 
+	/**
+	 * Elimina la escena Juego
+	 */
 	@Override
 	public void disposeScene()
 	{
@@ -197,6 +211,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		// removing all game scene objects.
 	}
 
+	/**
+	 * Accion que se realiza cuando toca la pantalla, cualquier parte de la pantalla
+	 */
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
 	{
 		/*if (pSceneTouchEvent.isActionDown())
@@ -214,6 +231,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		return false;
 	}
 
+	/**
+	 * Permite pausar el juego o reanudarlo
+	 */
 	public final void onManagedUpdate(final float pSecondsElapsed) {
 		if(PAUSED){
 			// if need pause pass 0
@@ -223,6 +243,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		}
 	}
 
+	/**
+	 * Carga el contenido del XML level para poner en la escena
+	 * @param levelID
+	 */
 	private void loadLevel(final int levelID)
 	{
 		final SimpleLevelLoader levelLoader = new SimpleLevelLoader(getVbom());
@@ -495,11 +519,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		levelLoader.loadLevelFromAsset(activity.getAssets(), "level/" + levelID + ".lvl");
 	}
 
+	
+	/**
+	 * Crea el texto Game Over
+	 */
 	private void createGameOverText()
 	{
 		gameOverText = new Text(0, 0, getResourcesManager().font, "Game Over!", getVbom());
 	}
 
+	/**
+	 * Muestra el texto Game Over
+	 */
 	private void displayGameOverText()
 	{
 		gameOverText.detachSelf();
@@ -509,6 +540,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		gameOverDisplayed = true;
 	}
 
+	/**
+	 * Crea el HUD de la escena
+	 */
 	private void createHUD()
 	{
 		gameHUD = new HUD();
@@ -708,7 +742,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 
 
-
+	/**
+	 * Crea el fondo de la escena
+	 * @param level
+	 */
 	private void createBackground(final int level)
 	{
 		//setBackground(new Background(Color.GREEN));
@@ -747,18 +784,29 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	}
 
+	/**
+	 * Anade puntuacion y modifica el texto de Puntuacion
+	 * @param i
+	 */
 	private void addToScore(int i)
 	{
 		score += i;
 		scoreText.setText("" + score);
 	}
 	
+	/**
+	 * Anade llaves y modifica el texto de Llaves
+	 * @param i
+	 */
 	private void addToKey(int i)
 	{
 		key += i;
 		llavesText.setText("" + key);
 	}
 
+	/**
+	 * Crea las fisicas
+	 */
 	private void createPhysics()
 	{
 		physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -17), false); 
@@ -766,6 +814,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		registerUpdateHandler(physicsWorld);
 	}
 
+	/**
+	 * Crea el temporizador
+	 */
 	private void crearTemporizador()
 	{
 		this.engine.registerUpdateHandler(temporizador = new TimerHandler(1.0f, true, new ITimerCallback()
@@ -783,6 +834,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		}));
 	}
 
+	/**
+	 * Habilita o deshabilita botones para cuando aparezca el mensaje Game Over
+	 */
 	private void pantallaGameOver() {
 		displayGameOverText();
 		player.setVisible(false);
@@ -807,6 +861,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	}
 
+	
+	/**
+	 * Habilita o deshabilita botones para cuando aparezca el mensaje Level Complete
+	 */
 	private void pantallaLevelComplete() {
 		engine.unregisterUpdateHandler(temporizador);
 		heart1.setVisible(false);
@@ -835,12 +893,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		reanudar.setEnabled(false);
 	}
 
-
+	/**
+	 * Accion cuando pulsamos el boton home del movil
+	 */
 	public void onHomeKeyPressed()
 	{
 
 	}
 
+	
+	/**
+	 * Habilita o deshabilita botones y musica para cuando el juego este en pausa
+	 */
 	public void pausa()
 	{
 		PAUSED=true;
@@ -875,6 +939,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	// INTERNAL CLASSES
 	// ---------------------------------------------
 
+	/**
+	 * Acciones que se realizaran cuando haya colisiones
+	 * @return
+	 */
 	private ContactListener contactListener()
 	{
 		ContactListener contactListener = new ContactListener()
@@ -1054,6 +1122,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		return contactListener;
 	}
 
+	
+	/**
+	 * Guarda la puntuacion a la base de datos si esta es mas alta que la anterior
+	 */
 	public void guardarPuntuacion(){
 
 		SQLiteDatabase db = getResourcesManager().getGame().getWritableDatabase();

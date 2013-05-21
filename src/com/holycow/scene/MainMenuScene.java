@@ -33,6 +33,11 @@ import com.holycow.manager.ResourcesManager;
 import com.holycow.manager.SceneManager;
 import com.holycow.manager.SceneManager.SceneType;
 
+/**Creacion de las escenas del menu
+ * @author Holy Cow
+ *
+ */
+
 public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 {
 	//---------------------------------------------
@@ -105,6 +110,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	// METHODS FROM SUPERCLASS
 	//---------------------------------------------
 
+	/**
+	 * Crea la primera escena y le pasa el fondo de pantalla, Menu
+	 */
 	@Override
 	public void createScene()
 	{
@@ -112,6 +120,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		createMenuChildScene();
 	}
 
+	/**
+	 * Accion que realiza al pulsar el boton de atras del movil
+	 */
 	@Override
 	public void onBackKeyPressed()
 	{
@@ -133,6 +144,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		}
 	}
 
+	/**
+	 * Accion que realiza al pulsar el boton de Home del movil
+	 */
 	public void onHomeKeyPressed()
 	{
 
@@ -144,13 +158,18 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		return SceneType.SCENE_MENU;
 	}
 
-
+	/**
+	 * Eliminacion de la escena
+	 */
 	@Override
 	public void disposeScene()
 	{
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Segun el boton del menu clicado se hara una accion
+	 */
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY)
 	{
 		switch(pMenuItem.getID())
@@ -257,6 +276,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	// CLASS LOGIC
 	//---------------------------------------------
 
+	/**
+	 * Crea el fondo de la pantalla
+	 */
 	private void createBackground()
 	{
 		attachChild(new Sprite(400, 240, getResourcesManager().menu_background_region, getVbom())
@@ -270,6 +292,10 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		});
 	}
 
+	
+	/**
+	 * Crea la pantalla de Menu Principal
+	 */
 	private void createMenuChildScene()
 	{
 		menuChildScene = new MenuScene(camera);
@@ -292,6 +318,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		setChildScene(menuChildScene);
 	}
 
+	/**
+	 * Crea la pantalla de Opciones
+	 */
 	private void createOptionsChildScene()
 	{
 		optionsChildScene = new MenuScene(camera);
@@ -315,6 +344,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		setChildScene(optionsChildScene);
 	}
 
+	/**
+	 * Crea la pantalla de Seleccion de Nivel
+	 */
 	private void createSeleccionNivelChildScene()
 	{
 		seleccionNivelChildScene = new MenuScene(camera);
@@ -395,6 +427,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		setChildScene(seleccionNivelChildScene);
 	}
 
+	/**
+	 * Crea la pantalla de seleccion de personaje
+	 */
 	private void createSeleccionPersonajeChildScene()
 	{
 
@@ -436,6 +471,11 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		setChildScene(seleccionPersonajeChildScene);
 	}
 
+	/**
+	 * Hace una consulta a la bd para devolver la puntuacion del nivel clicado
+	 * @param id
+	 * @return puntuacion
+	 */
 	private String mostrarPuntuacion(int id)
 	{
 		String punt= null;
@@ -457,7 +497,11 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		return punt;
 	}
 
-
+	/**
+	 * Hace una consulta a la bd para devolver el numero de estrella del nivel clicado
+	 * @param id
+	 * @return numero de estrellas
+	 */
 	private String mostrarEstrellas(int id)
 	{
 		String estr= null;
@@ -479,6 +523,10 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		return estr;
 	}
 
+	/**
+	 * Segun el numero de estrellas que tenga el nivel pondra las estrellas de un colo o de otro
+	 * @param numero
+	 */
 	private void ponerEstrellas(String numero){
 		int numeroInt = Integer.parseInt(numero);
 
@@ -512,6 +560,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 	}
 
+	/**
+	 * Crea un dialogo para antes de salir
+	 */
 	private void dialogoSalir(){
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);			
 		alertDialogBuilder.setTitle("¿Estás seguro de que quieres salir?");		

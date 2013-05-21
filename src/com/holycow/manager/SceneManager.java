@@ -22,6 +22,12 @@ import com.holycow.scene.LoadingScene;
 import com.holycow.scene.MainMenuScene;
 import com.holycow.scene.SplashScene;
 
+/**Clase que gestiona las escenas
+ * 
+ * @author Holy Cow
+ *
+ */
+
 public class SceneManager
 {
 	//---------------------------------------------
@@ -66,6 +72,10 @@ public class SceneManager
 		currentSceneType = scene.getSceneType();
 	}
 	
+	/**
+	 * Carga una escena segun la que se le pase
+	 * @param sceneType
+	 */
 	public void setScene(SceneType sceneType)
 	{
 		switch (sceneType)
@@ -87,6 +97,11 @@ public class SceneManager
 		}
 	}
 	
+	/**
+	 * Crea las escena Menu
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 */
 	public void createMenuScene() throws IllegalStateException, IOException
 	{
 		ResourcesManager.getInstance().loadMenuResources();
@@ -96,6 +111,10 @@ public class SceneManager
         disposeSplashScene();
 	}
 	
+	/**
+	 * Crea la escena Splash
+	 * @param pOnCreateSceneCallback
+	 */
 	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
 	{
 		ResourcesManager.getInstance().loadSplashScreen();
@@ -104,6 +123,9 @@ public class SceneManager
 		pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
 	}
 	
+	/**
+	 * Deshabilita la escena Splash
+	 */
 	private void disposeSplashScene()
 	{
 		ResourcesManager.getInstance().unloadSplashScreen();
@@ -111,6 +133,10 @@ public class SceneManager
 		splashScene = null;
 	}
 	
+	/**
+	 * Carga la escena Juego
+	 * @param mEngine
+	 */
 	public void loadGameScene(final Engine mEngine)
 	{
 		setScene(loadingScene);
@@ -127,6 +153,10 @@ public class SceneManager
 		}));
 	}
 	
+	/**
+	 * Carga la escena Menu
+	 * @param mEngine
+	 */
 	public void loadMenuScene(final Engine mEngine)
 	{
 		setScene(loadingScene);

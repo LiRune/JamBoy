@@ -15,6 +15,11 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.holycow.manager.ResourcesManager;
 
+/**
+ * @author Holy Cow
+ *
+ */
+
 public abstract class Player extends AnimatedSprite
 {
 	// ---------------------------------------------
@@ -68,6 +73,11 @@ public abstract class Player extends AnimatedSprite
 	// CLASS LOGIC
 	// ---------------------------------------------
 	
+	/**
+	 * Crea las fisicas de Player
+	 * @param camera
+	 * @param physicsWorld
+	 */
 	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
 	{		
 		body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
@@ -91,6 +101,9 @@ public abstract class Player extends AnimatedSprite
 		});
 	}
 	
+	/**
+	 * Player avanzar hacia la izquierda
+	 */
 	public void runLeft(){
 		if (!isFlippedHorizontal()) 
 		{ 
@@ -102,6 +115,10 @@ public abstract class Player extends AnimatedSprite
 		animate(100);
 	}
 	
+	
+	/**
+	 * Player avanzar hacia la derecha
+	 */
 	public void runRight(){
 		if (isFlippedHorizontal()) 
 		{ 
@@ -113,6 +130,10 @@ public abstract class Player extends AnimatedSprite
 		animate(100);
 	}
 	
+	
+	/**
+	 * Player se para
+	 */
 	public void stop(){
 		if (isFlippedHorizontal()) 
 		{ 
@@ -129,6 +150,9 @@ public abstract class Player extends AnimatedSprite
 		animate(PLAYER_ANIMATE, 0, 2, false);
 	}
 	
+	/**
+	 * Player salta
+	 */
 	public void jump()
 	{
 		
@@ -143,6 +167,13 @@ public abstract class Player extends AnimatedSprite
 		body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, 12)); 
 	}
 	
+	/**
+	 * Player dispara Bala
+	 * @param xCoord
+	 * @param yCoord
+	 * @param engine
+	 * @param bala
+	 */
 	public void disparar(float xCoord, float yCoord, Engine engine, Bala bala)
 	{
 		float xComp = 15;
@@ -162,11 +193,18 @@ public abstract class Player extends AnimatedSprite
 		ResourcesManager.disparar.play();
 	}
 	
+	/**
+	 * Incrementa el contacto del Player con el suelo
+	 */
 	public void increaseFootContacts()
 	{
 		footContacts++;
 	}
 	
+	
+	/**
+	 * Decrementa el contacto del Player con el suelo
+	 */
 	public void decreaseFootContacts()
 	{
 		footContacts--;

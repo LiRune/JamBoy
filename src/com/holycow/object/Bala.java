@@ -13,6 +13,11 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.holycow.manager.ResourcesManager;
 import com.holycow.pool.BalasPool;
 
+/**
+ * @author Holy Cow
+ *
+ */
+
 public class Bala extends Sprite{
 	// ---------------------------------------------
 	// VARIABLES
@@ -58,6 +63,12 @@ public class Bala extends Sprite{
 	// CLASS LOGIC
 	// ---------------------------------------------
 
+	
+	/**
+	 * Crea las fisicas de la bala
+	 * @param camera
+	 * @param physicsWorld
+	 */
 	public void createPhysics(final Camera camera, final PhysicsWorld physicsWorld)
 	{
 		bala = this;

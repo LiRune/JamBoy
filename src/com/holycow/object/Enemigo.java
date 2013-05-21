@@ -11,6 +11,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.holycow.manager.ResourcesManager;
 
+/**
+ * @author Holy Cow
+ *
+ */
+
+
 public abstract class Enemigo extends AnimatedSprite
 {
 	// ---------------------------------------------
@@ -55,6 +61,12 @@ public abstract class Enemigo extends AnimatedSprite
 	// CLASS LOGIC
 	// ---------------------------------------------
 
+	
+	/**
+	 * Crea las fisicas del enemigo
+	 * @param camera
+	 * @param physicsWorld
+	 */
 	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
 	{		
 		body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
@@ -78,6 +90,12 @@ public abstract class Enemigo extends AnimatedSprite
 		});
 	}
 
+	
+	/**
+	 * Para seguir al Player cuando se acerque a cierta distancia
+	 * @param camera
+	 * @param player
+	 */
 	public void seguirJugador(final Camera camera, Player player)
 	{
 		//Si la distancia de enemigo esta a 200 o mas positivo
