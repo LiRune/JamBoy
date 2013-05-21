@@ -27,17 +27,28 @@ import com.holycow.database.DataBase;
 import com.holycow.manager.ResourcesManager;
 import com.holycow.manager.SceneManager;
 
+/** Actividad principal i única
+ * En esta clase cargamos el engine y los recursos
+ * 
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
+ *
+ */
+
 public class GameActivity extends BaseGameActivity
 {
 	private BoundCamera camera;
-	
+
 	@Override
 	public Engine onCreateEngine(EngineOptions pEngineOptions) 
 	{
 		return new LimitedFPSEngine(pEngineOptions, 60);
 	}
 
-
+	/**
+	 * En este metodo se especifica el tamano de la camara, la orientacion horizontal y habilita el multi touch
+	 */
 	public EngineOptions onCreateEngineOptions()
 	{
 		camera = new BoundCamera(0, 0, 800, 480);
@@ -48,18 +59,28 @@ public class GameActivity extends BaseGameActivity
 		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
 		return engineOptions;
 	}
-
+	
+	/**
+	 * Le decimos en que clase cargamos las texturas, sonidos...
+	 */
 	public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws IOException
 	{
 		ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
+	/**
+	 * La primera escena que aparece al abrir la aplicacion, en este caso el splash
+	 */
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException
 	{
 		SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
 	}
 
+	
+	/**
+	 * Despues de unos segundos, desaparece el splash y carga la clase SceneManager
+	 */
 	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException
 	{
 		mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() 
@@ -70,10 +91,8 @@ public class GameActivity extends BaseGameActivity
 				try {
 					SceneManager.getInstance().createMenuScene();
 				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -81,6 +100,9 @@ public class GameActivity extends BaseGameActivity
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 	
+	/**
+	 * Accion que se realiza al pulsar el boton atras del movil
+	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) 
 	{  
@@ -95,6 +117,9 @@ public class GameActivity extends BaseGameActivity
 		return false; 
 	}
 
+	/**
+	 * Pausa el sonido
+	 */
 	@Override
 	public void onPause()
 	{
@@ -106,6 +131,9 @@ public class GameActivity extends BaseGameActivity
 		}
 	}
 
+	/**
+	 * Reanuda el sonido
+	 */
 	@Override
 	public synchronized void onResume()
 	{
