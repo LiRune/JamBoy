@@ -34,7 +34,9 @@ import com.holycow.manager.SceneManager;
 import com.holycow.manager.SceneManager.SceneType;
 
 /**Creacion de las escenas del menu
- * @author Holy Cow
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
  *
  */
 

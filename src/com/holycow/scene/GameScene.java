@@ -69,8 +69,10 @@ import com.holycow.object.Enemigo;
 import com.holycow.object.Player;
 import com.holycow.pool.BalasPool;
 
-/**
- * @author Holy Cow
+/**Clase que gestiona la escena del juego
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
  *
  */
 
@@ -130,11 +132,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public ButtonSprite jump;
 	public ButtonSprite disp;
 
+	private boolean golpeado=false;
+
 	boolean PAUSED = false;
 
 	private int estrellas;
 
 	private TimerHandler temporizador;
+	private TimerHandler contador;
 
 	private int key = 0;
 
@@ -152,7 +157,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		this.physicsWorld = physicsWorld;
 	}
 
-	
+
 	/**
 	 * Crea la escena 
 	 */
@@ -174,7 +179,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		//setOnSceneTouchListener(this); 
 	}
 
-	
+
 	/**
 	 * Realiza una accion al pulsar el boton de atras del mobil
 	 */
@@ -365,7 +370,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							{
 								addToScore(100);								
 								addToKey(1);
-								
+
 								this.setVisible(false);
 								this.setIgnoreUpdate(true);
 								ResourcesManager.coger_llave.play();										
@@ -401,8 +406,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							enemigo.setVisible(false);
 							enemigo.detachSelf();
 							enemigo.clearUpdateHandlers();
-							physicsWorld.unregisterPhysicsConnector(physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(enemigo));
-							physicsWorld.destroyBody(enemigo.getBody());
+							enemigo.getBody().setActive(false);
 							ResourcesManager.enemigo_muerte.play();
 						}
 					};
@@ -519,7 +523,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		levelLoader.loadLevelFromAsset(activity.getAssets(), "level/" + levelID + ".lvl");
 	}
 
-	
+
 	/**
 	 * Crea el texto Game Over
 	 */
@@ -550,11 +554,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		scoreText = new Text(70, 440, getResourcesManager().font, "0123456789", new TextOptions(HorizontalAlign.LEFT), getVbom());
 		//scoreText.setAnchorCenter(0, 0);	
 		scoreText.setText("0");
-		
+
 		llavesText = new Text(70, 400, getResourcesManager().font, "0123456789", new TextOptions(HorizontalAlign.LEFT), getVbom());
 		//scoreText.setAnchorCenter(0, 0);	
 		llavesText.setText("0");
-		
+
 		gameHUD.attachChild(scoreText);
 
 		timeText = new Text(390, 440, getResourcesManager().font, "0123456789", new TextOptions(HorizontalAlign.CENTER), getVbom());
@@ -567,7 +571,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		//timeText.setAnchorCenter(0,  0);
 		faltankeysText.setText("Faltan llaves");
 		faltankeysText.setVisible(false);
-		
+
 		gameHUD.attachChild(llavesText);
 		gameHUD.attachChild(faltankeysText);
 		gameHUD.attachChild(reloj);
@@ -582,9 +586,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				if(moverPausa){
 					switch(pAreaTouchEvent.getAction()) {
 					case TouchEvent.ACTION_DOWN:  
-
 						isTouchedFlag = true;
 						player.runLeft();
+						if(player.getFootContacts()==0 || golpeado==true){
+							System.out.println("HOLAAAAAAAAAAAAAAAAA");
+							player.getBody().getFixtureList().get(0).setFriction(0);
+						}
 
 						break;
 
@@ -612,10 +619,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				if(moverPausa){
 					switch(pAreaTouchEvent.getAction()) {
 					case TouchEvent.ACTION_DOWN:
-
 						isTouchedFlag = true;
 						player.runRight();
-
+						if(player.getFootContacts()==0 || golpeado==true){
+							System.out.println("HOLAAAAAAAAAAAAAAAAA");
+							player.getBody().getFixtureList().get(0).setFriction(0);
+						}
 						break;
 
 					case TouchEvent.ACTION_UP:  
@@ -645,8 +654,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 		restartJuego = new ButtonSprite(300, 50, getResourcesManager().reanudar_region , getVbom(), new OnClickListener() {
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) { 	
-				LoadingScene.getCargandoText().setPosition(camera.getCenterX(), camera.getCenterY());
-				SceneManager.getInstance().loadGameScene(engine);
+				LoadingScene.getCargandoText().setPosition(camera.getCenterX(), camera.getCenterY());				
+				SceneManager.getInstance().loadGameScene(engine);			
+				gameHUD.setVisible(false);				
 			}
 		});
 
@@ -724,7 +734,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		gameHUD.registerTouchArea(volverMenu);
 		gameHUD.registerTouchArea(restartJuego);
 		gameHUD.registerTouchArea(disp);
-		
+
 		gameHUD.attachChild(left);
 		gameHUD.attachChild(right);
 		gameHUD.attachChild(jump);
@@ -793,7 +803,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		score += i;
 		scoreText.setText("" + score);
 	}
-	
+
 	/**
 	 * Anade llaves y modifica el texto de Llaves
 	 * @param i
@@ -861,7 +871,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	}
 
-	
+
 	/**
 	 * Habilita o deshabilita botones para cuando aparezca el mensaje Level Complete
 	 */
@@ -891,6 +901,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		pausar.setEnabled(false);
 		reanudar.setVisible(false);
 		reanudar.setEnabled(false);
+		llavesText.setVisible(false);
 	}
 
 	/**
@@ -901,7 +912,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	}
 
-	
+
 	/**
 	 * Habilita o deshabilita botones y musica para cuando el juego este en pausa
 	 */
@@ -979,31 +990,47 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					{
 						x1.getBody().setType(BodyType.DynamicBody);
 
-						
+
 
 
 					}
 
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo"))
 					{
-						player.setVida(player.getVida() - 1);
-						
-						//Si el jugador choca con el enemigo pega un salto hacia atras
-						if(player.getX() > enemigo.getX()){
-							player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x +8, 6));
-						}
-						if(player.getX() < enemigo.getX()){
-							player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x -8, 6));
-						}
 
-						if(heart3.isVisible()) {
-							heart3.setVisible(false);
+						//enemigo.setVida(0);
+						//Si el jugador choca con el enemigo pega un salto hacia atras
+						if(golpeado){
+							engine.registerUpdateHandler(contador = new TimerHandler(0.5f, true, new ITimerCallback()
+							{                      
+								public void onTimePassed(final TimerHandler pTimerHandler)
+								{
+									System.out.println("DENTRO DEL TEMPORIZADOR");
+									engine.unregisterUpdateHandler(contador);
+									golpeado=false;
+								}
+							}));
 						}
-						else if(heart2.isVisible()) {
-							heart2.setVisible(false);
-						}
-						else if(heart1.isVisible()) {
-							heart1.setVisible(false);
+						else{
+							player.setVida(player.getVida() - 1);
+							if(player.getX() > enemigo.getX()){
+								player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x +8, 6));
+							}
+							if(player.getX() < enemigo.getX()){
+								player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x -8, 6));
+							}
+
+							if(heart3.isVisible()) {
+								heart3.setVisible(false);
+							}
+							else if(heart2.isVisible()) {
+								heart2.setVisible(false);
+							}
+							else if(heart1.isVisible()) {
+								heart1.setVisible(false);
+							}
+
+							golpeado=true;
 						}
 
 						player.getBody().getFixtureList().get(0).setFriction(100);
@@ -1016,14 +1043,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						bala.setColisionEnemigo(true);
 
 						if(enemigo.getVida() == 0)
-						//enemigo.setVida(vidaEnemigo);
+							//enemigo.setVida(vidaEnemigo);
 
-						//System.out.println("VIDA ENEMIGO: "+enemigo.getVida());
+							//System.out.println("VIDA ENEMIGO: "+enemigo.getVida());
 
-						if(enemigo.getVida() == 0)
-						{
-							addToScore(50);
-						}
+							if(enemigo.getVida() == 0)
+							{
+								addToScore(50);
+							}
 
 						explosion = new AnimatedSprite(enemigo.getX(), enemigo.getY(), getResourcesManager().explosion_region, vbom)
 						{
@@ -1065,7 +1092,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 			{
 				final Fixture x1 = contact.getFixtureA();
 				final Fixture x2 = contact.getFixtureB();
-				
+
 				if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
 				{					
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) {
@@ -1075,22 +1102,22 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("bala")) {
 						contact.setEnabled(false);
 					}
-					
-					if (x1.getBody().getUserData().equals("platform1") && x2.getBody().getUserData().equals("player"))
+
+					/*if (x1.getBody().getUserData().equals("platform1") && x2.getBody().getUserData().equals("player"))
 					{
 						if(player.getBody().getFixtureList().get(0).getFriction() > 0)
 						{
 							player.getBody().getFixtureList().get(0).setFriction(0);
 						}	
 					}
-					
+
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("platform1"))
 					{
 						if(player.getBody().getFixtureList().get(0).getFriction() > 0)
 						{
 							player.getBody().getFixtureList().get(0).setFriction(0);
 						}	
-					}
+					}*/
 				}
 			}
 
@@ -1100,29 +1127,29 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				final Fixture x2 = contact.getFixtureB();
 				if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
 				{
-					if (x1.getBody().getUserData().equals("platform1") && x2.getBody().getUserData().equals("player"))
+					/*if (x1.getBody().getUserData().equals("platform1") && x2.getBody().getUserData().equals("player"))
 					{
 						if(player.getBody().getFixtureList().get(0).getFriction() > 0)
 						{
 							player.getBody().getFixtureList().get(0).setFriction(0);
 						}	
 					}
-					
+
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("platform1"))
 					{
 						if(player.getBody().getFixtureList().get(0).getFriction() > 0)
 						{
 							player.getBody().getFixtureList().get(0).setFriction(0);
 						}	
-					}
+					}*/
 				}
 			}
 		};
-		
+
 		return contactListener;
 	}
 
-	
+
 	/**
 	 * Guarda la puntuacion a la base de datos si esta es mas alta que la anterior
 	 */

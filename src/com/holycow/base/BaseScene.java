@@ -14,7 +14,9 @@ import com.holycow.manager.SceneManager.SceneType;
 
 /**Esta clase es la representacion basica de cada escena
  * 
- * @author Holy Cow
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
  *
  */
 public abstract class BaseScene extends Scene

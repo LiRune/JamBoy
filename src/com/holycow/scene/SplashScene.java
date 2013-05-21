@@ -8,7 +8,9 @@ import com.holycow.base.BaseScene;
 import com.holycow.manager.SceneManager.SceneType;
 
 /**Clase que crea las escena Splash
- * @author Holy Cow
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
  *
  */
 

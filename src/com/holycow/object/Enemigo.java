@@ -11,8 +11,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.holycow.manager.ResourcesManager;
 
-/**
- * @author Holy Cow
+/**Clase que define las opciones de Enemigo
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
  *
  */
 
@@ -86,6 +88,8 @@ public abstract class Enemigo extends AnimatedSprite
 				{					
 					onDie();
 				}
+				
+				
 			}
 		});
 	}
@@ -102,27 +106,26 @@ public abstract class Enemigo extends AnimatedSprite
 		if(this.getX() - player.getX() <= 200){
 			//enemigo_cuerpo.setLinearVelocity(5 * -1, 0);									
 			//Se compara a cuanto esta de cerca del enemigo, si esta a  150, empieza a correr hacia la derecha
-			if (player.getX() > this.getX()+150)
+			if (player.getX() > this.getX()+190)
 			{
 				this.animate(100);
 				body.setLinearVelocity(5, 0);
 				this.setFlippedHorizontal(false);
 			}
 			//Sino, obtiene velocidad negativa
-			else if(player.getX() < this.getX()-150)
+			else if(player.getX() < this.getX()-190)
 			{
 				this.animate(100);
 				body.setLinearVelocity(-5, 0);
 				this.setFlippedHorizontal(true);
-			}
-
-
-		}
+			}			
+			
+		}	
 		//Si la distancia del jugador es -200 o menos
 		if(this.getX() - player.getX() <= -200){
 			//enemigo_cuerpo.setLinearVelocity(5 * -1, 0);
 			// Si el jugador esta a 150 mas se gira el enemigo
-			if (player.getX() > this.getX()+150)
+			if (player.getX() > this.getX()+190)
 			{
 				this.animate(100);
 				body.setLinearVelocity(5, 0);
@@ -130,12 +133,13 @@ public abstract class Enemigo extends AnimatedSprite
 			}
 
 			//Sino, obtiene velocidad negativa
-			else if(player.getX() < this.getX()-150)
+			else if(player.getX() < this.getX()-190)
 			{
 				this.animate(100);
 				body.setLinearVelocity(-5, 0);
 				this.setFlippedHorizontal(true);
 			}
+			
 		}
 	}
 

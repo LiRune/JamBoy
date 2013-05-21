@@ -15,8 +15,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.holycow.manager.ResourcesManager;
 
-/**
- * @author Holy Cow
+/**Clase que define las opciones de player
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
  *
  */
 

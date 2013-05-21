@@ -20,8 +20,10 @@ import com.holycow.object.Bala;
 import com.holycow.object.Player;
 import com.holycow.scene.GameScene;
 
-/**
- * @author Holy Cow
+/**Clase que gestiona el pool de Bala
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
  *
  */
 

@@ -24,7 +24,9 @@ import com.holycow.scene.SplashScene;
 
 /**Clase que gestiona las escenas
  * 
- * @author Holy Cow
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
  *
  */
 

@@ -13,7 +13,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * En esta clase se crea la base de datos y se gestiona
  * 
- * @author Holy Cow
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
  *
  */
 

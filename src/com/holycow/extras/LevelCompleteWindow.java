@@ -8,8 +8,10 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.holycow.manager.ResourcesManager;
 
-/**
- * @author Holy Cow
+/**Clase que define y crea la pantalla Level Complete
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
  *
  */
 

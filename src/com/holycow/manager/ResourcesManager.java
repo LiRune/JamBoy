@@ -29,8 +29,10 @@ import com.holycow.GameActivity;
 import com.holycow.database.DataBase;
 import com.holycow.scene.MainMenuScene;
 
-/**
- * @author Holy Cow
+/**Clase que gestiona los recursos
+ * @author Samir El Aoufi
+ * @author Juan José Cillero
+ * @author Rubén Díaz
  *
  */
 
