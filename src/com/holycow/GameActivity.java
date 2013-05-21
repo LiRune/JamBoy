@@ -22,6 +22,7 @@ import android.content.Context;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
+import com.holycow.base.BaseScene;
 import com.holycow.database.DataBase;
 import com.holycow.manager.ResourcesManager;
 import com.holycow.manager.SceneManager;
@@ -46,20 +47,6 @@ public class GameActivity extends BaseGameActivity
 		engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
 		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
 		return engineOptions;
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) 
-	{  
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
-			SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
-		}
-		else if(keyCode == KeyEvent.KEYCODE_HOME)
-		{
-			SceneManager.getInstance().getCurrentScene().onHomeKeyPressed();
-		}
-		return false; 
 	}
 
 	public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws IOException
@@ -93,15 +80,19 @@ public class GameActivity extends BaseGameActivity
 		}));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
-
+	
 	@Override
-	protected void onDestroy()
-	{
-		super.onDestroy();
-		if (this.isGameLoaded())
+	public boolean onKeyDown(int keyCode, KeyEvent event) 
+	{  
+		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			System.exit(0);	
-		}	
+			SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+		}
+		else if(keyCode == KeyEvent.KEYCODE_HOME)
+		{
+			SceneManager.getInstance().getCurrentScene().onHomeKeyPressed();
+		}
+		return false; 
 	}
 
 	@Override
@@ -110,7 +101,8 @@ public class GameActivity extends BaseGameActivity
 		super.onPause();
 		if (this.isGameLoaded())
 		{
-			SceneManager.getInstance().getCurrentScene().getResourcesManager().music.pause();
+			SceneManager.getInstance().getCurrentScene();
+			BaseScene.getResourcesManager().music.pause();
 		}
 	}
 
@@ -120,7 +112,18 @@ public class GameActivity extends BaseGameActivity
 		super.onResume();
 		if (this.isGameLoaded())
 		{
-			SceneManager.getInstance().getCurrentScene().getResourcesManager().music.resume();
+			SceneManager.getInstance().getCurrentScene();
+			BaseScene.getResourcesManager().music.resume();
 		}
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		if (this.isGameLoaded())
+		{
+			System.exit(0);	
+		}	
 	}
 }
