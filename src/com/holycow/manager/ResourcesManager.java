@@ -73,7 +73,11 @@ public class ResourcesManager
 	public ITextureRegion personaje1_region;
 	public ITextureRegion personaje2_region;
 	public ITextureRegion personaje3_region;
-
+	public ITextureRegion niveles_region;
+	public ITextureRegion volverMenu_region;
+	public ITextureRegion seleccionPersonaje_region;
+	
+	
 	public ITiledTextureRegion personajeSelec1_region;
 	public ITiledTextureRegion personajeSelec2_region;
 	public ITiledTextureRegion personajeSelec3_region;
@@ -196,7 +200,11 @@ public class ResourcesManager
 		personajeSelec2_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "personaje2.png", 7, 1);
 		personajeSelec3_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "personaje3.png", 7, 1);
 		numeroEstrellas = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "stars.png", 2, 1);
-
+		niveles_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "nivel.png");
+		volverMenu_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "volver.png");
+		seleccionPersonaje_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje.png");
+		
+		
 		try 
 		{
 			// Carga el Atlas

@@ -1,5 +1,5 @@
 /** Automatically generated file. DO NOT MODIFY */
-package com.matimdev;
+package com.holycow;
 
 public final class BuildConfig {
     public final static boolean DEBUG = true;

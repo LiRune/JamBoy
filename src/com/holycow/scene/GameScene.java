@@ -407,7 +407,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							enemigo.detachSelf();
 							enemigo.clearUpdateHandlers();
 							enemigo.getBody().setActive(false);
-							ResourcesManager.enemigo_muerte.play();
 						}
 					};
 
@@ -1042,15 +1041,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 						bala.setColisionEnemigo(true);
 
+
+
 						if(enemigo.getVida() == 0)
-							//enemigo.setVida(vidaEnemigo);
-
-							//System.out.println("VIDA ENEMIGO: "+enemigo.getVida());
-
-							if(enemigo.getVida() == 0)
-							{
-								addToScore(50);
-							}
+						{
+							addToScore(50);
+							ResourcesManager.enemigo_muerte.play();
+						}
 
 						explosion = new AnimatedSprite(enemigo.getX(), enemigo.getY(), getResourcesManager().explosion_region, vbom)
 						{
