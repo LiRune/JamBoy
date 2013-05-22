@@ -183,9 +183,9 @@ public class ResourcesManager
 	{
 		// Creación del Atlas donde se añadirán todas las texturas del menú
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
-		menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+		menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1100, 1100, TextureOptions.BILINEAR);
 		// Con esto conseguimos que no aparezcan rayas negras en los bordes de algunas texturas
-		menuTextureAtlas.addEmptyTextureAtlasSource(0, 0, 1024, 1024);
+		menuTextureAtlas.addEmptyTextureAtlasSource(0, 0, 1100, 1100);
 
 		menu_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_background.png");
 		play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play.png");
@@ -256,7 +256,7 @@ public class ResourcesManager
 	private void loadMenuFonts()
 	{
 		FontFactory.setAssetBasePath("font/");
-		final ITexture mainFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		final ITexture mainFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		font = FontFactory.createStrokeFromAsset(activity.getFontManager(), mainFontTexture, activity.getAssets(), "font.ttf", 50, true, Color.WHITE, 2, Color.BLACK);
 		font.load();

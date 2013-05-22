@@ -561,7 +561,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 
 		
-		desarrollado.setPosition(300,400);
+		desarrollado.setPosition(400,400);
 		samir.setPosition(400,300);
 		juanjo.setPosition(400,200);
 		ruben.setPosition(400,100);

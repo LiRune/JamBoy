@@ -664,7 +664,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 
 
-		disp = new ButtonSprite(620, 50, getResourcesManager().saltar_region , getVbom(), new OnClickListener() {
+		disp = new ButtonSprite(620, 50, getResourcesManager().atacar_region , getVbom(), new OnClickListener() {
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				bala = balasPool.obtainPoolItem();
 				player.disparar(player.getX(), player.getY(), engine, bala);
