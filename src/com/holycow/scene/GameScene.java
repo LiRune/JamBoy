@@ -1158,14 +1158,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		SQLiteDatabase db = getResourcesManager().getGame().getWritableDatabase();
 
 
-		if(!DataBase.nivelSuperado(MainMenuScene.getIdNivel()))
+		if(!DataBase.isBeat(MainMenuScene.getIdNivel()))
 		{
 			int nivelDesbloqueado=MainMenuScene.getIdNivel()+1;
 			db.execSQL("UPDATE Niveles SET Superado = 'true' WHERE Numero = "+MainMenuScene.getIdNivel());
 			db.execSQL("UPDATE Niveles SET Desbloqueado = 'true' WHERE Numero = "+nivelDesbloqueado);
 		}
 
-		if(DataBase.compararPuntuacion(MainMenuScene.getIdNivel(), score)){
+		if(DataBase.compareScore(MainMenuScene.getIdNivel(), score)){
 			db.execSQL("UPDATE Niveles SET Puntuacion = "+score+", Estrellas= "+estrellas+" WHERE Numero = "+MainMenuScene.getIdNivel());
 		}
 		db.close();

@@ -13,7 +13,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.holycow.manager.ResourcesManager;
 import com.holycow.pool.BalasPool;
 
-/**Clase que define las caracteristicas de bala
+/**
+ * Clase que define las caracteristicas de bala
+ * 
  * @author Samir El Aoufi
  * @author Juan José Cillero
  * @author Rubén Díaz
@@ -62,7 +64,7 @@ public class Bala extends Sprite{
 	}
 
 	// ---------------------------------------------
-	// CLASS LOGIC
+	// LÓGICA DE CLASE
 	// ---------------------------------------------
 
 	
@@ -87,6 +89,7 @@ public class Bala extends Sprite{
 				super.onUpdate(pSecondsElapsed);
 				camera.onUpdate(0.1f);
 				
+				// Si la bala sale fuera de pantalla o choca contra un enemigo esta volverá al pool para ser reciclada
 				if ((!camera.isEntityVisible(bala) && bala.isVisible()) || colisionEnemigo)
 				{
 					balasPool.recyclePoolItem(bala);

@@ -20,7 +20,9 @@ import com.holycow.object.Bala;
 import com.holycow.object.Player;
 import com.holycow.scene.GameScene;
 
-/**Clase que gestiona el pool de Bala
+/**
+ * Clase que gestiona el pool de Bala
+ * 
  * @author Samir El Aoufi
  * @author Juan José Cillero
  * @author Rubén Díaz
@@ -67,7 +69,7 @@ public class BalasPool extends GenericPool<Bala> {
 	}
 
 	/**
-	 * Llamada cuando Bala se envia a pool
+	 * Llamada cuando Bala se envía al pool
 	 */
 	@Override
 	protected void onHandleRecycleItem(final Bala pBullet) {
@@ -85,12 +87,14 @@ public class BalasPool extends GenericPool<Bala> {
 	@Override
 	protected void onHandleObtainItem(final Bala pBullet) {
 		pBullet.reset();
-		pBullet.getBody().setActive(true);		
+		pBullet.getBody().setActive(true);
+		
+		// Reasigna la posición a la bala reciclada
 		pBullet.getBody().setTransform(new Vector2((posicionBalaX()+15) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT, (player.getY()+5) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT),0);
 	}
 	
 	/**
-	 * Posicion de Bala
+	 * Coge la posición X de Bala
 	 * @return
 	 */
 	public float posicionBalaX()

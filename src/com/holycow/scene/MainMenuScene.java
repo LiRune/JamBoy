@@ -46,19 +46,22 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	// VARIABLES
 	//---------------------------------------------
 
+	// ChildScenes
 	private MenuScene menuChildScene;
 	private MenuScene optionsChildScene;
 	private MenuScene seleccionNivelChildScene;
 	private MenuScene seleccionPersonajeChildScene;
 
+	// Estrellas
 	private TiledSprite star1;
 	private TiledSprite star2;
 	private TiledSprite star3;
 
-
+	// Nivel y personaje seleccionados
 	private static int idNivel = 0;
 	private static int idPersonaje = 1;
 
+	// Las distintas opciones de menú
 	private final int MENU_PLAY = 0;
 	private final int MENU_OPTIONS = 1;
 	private final int MUSICA = 2;
@@ -71,18 +74,24 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private final int PERSONAJE2 = 9;
 	private final int PERSONAJE3 = 10;
 
+	// Textos
 	private Text puntuaciones;
-	private Text puntosText; 
-	private Text estrellas; 
+	private Text puntosText;
 
+	// Animación de los personajes
 	private AnimatedSprite pers1;
 	private AnimatedSprite pers2;
 	private AnimatedSprite pers3;
 
+	// Música y sonido
 	private static boolean musica = true;
 	private static boolean sonido = true;
 	private float volumenMusica = engine.getMusicManager().getMasterVolume();
 	private float volumenSonido = engine.getSoundManager().getMasterVolume();
+	
+	//---------------------------------------------
+	// GETTERS AND SETTERS
+	//---------------------------------------------
 
 	public static int getIdPersonaje() {
 		return idPersonaje;
@@ -109,11 +118,11 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	}
 
 	//---------------------------------------------
-	// METHODS FROM SUPERCLASS
+	// MÉTODOS DE LA SUPERCLASS
 	//---------------------------------------------
 
 	/**
-	 * Crea la primera escena y le pasa el fondo de pantalla, Menu
+	 * Crea la escena
 	 */
 	@Override
 	public void createScene()
@@ -142,7 +151,6 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 					dialogoSalir();
 				}
 			});
-
 		}
 	}
 
@@ -154,6 +162,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 	}
 
+	/**
+	 * Obtiene el tipo de escena
+	 */
 	@Override
 	public SceneType getSceneType()
 	{
@@ -161,12 +172,12 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	}
 
 	/**
-	 * Eliminacion de la escena
+	 * Eliminación de la escena
 	 */
 	@Override
 	public void disposeScene()
 	{
-		// TODO Auto-generated method stub
+		
 	}
 
 	/**
@@ -177,16 +188,17 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		switch(pMenuItem.getID())
 		{
 		case MENU_PLAY:
-			//Load Game Scene!
+			// Carga selección de nivel
 			createSeleccionNivelChildScene();
 			return true;
 
 		case MENU_OPTIONS:
-			//Cargar Scene de Opciones
+			// Carga el menú de opciones
 			createOptionsChildScene();
 			return true;
 
 		case MUSICA:
+			// Activa/Desactiva música
 			if (musica)
 			{
 				musica = false;
@@ -200,6 +212,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			return true;
 
 		case SONIDO:
+			// Activa/Desactiva sonido
 			if (sonido)
 			{
 				sonido = false;
@@ -215,7 +228,6 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		case NIVEL1:
 			idNivel = 1;
 			puntuaciones.setText(mostrarPuntuacion(idNivel));
-			//estrellas.setText(mostrarEstrellas(idNivel));
 			ponerEstrellas(mostrarEstrellas(idNivel));
 			return true;
 
@@ -223,12 +235,12 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			idNivel = 2;
 			puntuaciones.setText(mostrarPuntuacion(idNivel));
 			ponerEstrellas(mostrarEstrellas(idNivel));
-			//estrellas.setText(mostrarEstrellas(idNivel));
 			return true;
 
 		case JUGAR:
+			// Carga el nivel seleccionado
 			if(idNivel!=0){
-				if(DataBase.nivelDesbloqueado(idNivel)){
+				if(DataBase.isUnlocked(idNivel)){
 					SceneManager.getInstance().loadGameScene(engine);
 				}
 			}
@@ -275,11 +287,11 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	}
 
 	//---------------------------------------------
-	// CLASS LOGIC
+	// LÓGICA DE CLASE
 	//---------------------------------------------
 
 	/**
-	 * Crea el fondo de la pantalla
+	 * Crea el fondo del menú principal
 	 */
 	private void createBackground()
 	{

@@ -3,18 +3,9 @@ package com.holycow.manager;
 import java.io.IOException;
 
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.Camera;
-import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.menu.MenuScene;
-import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.scene.menu.item.SpriteMenuItem;
-import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
-import org.andengine.engine.camera.hud.HUD;
 
 import com.holycow.base.BaseScene;
 import com.holycow.scene.GameScene;
@@ -22,7 +13,8 @@ import com.holycow.scene.LoadingScene;
 import com.holycow.scene.MainMenuScene;
 import com.holycow.scene.SplashScene;
 
-/**Clase que gestiona las escenas
+/** 
+ * Clase que gestiona las escenas
  * 
  * @author Samir El Aoufi
  * @author Juan José Cillero
@@ -33,26 +25,27 @@ import com.holycow.scene.SplashScene;
 public class SceneManager
 {
 	//---------------------------------------------
-	// SCENES
+	// ESCENAS
 	//---------------------------------------------
-	
+
 	private BaseScene splashScene;
 	private BaseScene menuScene;
 	private BaseScene gameScene;
 	private BaseScene loadingScene;
-	
+
 	//---------------------------------------------
 	// VARIABLES
 	//---------------------------------------------
-	
+
 	private static final SceneManager INSTANCE = new SceneManager();
-	
+
 	private SceneType currentSceneType = SceneType.SCENE_SPLASH;
-	
+
 	private BaseScene currentScene;
-	
+
 	private Engine engine = ResourcesManager.getInstance().engine;
-	
+
+	// Tipos de escena
 	public enum SceneType
 	{
 		SCENE_SPLASH,
@@ -62,45 +55,68 @@ public class SceneManager
 		SCENE_OPTIONS,
 		SCENE_CHARACTER,
 	}
-	
+
 	//---------------------------------------------
-	// CLASS LOGIC
+	// GETTERS AND SETTERS
 	//---------------------------------------------
-	
+
+	public static SceneManager getInstance()
+	{
+		return INSTANCE;
+	}
+
+	public SceneType getCurrentSceneType()
+	{
+		return currentSceneType;
+	}
+
+	public BaseScene getCurrentScene()
+	{
+		return currentScene;
+	}
+
+	//---------------------------------------------
+	// LÓGICA DE LA CLASE
+	//---------------------------------------------
+
+	/**
+	 * Establece la escena
+	 * @param scene
+	 */
 	public void setScene(BaseScene scene)
 	{
 		engine.setScene(scene);
 		currentScene = scene;
 		currentSceneType = scene.getSceneType();
 	}
-	
+
 	/**
-	 * Carga una escena segun la que se le pase
+	 * Establece el tipo de escena
 	 * @param sceneType
 	 */
 	public void setScene(SceneType sceneType)
 	{
 		switch (sceneType)
 		{
-			case SCENE_MENU:
-				setScene(menuScene);
-				break;
-			case SCENE_GAME:
-				setScene(gameScene);
-				break;
-			case SCENE_SPLASH:
-				setScene(splashScene);
-				break;
-			case SCENE_LOADING:
-				setScene(loadingScene);
-				break;
-			default:
-				break;
+		case SCENE_MENU:
+			setScene(menuScene);
+			break;
+		case SCENE_GAME:
+			setScene(gameScene);
+			break;
+		case SCENE_SPLASH:
+			setScene(splashScene);
+			break;
+		case SCENE_LOADING:
+			setScene(loadingScene);
+			break;
+		default:
+			break;
 		}
 	}
-	
+
 	/**
-	 * Crea las escena Menu
+	 * Crea la escena Menu
 	 * @throws IllegalStateException
 	 * @throws IOException
 	 */
@@ -109,10 +125,10 @@ public class SceneManager
 		ResourcesManager.getInstance().loadMenuResources();
 		menuScene = new MainMenuScene();
 		loadingScene = new LoadingScene();
-	    SceneManager.getInstance().setScene(menuScene);
-        disposeSplashScene();
+		SceneManager.getInstance().setScene(menuScene);
+		disposeSplashScene();
 	}
-	
+
 	/**
 	 * Crea la escena Splash
 	 * @param pOnCreateSceneCallback
@@ -124,7 +140,7 @@ public class SceneManager
 		currentScene = splashScene;
 		pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
 	}
-	
+
 	/**
 	 * Deshabilita la escena Splash
 	 */
@@ -134,7 +150,7 @@ public class SceneManager
 		splashScene.disposeScene();
 		splashScene = null;
 	}
-	
+
 	/**
 	 * Carga la escena Juego
 	 * @param mEngine
@@ -145,16 +161,16 @@ public class SceneManager
 		ResourcesManager.getInstance().unloadMenuTextures();
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
 		{
-            public void onTimePassed(final TimerHandler pTimerHandler) 
-            {
-            	mEngine.unregisterUpdateHandler(pTimerHandler);
-            	ResourcesManager.getInstance().loadGameResources();
-        		gameScene = new GameScene();
-        		setScene(gameScene);
-            }
+			public void onTimePassed(final TimerHandler pTimerHandler) 
+			{
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				ResourcesManager.getInstance().loadGameResources();
+				gameScene = new GameScene();
+				setScene(gameScene);
+			}
 		}));
 	}
-	
+
 	/**
 	 * Carga la escena Menu
 	 * @param mEngine
@@ -167,31 +183,12 @@ public class SceneManager
 		ResourcesManager.getInstance().loadMenuAudio();
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
 		{
-            public void onTimePassed(final TimerHandler pTimerHandler) 
-            {
-            	mEngine.unregisterUpdateHandler(pTimerHandler);
-            	ResourcesManager.getInstance().loadMenuTextures();
-        		setScene(menuScene);
-            }
+			public void onTimePassed(final TimerHandler pTimerHandler) 
+			{
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				ResourcesManager.getInstance().loadMenuTextures();
+				setScene(menuScene);
+			}
 		}));
-	}
-	
-	//---------------------------------------------
-	// GETTERS AND SETTERS
-	//---------------------------------------------
-	
-	public static SceneManager getInstance()
-	{
-		return INSTANCE;
-	}
-	
-	public SceneType getCurrentSceneType()
-	{
-		return currentSceneType;
-	}
-	
-	public BaseScene getCurrentScene()
-	{
-		return currentScene;
 	}
 }

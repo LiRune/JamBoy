@@ -7,7 +7,9 @@ import org.andengine.opengl.util.GLState;
 import com.holycow.base.BaseScene;
 import com.holycow.manager.SceneManager.SceneType;
 
-/**Clase que crea las escena Splash
+/**
+ * Clase que crea las escena Splash
+ * 
  * @author Samir El Aoufi
  * @author Juan José Cillero
  * @author Rubén Díaz

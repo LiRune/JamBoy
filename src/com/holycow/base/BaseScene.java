@@ -2,8 +2,6 @@ package com.holycow.base;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
-import org.andengine.engine.camera.Camera;
-import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -12,13 +10,15 @@ import android.app.Activity;
 import com.holycow.manager.ResourcesManager;
 import com.holycow.manager.SceneManager.SceneType;
 
-/**Esta clase es la representacion basica de cada escena
+/** 
+ * Esta clase será la plantilla para todas las escenas
  * 
  * @author Samir El Aoufi
  * @author Juan José Cillero
  * @author Rubén Díaz
  *
  */
+
 public abstract class BaseScene extends Scene
 {
 	//---------------------------------------------
@@ -31,6 +31,24 @@ public abstract class BaseScene extends Scene
 	protected VertexBufferObjectManager vbom;
 	protected static BoundCamera camera;
 
+	//---------------------------------------------
+	// CONSTRUCTOR
+	//---------------------------------------------
+
+	public BaseScene()
+	{
+		this.setResourcesManager(ResourcesManager.getInstance());
+		this.engine = resourcesManager.engine;
+		this.activity = resourcesManager.activity;
+		this.setVbom(resourcesManager.vbom);
+		this.camera = resourcesManager.camera;
+		createScene();
+	}
+	
+	//---------------------------------------------
+	// GETTERS AND SETTERS
+	//---------------------------------------------
+	
 	public Engine getEngine() {
 		return engine;
 	}
@@ -38,15 +56,15 @@ public abstract class BaseScene extends Scene
 	public void setEngine(Engine engine) {
 		this.engine = engine;
 	}
-
-	public VertexBufferObjectManager getVbom() {
-		return vbom;
+	
+	public static Activity getActivity() {
+		return activity;
 	}
 
-	public void setVbom(VertexBufferObjectManager vbom) {
-		this.vbom = vbom;
+	public void setActivity(Activity activity) {
+		this.activity = activity;
 	}
-
+	
 	public static ResourcesManager getResourcesManager() {
 		return resourcesManager;
 	}
@@ -55,12 +73,12 @@ public abstract class BaseScene extends Scene
 		this.resourcesManager = resourcesManager;
 	}
 
-	public static Activity getActivity() {
-		return activity;
+	public VertexBufferObjectManager getVbom() {
+		return vbom;
 	}
 
-	public void setActivity(Activity activity) {
-		this.activity = activity;
+	public void setVbom(VertexBufferObjectManager vbom) {
+		this.vbom = vbom;
 	}
 	
 	public BoundCamera getCamera() {
@@ -72,23 +90,7 @@ public abstract class BaseScene extends Scene
 	}
 
 	//---------------------------------------------
-	// CONSTRUCTOR
-	//---------------------------------------------
-
-
-
-	public BaseScene()
-	{
-		this.setResourcesManager(ResourcesManager.getInstance());
-		this.engine = resourcesManager.engine;
-		this.activity = resourcesManager.activity;
-		this.setVbom(resourcesManager.vbom);
-		this.camera = resourcesManager.camera;
-		createScene();
-	}
-
-	//---------------------------------------------
-	// ABSTRACTION
+	// ABSTRACCIÓN
 	//---------------------------------------------
 
 	public abstract void createScene();

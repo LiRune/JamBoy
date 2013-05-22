@@ -15,7 +15,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.holycow.manager.ResourcesManager;
 
-/**Clase que define las opciones de player
+/**
+ * Clase que define las características del jugador
+ * 
  * @author Samir El Aoufi
  * @author Juan José Cillero
  * @author Rubén Díaz
@@ -95,6 +97,7 @@ public abstract class Player extends AnimatedSprite
 				super.onUpdate(pSecondsElapsed);
 				camera.onUpdate(0.1f);
 				
+				// Si el cae cae por debajo del límite del nivel o su vida llega a 0 muere
 				if (getY() <= 0 || vida == 0)
 				{					
 					onDie();
@@ -104,7 +107,7 @@ public abstract class Player extends AnimatedSprite
 	}
 	
 	/**
-	 * Player avanzar hacia la izquierda
+	 * Player avanza hacia la izquierda
 	 */
 	public void runLeft(){
 		if (!isFlippedHorizontal()) 
@@ -119,7 +122,7 @@ public abstract class Player extends AnimatedSprite
 	
 	
 	/**
-	 * Player avanzar hacia la derecha
+	 * Player avanza hacia la derecha
 	 */
 	public void runRight(){
 		if (isFlippedHorizontal()) 
@@ -171,6 +174,7 @@ public abstract class Player extends AnimatedSprite
 	
 	/**
 	 * Player dispara Bala
+	 * 
 	 * @param xCoord
 	 * @param yCoord
 	 * @param engine

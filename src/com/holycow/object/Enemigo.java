@@ -11,7 +11,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.holycow.manager.ResourcesManager;
 
-/**Clase que define las opciones de Enemigo
+/**
+ * Clase que define las características de Enemigo
  * @author Samir El Aoufi
  * @author Juan José Cillero
  * @author Rubén Díaz
@@ -60,7 +61,7 @@ public abstract class Enemigo extends AnimatedSprite
 	}
 
 	// ---------------------------------------------
-	// CLASS LOGIC
+	// LÓGICA DE CLASE
 	// ---------------------------------------------
 
 	
@@ -72,7 +73,6 @@ public abstract class Enemigo extends AnimatedSprite
 	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
 	{		
 		body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
-
 		body.setUserData("enemigo");
 		body.setFixedRotation(true);
 
@@ -84,6 +84,7 @@ public abstract class Enemigo extends AnimatedSprite
 				super.onUpdate(pSecondsElapsed);
 				camera.onUpdate(0.1f);
 
+				// Si el enemigo cae por debajo del límite del nivel o su vida llega a 0 muere
 				if (getY() <= 0 || vida == 0)
 				{					
 					onDie();
@@ -103,8 +104,7 @@ public abstract class Enemigo extends AnimatedSprite
 	public void seguirJugador(final Camera camera, Player player)
 	{
 		//Si la distancia de enemigo esta a 200 o mas positivo
-		if(this.getX() - player.getX() <= 200){
-			//enemigo_cuerpo.setLinearVelocity(5 * -1, 0);									
+		if(this.getX() - player.getX() <= 200){							
 			//Se compara a cuanto esta de cerca del enemigo, si esta a  150, empieza a correr hacia la derecha
 			if (player.getX() > this.getX()+190)
 			{

@@ -8,7 +8,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.holycow.manager.ResourcesManager;
 
-/**Clase que define y crea la pantalla Level Complete
+/** 
+ * Clase que define y crea la pantalla Level Complete
+ * 
  * @author Samir El Aoufi
  * @author Juan José Cillero
  * @author Rubén Díaz
@@ -21,7 +23,7 @@ public class LevelCompleteWindow extends Sprite
 	private TiledSprite star2;
 	private TiledSprite star3;
 	
-	
+	// Para saber cuántas estrellas se ha ganado
 	public enum StarsCount
 	{
 		ONE,
@@ -29,19 +31,14 @@ public class LevelCompleteWindow extends Sprite
 		THREE
 	}
 	
-	/**
-	 * Define la textura y el tamano se mostrara
-	 * @param pSpriteVertexBufferObject
-	 */
 	public LevelCompleteWindow(VertexBufferObjectManager pSpriteVertexBufferObject)
 	{
 		super(0, 0, 650, 400, ResourcesManager.getInstance().complete_window_region, pSpriteVertexBufferObject);
 		attachStars(pSpriteVertexBufferObject);
-	}
-	
+	}	
 	
 	/**
-	 * Crea las estrellas y las anade la escena
+	 * Crea las estrellas y las añade a la escena
 	 * @param pSpriteVertexBufferObject
 	 */
 	private void attachStars(VertexBufferObjectManager pSpriteVertexBufferObject)
@@ -56,12 +53,12 @@ public class LevelCompleteWindow extends Sprite
 	}
 	
 	/**
-	 * Cambia el tipo de estrella dependiendo del numero de estrellas obtenidas.
+	 * Muestra las estrellas obtenidas
 	 * @param starsCount
 	 */
 	public void display(StarsCount starsCount, Scene scene, Camera camera)
 	{
-		// Change stars tile index, based on stars count (1-3)
+		// Cambia el tipo de estrella dependiendo del numero de estrellas obtenidas
 		switch (starsCount)
 		{
 			case ONE:
@@ -81,14 +78,10 @@ public class LevelCompleteWindow extends Sprite
 				break;
 		}
 		
-		
-		// Hide HUD
-		//camera.getHUD().setVisible(false);
-		
-		// Disable camera chase entity
+		// Deshabilita el seguimiento de cámara
 		camera.setChaseEntity(null);
 		
-		// Attach our level complete panel in the middle of camera
+		// Agrega el panel de nivel completado en medio de la cámara
 		setPosition(camera.getCenterX(), camera.getCenterY());
 		scene.attachChild(this);
 	}

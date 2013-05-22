@@ -7,7 +7,9 @@ import org.andengine.util.adt.color.Color;
 import com.holycow.base.BaseScene;
 import com.holycow.manager.SceneManager.SceneType;
 
-/**Clase que crea la escena Cargando...
+/**
+ * Clase que crea la escena Cargando...
+ * 
  * @author Samir El Aoufi
  * @author Juan José Cillero
  * @author Rubén Díaz
@@ -30,7 +32,7 @@ public class LoadingScene extends BaseScene
 
 	
 	/**
-	 * Crea la escena Cargando... anadiendo el texto centrado y colo de fondo blanco
+	 * Crea la escena Cargando... anadiendo el texto centrado y color de fondo blanco
 	 */
 	@Override
 	public void createScene()
@@ -51,6 +53,9 @@ public class LoadingScene extends BaseScene
 		return;
 	}
 
+	/**
+	 * Obtiene el tipo de la escena
+	 */
 	@Override
 	public SceneType getSceneType()
 	{
