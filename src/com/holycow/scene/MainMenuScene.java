@@ -3,7 +3,10 @@ package com.holycow.scene;
 import java.util.Vector;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.scene.background.ParallaxBackground;
+import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
@@ -60,6 +63,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private TiledSprite star2;
 	private TiledSprite star3;
 
+	//Boton play mostrar
+	private boolean jugarVisible=false;
+	
 	// Nivel y personaje seleccionados
 	private static int idNivel = 0;
 	private static int idPersonaje = 1;
@@ -96,6 +102,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private AnimatedSprite pers2;
 	private AnimatedSprite pers3;
 
+	
+	private IMenuItem Jugar;
 	// Música y sonido
 	private static boolean musica = true;
 	private static boolean sonido = true;
@@ -153,12 +161,13 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		if(getChildScene() == optionsChildScene || getChildScene() == seleccionNivelChildScene)
 		{
 			setChildScene(menuChildScene);
+			idNivel=0;
 		}
 		else if(getChildScene() == seleccionPersonajeChildScene){
-			setChildScene(seleccionNivelChildScene);
+			setChildScene(seleccionNivelChildScene);			
 		}
 		else if(getChildScene() == aboutChildScene){
-			setChildScene(optionsChildScene);
+			setChildScene(optionsChildScene);			
 		}
 		else if(getChildScene() == menuChildScene){
 			activity.runOnUiThread(new Runnable() {
@@ -245,12 +254,15 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			idNivel = 1;
 			puntuaciones.setText(mostrarPuntuacion(idNivel));
 			ponerEstrellas(mostrarEstrellas(idNivel));
+			Jugar.setVisible(true);
 			return true;
 
 		case NIVEL2:				
 			idNivel = 2;
 			puntuaciones.setText(mostrarPuntuacion(idNivel));
 			ponerEstrellas(mostrarEstrellas(idNivel));
+			Jugar.setVisible(true);
+			
 			return true;
 
 		case JUGAR:
@@ -301,6 +313,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			if(getChildScene() == optionsChildScene || getChildScene() == seleccionNivelChildScene)
 			{
 				setChildScene(menuChildScene);
+				idNivel=0;
 			}
 			else if(getChildScene() == seleccionPersonajeChildScene){
 				setChildScene(seleccionNivelChildScene);
@@ -384,12 +397,15 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 		optionsChildScene.buildAnimations();
 		optionsChildScene.setBackgroundEnabled(true);
-		optionsChildScene.setBackground(new Background(Color.BLUE));
+		final ParallaxBackground background = new ParallaxBackground(0,0,0);		
+		background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.menu_background2_region, vbom)));
+		optionsChildScene.setBackground(background);
 
 		musicaMenuItem.setPosition(musicaMenuItem.getX(), musicaMenuItem.getY() - 30);
 		sonidoMenuItem.setPosition(sonidoMenuItem.getX(), sonidoMenuItem.getY() - 60);
-		sonidoMenuItem.setPosition(aboutMenu.getX(), aboutMenu.getY() - 90);
+		aboutMenu.setPosition(aboutMenu.getX(), aboutMenu.getY() - 90);
 		volverMenu.setPosition(50, 50);
+		
 		optionsChildScene.setOnMenuItemClickListener(this);
 
 		setChildScene(optionsChildScene);
@@ -422,7 +438,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		Nivel2.setWidth(100);
 		
 		//BOTON PLAY
-		final IMenuItem Jugar = new ScaleMenuItemDecorator(new SpriteMenuItem(JUGAR, getResourcesManager().derecha_region, getVbom()), 0.9f, 1);
+		Jugar = new ScaleMenuItemDecorator(new SpriteMenuItem(JUGAR, getResourcesManager().jugar_region, getVbom()), 0.9f, 1);
 
 		//TEXTO PUNTUACIONES
 		puntuaciones = new Text(0, 0, getResourcesManager().font, "01234567892", getVbom());
@@ -464,7 +480,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 		seleccionNivelChildScene.buildAnimations();
 		seleccionNivelChildScene.setBackgroundEnabled(true);
-		seleccionNivelChildScene.setBackground(new Background(Color.BLUE));
+		final ParallaxBackground background = new ParallaxBackground(0,0,0);		
+		background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.menu_background2_region, vbom)));
+		seleccionNivelChildScene.setBackground(background);
 
 		Nivel1.setPosition(80, 350);
 		Nivel2.setPosition(Nivel1.getX() + 120, Nivel1.getY());
@@ -479,6 +497,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		nivel1Text.setPosition(Nivel1.getX(), Nivel1.getY());
 		nivel2Text.setPosition(Nivel2.getX(), Nivel2.getY());
 
+		Jugar.setVisible(false);
+		
+		
 		seleccionNivelChildScene.setOnMenuItemClickListener(this);
 
 		setChildScene(seleccionNivelChildScene);
@@ -504,10 +525,26 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		pers2 = new AnimatedSprite(400, 300, getResourcesManager().personajeSelec2_region, vbom);
 		pers3 = new AnimatedSprite(400, 300, getResourcesManager().personajeSelec3_region, vbom);
 
+		
 		pers1.setVisible(false);
 		pers2.setVisible(false);
 		pers3.setVisible(false);
+		
+		if(idPersonaje==1){
+			pers1.setVisible(true);
+			pers1.animate(100);
+		}else if(idPersonaje==2){
+			pers2.setVisible(true);
+			pers2.animate(100);
+		}else if(idPersonaje==3){
+			pers3.setVisible(true);
+			pers3.animate(100);
+		}
+		
+		
+		
 
+		pers1.animate(100);
 
 		seleccionPersonajeChildScene.addMenuItem(personaje1MenuItem);
 		seleccionPersonajeChildScene.addMenuItem(personaje2MenuItem);
@@ -519,12 +556,14 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 		seleccionPersonajeChildScene.buildAnimations();
 		seleccionPersonajeChildScene.setBackgroundEnabled(true);
-		seleccionPersonajeChildScene.setBackground(new Background(Color.RED));
+		final ParallaxBackground background = new ParallaxBackground(0,0,0);		
+		background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.menu_background2_region, vbom)));
+		seleccionPersonajeChildScene.setBackground(background);
 
 		volverMenu.setPosition(50, 50);
-		personaje1MenuItem.setPosition(450, 100);
-		personaje2MenuItem.setPosition(450, 40);
-		personaje2MenuItem.setPosition(450, 40);
+		personaje1MenuItem.setPosition(250, 150);
+		personaje2MenuItem.setPosition(400, 150);
+		personaje3MenuItem.setPosition(550, 150);
 
 		seleccionPersonajeChildScene.setOnMenuItemClickListener(this);
 
@@ -539,6 +578,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		System.out.println(getChildScene()); 
 		
 		final IMenuItem volverMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(VOLVERSEL, getResourcesManager().volverMenu_region, getVbom()), 0.9f, 1);
+				
 		
 		
 		//TEXTO PUNTUACIONES
@@ -546,25 +586,39 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		juanjo = new Text(0, 0, getResourcesManager().font, "Juanjo Cillero", getVbom());
 		ruben = new Text(0, 0, getResourcesManager().font, "Ruben Diaz", getVbom());
 		desarrollado = new Text(0, 0, getResourcesManager().font, "Desarrollado por:", getVbom());
+		desarrollado.setColor(1, 0, 0);
 		
+		desarrollado.setPosition(400,400);
+		samir.setPosition(400,300);
+		juanjo.setPosition(400,200);
+		ruben.setPosition(400,100);
+		
+		
+		pers1 = new AnimatedSprite(samir.getX()+280, samir.getY()+10, getResourcesManager().personajeSelec1_region, vbom);
+		pers2 = new AnimatedSprite(juanjo.getX()+280, juanjo.getY()+10, getResourcesManager().personajeSelec2_region, vbom);
+		pers3 = new AnimatedSprite(ruben.getX()+280, ruben.getY()+10, getResourcesManager().personajeSelec3_region, vbom);
+
+		pers1.animate(100);
+		pers2.animate(100);
+		pers3.animate(100);
 		
 		aboutChildScene.addMenuItem(volverMenu);
 		aboutChildScene.attachChild(desarrollado);
 		aboutChildScene.attachChild(samir);
 		aboutChildScene.attachChild(juanjo);
 		aboutChildScene.attachChild(ruben);
-		
+		aboutChildScene.attachChild(pers1);
+		aboutChildScene.attachChild(pers2);
+		aboutChildScene.attachChild(pers3);
 
 		aboutChildScene.buildAnimations();
 		aboutChildScene.setBackgroundEnabled(true);
-		aboutChildScene.setBackground(new Background(Color.GREEN));
+		final ParallaxBackground background = new ParallaxBackground(0,0,0);		
+		background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.menu_background2_region, vbom)));
+		aboutChildScene.setBackground(background);
 
 
 		
-		desarrollado.setPosition(400,400);
-		samir.setPosition(400,300);
-		juanjo.setPosition(400,200);
-		ruben.setPosition(400,100);
 		volverMenu.setPosition(50, 50);
 
 		

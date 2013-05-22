@@ -75,6 +75,8 @@ public class ResourcesManager
 	public ITextureRegion personaje3_region;
 	public ITextureRegion niveles_region;
 	public ITextureRegion volverMenu_region;
+	public ITextureRegion jugar_region;
+	public ITextureRegion menu_background2_region;
 	public ITextureRegion seleccionPersonaje_region;
 	
 	
@@ -183,22 +185,24 @@ public class ResourcesManager
 	{
 		// Creación del Atlas donde se añadirán todas las texturas del menú
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
-		menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1100, 1100, TextureOptions.BILINEAR);
+		menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1500, 1500, TextureOptions.BILINEAR);
 		// Con esto conseguimos que no aparezcan rayas negras en los bordes de algunas texturas
-		menuTextureAtlas.addEmptyTextureAtlasSource(0, 0, 1100, 1100);
+		menuTextureAtlas.addEmptyTextureAtlasSource(0, 0, 1500, 1500);
 
 		menu_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_background.png");
+		menu_background2_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_background2.png");
+		
 		play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play.png");
 		options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "options.png");
 		musica_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "musica1.png");
-		sonido_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "musica2.png");
-		derecha_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "der.png");		
-		personaje1_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje1.png");
-		personaje2_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje2.png");
-		personaje3_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje3.png");
-		personajeSelec1_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "personaje1.png", 7, 1);
-		personajeSelec2_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "personaje2.png", 7, 1);
-		personajeSelec3_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "personaje3.png", 7, 1);
+		sonido_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "efectos.png");
+		jugar_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "jugar.png");		
+		personaje1_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "cuadrado1.png");
+		personaje2_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "cuadrado2.png");
+		personaje3_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "cuadrado3.png");
+		personajeSelec1_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "sprite1.png", 7, 1);
+		personajeSelec2_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "sprite2.png", 7, 1);
+		personajeSelec3_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "sprite3.png", 7, 1);
 		numeroEstrellas = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "stars.png", 2, 1);
 		niveles_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "nivel.png");
 		volverMenu_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "volver.png");
@@ -233,7 +237,7 @@ public class ResourcesManager
 
 			}
 
-			music = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity, "mfx/menu.mp3");
+			music = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity, "mfx/menu.ogg");
 			music.setLooping(true);
 			music.play();
 
@@ -257,7 +261,7 @@ public class ResourcesManager
 	{
 		FontFactory.setAssetBasePath("font/");
 		final ITexture mainFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-
+		
 		font = FontFactory.createStrokeFromAsset(activity.getFontManager(), mainFontTexture, activity.getAssets(), "font.ttf", 50, true, Color.WHITE, 2, Color.BLACK);
 		font.load();
 	}
@@ -313,7 +317,7 @@ public class ResourcesManager
 		volver_menu_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "volvermenu.png");
 		atacar_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "atacar.png");
 		reiniciar_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "reiniciar.png");
-		complete_window_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "levelCompleteWindow.png");
+		complete_window_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "levelCompleteWindow2.png");
 		complete_stars_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "star.png", 2, 1);
 
 		// Carga los Atlas
@@ -357,7 +361,7 @@ public class ResourcesManager
 
 			}
 
-			music = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity, "mfx/game.mp3");
+			music = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity, "mfx/game.ogg");
 			music.setLooping(true);
 			music.play();
 
@@ -369,11 +373,11 @@ public class ResourcesManager
 			// Sonido //
 			// Instancia todos los efectos de sonido del juego
 			SoundFactory.setAssetBasePath("sfx/");
-			salto = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity, "saltar.wav");   
-			disparar = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "disparo.mp3");  
-			enemigo_muerte = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "enemigo_muerte.mp3");
+			salto = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity, "saltar.ogg");   
+			disparar = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "disparo.ogg");  
+			enemigo_muerte = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "enemigo_muerte.ogg");
 			grito = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "grito.ogg");
-			coger_llave = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "coger_llave.wav");
+			coger_llave = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity.getApplicationContext(), "coger_llave.ogg");
 		} 
 		catch (IOException e)
 		{
