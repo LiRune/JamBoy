@@ -370,8 +370,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		menuChildScene.buildAnimations();
 		menuChildScene.setBackgroundEnabled(false);
 
-		playMenuItem.setPosition(playMenuItem.getX(), playMenuItem.getY() - 30);
-		optionsMenuItem.setPosition(optionsMenuItem.getX(), optionsMenuItem.getY() - 60);
+		playMenuItem.setPosition(playMenuItem.getX(), playMenuItem.getY() - 50);
+		optionsMenuItem.setPosition(optionsMenuItem.getX(), optionsMenuItem.getY() - 70);
 
 		menuChildScene.setOnMenuItemClickListener(this);
 
@@ -389,7 +389,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		final IMenuItem musicaMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSICA, getResourcesManager().musica_region, getVbom()), 0.9f, 1);
 		final IMenuItem sonidoMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(SONIDO, getResourcesManager().sonido_region, getVbom()), 0.9f, 1);
 		final IMenuItem volverMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(VOLVERSEL, getResourcesManager().volverMenu_region, getVbom()), 0.9f, 1);
-		final IMenuItem aboutMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT, getResourcesManager().seleccionPersonaje_region, getVbom()), 0.9f, 1);
+		final IMenuItem aboutMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT, getResourcesManager().about_region, getVbom()), 0.9f, 1);
 		optionsChildScene.addMenuItem(musicaMenuItem);
 		optionsChildScene.addMenuItem(sonidoMenuItem);
 		optionsChildScene.addMenuItem(aboutMenu);

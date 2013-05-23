@@ -76,6 +76,7 @@ public class ResourcesManager
 	public ITextureRegion niveles_region;
 	public ITextureRegion volverMenu_region;
 	public ITextureRegion jugar_region;
+	public ITextureRegion about_region;
 	public ITextureRegion menu_background2_region;
 	public ITextureRegion seleccionPersonaje_region;
 	
@@ -206,6 +207,7 @@ public class ResourcesManager
 		numeroEstrellas = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "stars.png", 2, 1);
 		niveles_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "nivel.png");
 		volverMenu_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "volver.png");
+		about_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "acerca.png");
 		seleccionPersonaje_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje.png");
 		
 		
