@@ -316,6 +316,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 							if (player.collidesWith(this))
 							{
+								ResourcesManager.coger_moneda.play();
 								addToScore(50);
 								this.setVisible(false);
 								this.setIgnoreUpdate(true);
@@ -337,7 +338,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 							if (player.collidesWith(this))
 							{
-
+								ResourcesManager.coger_corazon.play();
 								if(heart3.isVisible()==false && heart2.isVisible()==true){
 									player.setVida(player.getVida() + 1);
 									heart3.setVisible(true);									
@@ -388,7 +389,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						@Override
 						public void onDie()
 						{
-							pantallaGameOver();
+							try {
+								pantallaGameOver();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							ResourcesManager.grito.play();
 						}
 					};
@@ -479,7 +485,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 									}
 
 									try {
-										getResourcesManager().music = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity, "mfx/victory.mp3");
+										getResourcesManager().music = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity, "sfx/win.ogg");
 										getResourcesManager().music.play();
 									} catch (IllegalStateException e) {
 										e.printStackTrace();
@@ -837,7 +843,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					timeText.setText("" + tiempo);
 				}
 				else if(tiempo <= 0 && !PAUSED){
-					pantallaGameOver();
+					try {
+						pantallaGameOver();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}));
@@ -845,8 +856,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	/**
 	 * Habilita o deshabilita botones para cuando aparezca el mensaje Game Over
+	 * @throws IOException 
 	 */
-	private void pantallaGameOver() {
+	private void pantallaGameOver() throws IOException {
 		displayGameOverText();
 		player.setVisible(false);
 		player.detachSelf();
@@ -867,6 +879,23 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		pausar.setEnabled(false);
 		reanudar.setVisible(false);
 		reanudar.setEnabled(false);
+		
+		if (getResourcesManager().music != null)
+		{
+			if (getResourcesManager().music.isPlaying())
+			{
+				getResourcesManager().music.stop();
+			}
+		}
+
+		
+		//Sonido de perder
+		try {
+			getResourcesManager().music = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity, "sfx/gameover.ogg");
+			getResourcesManager().music.play();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
 
 	}
 
