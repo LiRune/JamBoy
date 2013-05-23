@@ -72,21 +72,18 @@ public class ResourcesManager
 	//public ITextureRegion sonido_region;
 	public ITextureRegion personaje1_region;
 	public ITextureRegion personaje2_region;
-	public ITextureRegion personaje3_region;
-	public ITextureRegion niveles_region;
+	public ITextureRegion personaje3_region;	
 	public ITextureRegion volverMenu_region;
 	public ITextureRegion jugar_region;
 	public ITextureRegion about_region;
 	public ITextureRegion menu_background2_region;
 	public ITextureRegion seleccionPersonaje_region;
 	
-	
+	public ITiledTextureRegion niveles_region;	
 	public ITiledTextureRegion personajeSelec1_region;
 	public ITiledTextureRegion personajeSelec2_region;
 	public ITiledTextureRegion personajeSelec3_region;
-
-	public ITiledTextureRegion numeroEstrellas;
-	
+	public ITiledTextureRegion numeroEstrellas;	
 	public ITiledTextureRegion musica_region;	
 	public ITiledTextureRegion sonido_region;
 
@@ -208,7 +205,7 @@ public class ResourcesManager
 		personajeSelec2_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "sprite2.png", 7, 1);
 		personajeSelec3_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "sprite3.png", 7, 1);
 		numeroEstrellas = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "stars.png", 2, 1);
-		niveles_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "nivel.png");
+		niveles_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "niveles.png", 2, 1);		
 		volverMenu_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "volver.png");
 		about_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "acerca.png");
 		seleccionPersonaje_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje.png");

@@ -63,6 +63,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private TiledSprite star1;
 	private TiledSprite star2;
 	private TiledSprite star3;
+	
 
 	//Boton play mostrar
 	private boolean jugarVisible=false;
@@ -92,6 +93,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	
 	private AnimatedSpriteMenuItem sonidoBoton;
 	private AnimatedSpriteMenuItem musicaBoton;
+	
+	private AnimatedSpriteMenuItem Nivel1;
+	private AnimatedSpriteMenuItem Nivel2;
 	
 	
 	// Textos
@@ -264,6 +268,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			idNivel = 1;
 			puntuaciones.setText(mostrarPuntuacion(idNivel));
 			ponerEstrellas(mostrarEstrellas(idNivel));
+			botonesTiledNivel();
 			Jugar.setVisible(true);
 			return true;
 
@@ -271,6 +276,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			idNivel = 2;
 			puntuaciones.setText(mostrarPuntuacion(idNivel));
 			ponerEstrellas(mostrarEstrellas(idNivel));
+			botonesTiledNivel();
 			Jugar.setVisible(true);
 
 			return true;
@@ -453,8 +459,10 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 
 		//BOTONES NIVELES
-		final IMenuItem Nivel1 = new ScaleMenuItemDecorator(new SpriteMenuItem(NIVEL1, getResourcesManager().niveles_region, getVbom()), 0.9f, 1);
-		final IMenuItem Nivel2 = new ScaleMenuItemDecorator(new SpriteMenuItem(NIVEL2, getResourcesManager().niveles_region, getVbom()),0.9f, 1);
+		
+		Nivel1 = new AnimatedSpriteMenuItem(NIVEL1, getResourcesManager().niveles_region, getVbom());
+		Nivel2 = new AnimatedSpriteMenuItem(NIVEL2, getResourcesManager().niveles_region, getVbom());
+		
 		final IMenuItem personajeMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(SELECCION_PERSONAJE, getResourcesManager().seleccionPersonaje_region, getVbom()), 0.9f, 1);
 		final IMenuItem volverMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(VOLVERSEL, getResourcesManager().volverMenu_region, getVbom()), 0.9f, 1);
 
@@ -488,6 +496,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		star1.setCurrentTileIndex(1);
 		star2.setCurrentTileIndex(1);
 		star3.setCurrentTileIndex(1);
+		
+		Nivel1.setCurrentTileIndex(0);
+		Nivel2.setCurrentTileIndex(0);
 
 		seleccionNivelChildScene.attachChild(star1);
 		seleccionNivelChildScene.attachChild(star2);
@@ -770,6 +781,23 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		}
 	}
 
+	private void botonesTiledNivel(){
+		if(idNivel!=0){
+			switch (idNivel)
+			{
+			
+			case 1:
+				Nivel1.setCurrentTileIndex(1);
+				Nivel2.setCurrentTileIndex(0);				
+				break;
+			case 2:
+				Nivel1.setCurrentTileIndex(0);
+				Nivel2.setCurrentTileIndex(1);		
+				break;
+			
+			}
+		}
+	}
 	/**
 	 * Crea un dialogo para antes de salir
 	 */
