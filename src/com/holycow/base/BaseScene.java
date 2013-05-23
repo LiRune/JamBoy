@@ -3,6 +3,7 @@ package com.holycow.base;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.vbo.ITiledSpriteVertexBufferObject;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.app.Activity;
@@ -88,10 +89,13 @@ public abstract class BaseScene extends Scene
 	public void setCamera(BoundCamera camera) {
 		this.camera = camera;
 	}
-
+	
+	
 	//---------------------------------------------
 	// ABSTRACCIÓN
 	//---------------------------------------------
+
+	
 
 	public abstract void createScene();
 

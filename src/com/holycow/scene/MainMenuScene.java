@@ -9,6 +9,7 @@ import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
+import org.andengine.entity.scene.menu.item.AnimatedSpriteMenuItem;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
@@ -65,10 +66,12 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 	//Boton play mostrar
 	private boolean jugarVisible=false;
-	
+	private boolean botonPulsado=false;
+
 	// Nivel y personaje seleccionados
 	private static int idNivel = 0;
 	private static int idPersonaje = 1;
+	private static int idBoton =0;
 	private final int NIVELES=2;
 
 	// Las distintas opciones de menú
@@ -85,6 +88,11 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private final int PERSONAJE3 = 10;
 	private final int VOLVERSEL = 11;
 	private final int ABOUT = 12;
+
+	
+	private AnimatedSpriteMenuItem sonidoBoton;
+	private AnimatedSpriteMenuItem musicaBoton;
+	
 	
 	// Textos
 	private Text puntuaciones;
@@ -95,21 +103,21 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private Text juanjo;
 	private Text ruben;
 	private Text desarrollado;
-	
+
 
 	// Animación de los personajes
 	private AnimatedSprite pers1;
 	private AnimatedSprite pers2;
 	private AnimatedSprite pers3;
 
-	
+
 	private IMenuItem Jugar;
 	// Música y sonido
 	private static boolean musica = true;
 	private static boolean sonido = true;
 	private float volumenMusica = engine.getMusicManager().getMasterVolume();
 	private float volumenSonido = engine.getSoundManager().getMasterVolume();
-	
+
 	//---------------------------------------------
 	// GETTERS AND SETTERS
 	//---------------------------------------------
@@ -202,7 +210,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	@Override
 	public void disposeScene()
 	{
-		
+
 	}
 
 	/**
@@ -233,7 +241,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			{
 				musica = true;
 				engine.getMusicManager().setMasterVolume(volumenMusica);
-			}
+			}			
+			botonesTiledMusica();
 			return true;
 
 		case SONIDO:
@@ -248,6 +257,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 				sonido = true;
 				engine.getSoundManager().setMasterVolume(volumenSonido);
 			}
+			botonesTiledSonido();
 			return true;
 
 		case NIVEL1:
@@ -262,7 +272,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			puntuaciones.setText(mostrarPuntuacion(idNivel));
 			ponerEstrellas(mostrarEstrellas(idNivel));
 			Jugar.setVisible(true);
-			
+
 			return true;
 
 		case JUGAR:
@@ -308,7 +318,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			pers3.setVisible(true);
 			pers3.animate(100);
 			return true;
-		
+
 		case VOLVERSEL:	
 			if(getChildScene() == optionsChildScene || getChildScene() == seleccionNivelChildScene)
 			{
@@ -322,7 +332,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 				setChildScene(optionsChildScene);
 			}
 			return true;
-		
+
 		case ABOUT:			
 			createAboutChildScene();
 			return true;
@@ -352,7 +362,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		});
 	}
 
-	
+
 	/**
 	 * Crea la pantalla de Menu Principal
 	 */
@@ -386,14 +396,31 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		optionsChildScene = new MenuScene(camera);
 		optionsChildScene.setPosition(0, 0);
 
-		final IMenuItem musicaMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MUSICA, getResourcesManager().musica_region, getVbom()), 0.9f, 1);
-		final IMenuItem sonidoMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(SONIDO, getResourcesManager().sonido_region, getVbom()), 0.9f, 1);
+		sonidoBoton = new AnimatedSpriteMenuItem(SONIDO, getResourcesManager().sonido_region, getVbom());
+		musicaBoton = new AnimatedSpriteMenuItem(MUSICA, getResourcesManager().musica_region, getVbom());
+		
 		final IMenuItem volverMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(VOLVERSEL, getResourcesManager().volverMenu_region, getVbom()), 0.9f, 1);
 		final IMenuItem aboutMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT, getResourcesManager().about_region, getVbom()), 0.9f, 1);
-		optionsChildScene.addMenuItem(musicaMenuItem);
-		optionsChildScene.addMenuItem(sonidoMenuItem);
+		optionsChildScene.addMenuItem(musicaBoton);
+		optionsChildScene.addMenuItem(sonidoBoton);
 		optionsChildScene.addMenuItem(aboutMenu);
 		optionsChildScene.addMenuItem(volverMenu);
+
+		
+		//Como default ponemos las estrellas grises
+		if(musica){
+			musicaBoton.setCurrentTileIndex(0);
+		}else{
+			musicaBoton.setCurrentTileIndex(1);
+		}
+		
+		if(sonido){
+			sonidoBoton.setCurrentTileIndex(0);
+		}else{
+			sonidoBoton.setCurrentTileIndex(1);
+		}
+		
+		
 
 		optionsChildScene.buildAnimations();
 		optionsChildScene.setBackgroundEnabled(true);
@@ -401,11 +428,11 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		background.attachParallaxEntity(new ParallaxEntity(0, new Sprite(400, 240,resourcesManager.menu_background2_region, vbom)));
 		optionsChildScene.setBackground(background);
 
-		musicaMenuItem.setPosition(musicaMenuItem.getX(), musicaMenuItem.getY() - 30);
-		sonidoMenuItem.setPosition(sonidoMenuItem.getX(), sonidoMenuItem.getY() - 60);
+		musicaBoton.setPosition(musicaBoton.getX(), musicaBoton.getY() - 30);
+		sonidoBoton.setPosition(sonidoBoton.getX(), sonidoBoton.getY() - 60);
 		aboutMenu.setPosition(aboutMenu.getX(), aboutMenu.getY() - 90);
 		volverMenu.setPosition(50, 50);
-		
+
 		optionsChildScene.setOnMenuItemClickListener(this);
 
 		setChildScene(optionsChildScene);
@@ -420,7 +447,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		seleccionNivelChildScene.setPosition(0, 0);
 
 		System.out.println(getChildScene()); 
-		
+
 		nivel1Text = new Text(0, 0, getResourcesManager().font, "1", getVbom());
 		nivel2Text = new Text(0, 0, getResourcesManager().font, "2", getVbom());
 
@@ -430,13 +457,13 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		final IMenuItem Nivel2 = new ScaleMenuItemDecorator(new SpriteMenuItem(NIVEL2, getResourcesManager().niveles_region, getVbom()),0.9f, 1);
 		final IMenuItem personajeMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(SELECCION_PERSONAJE, getResourcesManager().seleccionPersonaje_region, getVbom()), 0.9f, 1);
 		final IMenuItem volverMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(VOLVERSEL, getResourcesManager().volverMenu_region, getVbom()), 0.9f, 1);
-		
-		
+
+
 		Nivel1.setHeight(100);
 		Nivel1.setWidth(100);
 		Nivel2.setHeight(100);
 		Nivel2.setWidth(100);
-		
+
 		//BOTON PLAY
 		Jugar = new ScaleMenuItemDecorator(new SpriteMenuItem(JUGAR, getResourcesManager().jugar_region, getVbom()), 0.9f, 1);
 
@@ -476,7 +503,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		seleccionNivelChildScene.attachChild(nivel2Text);
 		seleccionNivelChildScene.attachChild(puntuaciones);
 		seleccionNivelChildScene.attachChild(puntosText);
-		
+
 
 		seleccionNivelChildScene.buildAnimations();
 		seleccionNivelChildScene.setBackgroundEnabled(true);
@@ -493,13 +520,13 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		puntosText.setPosition(500, 450);
 		puntuaciones.setPosition(puntosText.getX() + 200, puntosText.getY());			
 		//estrellas.setPosition(20, 450);
-		
+
 		nivel1Text.setPosition(Nivel1.getX(), Nivel1.getY());
 		nivel2Text.setPosition(Nivel2.getX(), Nivel2.getY());
 
 		Jugar.setVisible(false);
-		
-		
+
+
 		seleccionNivelChildScene.setOnMenuItemClickListener(this);
 
 		setChildScene(seleccionNivelChildScene);
@@ -520,16 +547,16 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		final IMenuItem personaje2MenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(PERSONAJE2, getResourcesManager().personaje2_region, getVbom()), 0.9f, 1);
 		final IMenuItem personaje3MenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(PERSONAJE3, getResourcesManager().personaje3_region, getVbom()), 0.9f, 1);
 		final IMenuItem volverMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(VOLVERSEL, getResourcesManager().volverMenu_region, getVbom()), 0.9f, 1);
-		
+
 		pers1 = new AnimatedSprite(400, 300, getResourcesManager().personajeSelec1_region, vbom);
 		pers2 = new AnimatedSprite(400, 300, getResourcesManager().personajeSelec2_region, vbom);
 		pers3 = new AnimatedSprite(400, 300, getResourcesManager().personajeSelec3_region, vbom);
 
-		
+
 		pers1.setVisible(false);
 		pers2.setVisible(false);
 		pers3.setVisible(false);
-		
+
 		if(idPersonaje==1){
 			pers1.setVisible(true);
 			pers1.animate(100);
@@ -540,9 +567,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			pers3.setVisible(true);
 			pers3.animate(100);
 		}
-		
-		
-		
+
+
+
 
 		pers1.animate(100);
 
@@ -576,24 +603,24 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		aboutChildScene.setPosition(0, 0);
 
 		System.out.println(getChildScene()); 
-		
+
 		final IMenuItem volverMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(VOLVERSEL, getResourcesManager().volverMenu_region, getVbom()), 0.9f, 1);
-				
-		
-		
+
+
+
 		//TEXTO PUNTUACIONES
 		samir = new Text(0, 0, getResourcesManager().font, "Samir El Aoufi", getVbom());
 		juanjo = new Text(0, 0, getResourcesManager().font, "Juanjo Cillero", getVbom());
 		ruben = new Text(0, 0, getResourcesManager().font, "Ruben Diaz", getVbom());
 		desarrollado = new Text(0, 0, getResourcesManager().font, "Desarrollado por:", getVbom());
 		desarrollado.setColor(1, 0, 0);
-		
+
 		desarrollado.setPosition(400,400);
 		samir.setPosition(400,300);
 		juanjo.setPosition(400,200);
 		ruben.setPosition(400,100);
-		
-		
+
+
 		pers1 = new AnimatedSprite(samir.getX()+280, samir.getY()+10, getResourcesManager().personajeSelec1_region, vbom);
 		pers2 = new AnimatedSprite(juanjo.getX()+280, juanjo.getY()+10, getResourcesManager().personajeSelec2_region, vbom);
 		pers3 = new AnimatedSprite(ruben.getX()+280, ruben.getY()+10, getResourcesManager().personajeSelec3_region, vbom);
@@ -601,7 +628,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		pers1.animate(100);
 		pers2.animate(100);
 		pers3.animate(100);
-		
+
 		aboutChildScene.addMenuItem(volverMenu);
 		aboutChildScene.attachChild(desarrollado);
 		aboutChildScene.attachChild(samir);
@@ -618,17 +645,17 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		aboutChildScene.setBackground(background);
 
 
-		
+
 		volverMenu.setPosition(50, 50);
 
-		
+
 
 		aboutChildScene.setOnMenuItemClickListener(this);
 
 		setChildScene(aboutChildScene);
 	}
-	
-	
+
+
 	/**
 	 * Hace una consulta a la bd para devolver la puntuacion del nivel clicado
 	 * @param id
@@ -716,6 +743,31 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			}
 		}
 
+	}
+
+	/**
+	 * Cambiar el tiled del boton
+	 * @param numero
+	 */	
+	private void botonesTiledMusica(){
+		
+
+		//System.out.println("ESTRELLAS A MOSTRAR: "+numeroInt);
+
+		if(musicaBoton.getCurrentTileIndex()==0){
+			musicaBoton.setCurrentTileIndex(1);	
+		}else{
+			musicaBoton.setCurrentTileIndex(0);	
+		}
+	}
+	
+	private void botonesTiledSonido(){
+			
+		if(sonidoBoton.getCurrentTileIndex()==0){
+			sonidoBoton.setCurrentTileIndex(1);
+		}else{
+			sonidoBoton.setCurrentTileIndex(0);	
+		}
 	}
 
 	/**

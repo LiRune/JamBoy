@@ -68,8 +68,8 @@ public class ResourcesManager
 	public ITextureRegion menu_background_region;
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
-	public ITextureRegion musica_region;
-	public ITextureRegion sonido_region;
+	//public ITextureRegion musica_region;
+	//public ITextureRegion sonido_region;
 	public ITextureRegion personaje1_region;
 	public ITextureRegion personaje2_region;
 	public ITextureRegion personaje3_region;
@@ -86,6 +86,9 @@ public class ResourcesManager
 	public ITiledTextureRegion personajeSelec3_region;
 
 	public ITiledTextureRegion numeroEstrellas;
+	
+	public ITiledTextureRegion musica_region;	
+	public ITiledTextureRegion sonido_region;
 
 
 	// Texturas del juego //
@@ -195,8 +198,8 @@ public class ResourcesManager
 		
 		play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play.png");
 		options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "options.png");
-		musica_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "musica1.png");
-		sonido_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "efectos.png");
+		//musica_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "musica1.png");
+		//sonido_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "efectos.png");
 		jugar_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "jugar.png");		
 		personaje1_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "cuadrado1.png");
 		personaje2_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "cuadrado2.png");
@@ -209,6 +212,9 @@ public class ResourcesManager
 		volverMenu_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "volver.png");
 		about_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "acerca.png");
 		seleccionPersonaje_region =BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "personaje.png");
+		
+		musica_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "musica.png", 2, 1);
+		sonido_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "sonido.png", 2, 1);
 		
 		
 		try 
