@@ -90,7 +90,8 @@ public class DataBase extends SQLiteOpenHelper
 			return false;
 		}
 	}
-
+	
+	
 	
 	/**
 	 * Hace una consulta a la base de datos para saber si el nivel ha sido superado
