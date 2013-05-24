@@ -33,6 +33,8 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.input.touch.controller.MultiTouchController;
+import org.andengine.input.touch.detector.HoldDetector;
+import org.andengine.input.touch.detector.HoldDetector.IHoldDetectorListener;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
@@ -76,7 +78,7 @@ import com.holycow.pool.BalasPool;
  *
  */
 
-public class GameScene extends BaseScene implements IOnSceneTouchListener
+public class GameScene extends BaseScene implements IOnSceneTouchListener, IHoldDetectorListener
 {
 	private int spawnEnemigo;
 	private int contEnemigos = 0;
@@ -97,6 +99,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private boolean moverPausa=true;
 
+	private boolean pulsando=false;
 
 	private static final String TAG_ENTITY = "entity";
 	private static final String TAG_ENTITY_ATTRIBUTE_X = "x";
@@ -589,17 +592,19 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					case TouchEvent.ACTION_DOWN:  
 						isTouchedFlag = true;
 						player.runLeft();
+						pulsando=true;
 						if(player.getFootContacts()==0 || golpeado==true){
 							System.out.println("HOLAAAAAAAAAAAAAAAAA");
 							player.getBody().getFixtureList().get(0).setFriction(0);
+							
 						}
-
+						
 						break;
 
 					case TouchEvent.ACTION_UP:  
 						isTouchedFlag = false;
 						player.stop();
-
+						pulsando=false;
 						break;
 
 
@@ -622,15 +627,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					case TouchEvent.ACTION_DOWN:
 						isTouchedFlag = true;
 						player.runRight();
+						pulsando=true;
 						if(player.getFootContacts()==0 || golpeado==true){
 							System.out.println("HOLAAAAAAAAAAAAAAAAA");
 							player.getBody().getFixtureList().get(0).setFriction(0);
+							
 						}
 						break;
 
 					case TouchEvent.ACTION_UP:  
 						isTouchedFlag = false;
 						player.stop();
+						pulsando=false;
 						break;
 
 
@@ -1042,12 +1050,17 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							}
 							else{
 								player.setVida(player.getVida() - 1);
-								if(player.getX() > enemigo.getX()){
+								/*if(player.getX() > enemigo.getX()){
+									
 									player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x +8, 6));
+									//player.getBody().setLinearVelocity(new Vector2(-5, player.getBody().getLinearVelocity().y)); 
+								
 								}
 								if(player.getX() < enemigo.getX()){
+									
 									player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x -8, 6));
-								}
+									//player.getBody().setLinearVelocity(new Vector2(5, player.getBody().getLinearVelocity().y)); 
+								}*/
 
 								if(heart3.isVisible()) {
 									heart3.setVisible(false);
@@ -1058,24 +1071,32 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 								else if(heart1.isVisible()) {
 									heart1.setVisible(false);
 								}
-
+								if(pulsando){
+									player.getBody().getFixtureList().get(0).setFriction(0);
+									if(player.getX() > enemigo.getX()){
+										player.getBody().setLinearVelocity(new Vector2(-5, player.getBody().getLinearVelocity().y)); 
+									}else{
+										player.getBody().setLinearVelocity(new Vector2(5, player.getBody().getLinearVelocity().y)); 
+									}
+								}
+								else{
+									player.getBody().getFixtureList().get(0).setFriction(100);
+								}
 								golpeado=true;
 							}
-
-							player.getBody().getFixtureList().get(0).setFriction(100);
+							
+								
+							
 
 							break;
 						}
 						
-						if (x1.getBody().getUserData().equals("enemigo0") && x2.getBody().getUserData().equals("bala"))
+						if (x1.getBody().getUserData().equals("enemigo"+spawnEnemigo) && x2.getBody().getUserData().equals("bala"))
 						{
-							if(enemigo.getBody().getUserData() == "enemigo0" ){
-								System.out.println("ENEMIGO PROBANDOOOOOOOOOO: "+enemigo.getBody().getUserData());
-							}
-							System.out.println("ENEMIGO GOLPEADO1111111111111111111: "+enemigo.getBody().getUserData());
-							if(enemigo.getBody().getUserData() == "enemigo0" ){
-								enemigo.setVida(enemigo.getVida() - 1);
-							}
+							
+							
+							enemigo.setVida(enemigo.getVida() - 1);
+							
 							
 
 							bala.setColisionEnemigo(true);
@@ -1260,5 +1281,29 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		}
 
 		db2.close();*/
+	}
+
+	@Override
+	public void onHoldStarted(HoldDetector pHoldDetector, int pPointerID,
+			float pHoldX, float pHoldY) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onHold(HoldDetector pHoldDetector, long pHoldTimeMilliseconds,
+			int pPointerID, float pHoldX, float pHoldY) {
+		// TODO Auto-generated method stub
+		pulsando=true;
+		player.getBody().getFixtureList().get(0).setFriction(0);
+		
+	}
+
+	@Override
+	public void onHoldFinished(HoldDetector pHoldDetector,
+			long pHoldTimeMilliseconds, int pPointerID, float pHoldX,
+			float pHoldY) {
+		// TODO Auto-generated method stub
+		
 	}
 }

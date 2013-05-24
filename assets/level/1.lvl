@@ -20,14 +20,14 @@
 	<entity x="970" y="380" type="coin"/>
 	<entity x="1280" y="200" type="levelComplete"/>
 	<entity x="60" y="135" type="player"/>
-	<entity x="1000" y="135" type="enemy"/>
+	
 	<entity x="600" y="135" type="enemy"/>
 	
 	
 	
 	
-	<entity x="700" y="200" type="heart"/>
-	<entity x="800" y="200" type="heart"/>
+	<!--<entity x="700" y="200" type="heart"/>
+	<entity x="800" y="200" type="heart"/>-->
 	
 	<entity x="500" y="140" type="key"/>
 	<entity x="600" y="140" type="key"/>
