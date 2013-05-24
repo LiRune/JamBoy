@@ -97,14 +97,14 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private AnimatedSpriteMenuItem musicaBoton;
 
 	private AnimatedSpriteMenuItem Nivel1;
-	private AnimatedSpriteMenuItem Nivel2;
+	private static AnimatedSpriteMenuItem Nivel2;
 
 
 	// Textos
 	private Text puntuaciones;
 	private Text puntosText;
 	private Text nivel1Text;
-	private Text nivel2Text;
+	private static Text nivel2Text;
 	private Text samir;
 	private Text juanjo;
 	private Text ruben;
@@ -128,8 +128,26 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	// GETTERS AND SETTERS
 	//---------------------------------------------
 
+	
+	
 	public static int getIdPersonaje() {
 		return idPersonaje;
+	}
+
+	public static AnimatedSpriteMenuItem getNivel2() {
+		return Nivel2;
+	}
+
+	public void setNivel2(AnimatedSpriteMenuItem nivel2) {
+		Nivel2 = nivel2;
+	}
+
+	public static Text getNivel2Text() {
+		return nivel2Text;
+	}
+
+	public void setNivel2Text(Text nivel2Text) {
+		this.nivel2Text = nivel2Text;
 	}
 
 	public static void setIdPersonaje(int idPersonaje) {

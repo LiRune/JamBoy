@@ -1063,18 +1063,23 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							}
 
 							player.getBody().getFixtureList().get(0).setFriction(100);
-							
+
 							break;
 						}
-
-						if (x1.getBody().getUserData().equals("enemigo"+spawnEnemigo) && x2.getBody().getUserData().equals("bala"))
+						
+						if (x1.getBody().getUserData().equals("enemigo0") && x2.getBody().getUserData().equals("bala"))
 						{
-							System.out.println("ENEMIGO GOLPEADO: "+enemigo.getBody().getUserData());
-							enemigo.setVida(enemigo.getVida() - 1);
+							if(enemigo.getBody().getUserData() == "enemigo0" ){
+								System.out.println("ENEMIGO PROBANDOOOOOOOOOO: "+enemigo.getBody().getUserData());
+							}
+							System.out.println("ENEMIGO GOLPEADO1111111111111111111: "+enemigo.getBody().getUserData());
+							if(enemigo.getBody().getUserData() == "enemigo0" ){
+								enemigo.setVida(enemigo.getVida() - 1);
+							}
+							
 
 							bala.setColisionEnemigo(true);
-
-
+							
 
 							if(enemigo.getVida() == 0)
 							{
@@ -1082,7 +1087,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 								ResourcesManager.enemigo_muerte.play();
 							}
 
-							explosion = new AnimatedSprite(enemigo.getX(), enemigo.getY(), getResourcesManager().explosion_region, vbom)
+							/*explosion = new AnimatedSprite(enemigo.getX(), enemigo.getY(), getResourcesManager().explosion_region, vbom)
 							{
 								@Override
 								protected void onManagedUpdate(float pSecondsElapsed) 
@@ -1096,13 +1101,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 										setIgnoreUpdate(true);
 									}
 								}
-							};
-
-							attachChild(explosion);
-							explosion.animate(100, 0);
+							};*/
 							
-							break;
+
+							//attachChild(explosion);
+							//explosion.animate(100, 0);
 						}
+						
+						
 
 						spawnEnemigo++;
 					}
@@ -1139,27 +1145,26 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						{
 							ec1 = spawnEnemigo;
 						}
-						
+
 						if(x2.getBody().getUserData().equals("enemigo"+spawnEnemigo))
 						{
 							ec2 = spawnEnemigo;
 						}
-						
+
 						if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo"+spawnEnemigo)) {
 							contact.setEnabled(false);
+							
 						}				
 
 						if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("bala")) {
 							contact.setEnabled(false);
+							
 						}
-						
-						if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("bala")) {
-							contact.setEnabled(false);
-						}
+
 						
 						spawnEnemigo++;
 					}
-					
+
 					if (x1.getBody().getUserData().equals("enemigo"+ec1) && x2.getBody().getUserData().equals("enemigo"+ec2)) {
 						contact.setEnabled(false);
 					}	
@@ -1205,7 +1210,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						}	
 					}*/
 				}
-
 				spawnEnemigo = 0;
 			}
 		};
@@ -1230,6 +1234,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		}
 
 		if(DataBase.compareScore(MainMenuScene.getIdNivel(), score)){
+			//Actualiza el boton de seleccion de nivel
+			if(MainMenuScene.getIdNivel()==1){
+				MainMenuScene.getNivel2().setCurrentTileIndex(0);
+				MainMenuScene.getNivel2Text().setVisible(true);				
+			}
+			
 			db.execSQL("UPDATE Niveles SET Puntuacion = "+score+", Estrellas= "+estrellas+" WHERE Numero = "+MainMenuScene.getIdNivel());
 		}
 		db.close();
