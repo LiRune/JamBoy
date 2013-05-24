@@ -26,17 +26,20 @@ public abstract class Enemigo extends AnimatedSprite
 	// VARIABLES
 	// ---------------------------------------------
 
+	private Enemigo enemigo;
 	private Body body;
-	private int vida = 3;
+	private int vida;
+	private Player player;
 
 	// ---------------------------------------------
 	// CONSTRUCTOR
 	// ---------------------------------------------
 
-	public Enemigo(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld, int vida)
+	public Enemigo(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld, int vida, Player player)
 	{
 		super(pX, pY, ResourcesManager.getInstance().enemy_region, vbo);
 		this.vida = vida;
+		this.player = player;
 		createPhysics(camera, physicsWorld);
 	}
 
@@ -63,7 +66,6 @@ public abstract class Enemigo extends AnimatedSprite
 	// ---------------------------------------------
 	// LÓGICA DE CLASE
 	// ---------------------------------------------
-
 	
 	/**
 	 * Crea las fisicas del enemigo
@@ -71,7 +73,8 @@ public abstract class Enemigo extends AnimatedSprite
 	 * @param physicsWorld
 	 */
 	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
-	{		
+	{
+		enemigo = this;
 		body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
 		body.setUserData("enemigo");
 		body.setFixedRotation(true);
@@ -90,7 +93,7 @@ public abstract class Enemigo extends AnimatedSprite
 					onDie();
 				}
 				
-				
+				enemigo.seguirJugador(camera, player);
 			}
 		});
 	}
