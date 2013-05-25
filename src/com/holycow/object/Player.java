@@ -2,6 +2,8 @@ package com.holycow.object;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -30,9 +32,14 @@ public abstract class Player extends AnimatedSprite
 	// VARIABLES
 	// ---------------------------------------------
 	
+	private Player player;
 	private Body body;
     private int footContacts = 0;
     private int vida = 3;
+    private boolean onGround = true;
+    private Engine engine = ResourcesManager.getInstance().engine;
+    private boolean right = false;
+    private boolean left = false;
 	
 	// ---------------------------------------------
 	// CONSTRUCTOR
@@ -73,6 +80,30 @@ public abstract class Player extends AnimatedSprite
 		this.vida = vida;
 	}
 	
+	public boolean isOnGround() {
+		return onGround;
+	}
+
+	public void setOnGround(boolean onGround) {
+		this.onGround = onGround;
+	}
+	
+	public boolean isRight() {
+		return right;
+	}
+
+	public void setRight(boolean right) {
+		this.right = right;
+	}
+	
+	public boolean isLeft() {
+		return left;
+	}
+
+	public void setLeft(boolean left) {
+		this.left = left;
+	}
+	
 	// ---------------------------------------------
 	// CLASS LOGIC
 	// ---------------------------------------------
@@ -84,8 +115,8 @@ public abstract class Player extends AnimatedSprite
 	 */
 	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
 	{		
+		player = this;
 		body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
-
 		body.setUserData("player");
 		body.setFixedRotation(true);
 		
@@ -101,6 +132,22 @@ public abstract class Player extends AnimatedSprite
 				if (getY() <= 0 || vida == 0)
 				{					
 					onDie();
+				}
+				
+				if(onGround)
+				{
+					body.getFixtureList().get(0).setFriction(0);
+					
+					if(right)
+					{
+						runRight();
+						animate(100);
+					}
+					else if(left)
+					{
+						runLeft();
+						animate(100);
+					}
 				}
 	        }
 		});
@@ -135,6 +182,29 @@ public abstract class Player extends AnimatedSprite
 		animate(100);
 	}
 	
+	public boolean isRunningRight()
+	{
+		if(body.getLinearVelocity().x > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public boolean isRunningLeft()
+	{
+		if(body.getLinearVelocity().x < 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	/**
 	 * Player se para

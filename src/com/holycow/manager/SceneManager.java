@@ -165,8 +165,14 @@ public class SceneManager
 			{
 				mEngine.unregisterUpdateHandler(pTimerHandler);
 				ResourcesManager.getInstance().loadGameResources();
-				gameScene = new GameScene();
-				setScene(gameScene);
+				mEngine.registerUpdateHandler(new TimerHandler(4f, new ITimerCallback() 
+				{
+					public void onTimePassed(final TimerHandler pTimerHandler) 
+					{
+						gameScene = new GameScene();
+						setScene(gameScene);
+					}
+				}));
 			}
 		}));
 	}
