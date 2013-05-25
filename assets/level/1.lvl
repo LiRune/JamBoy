@@ -22,9 +22,7 @@
 	<entity x="60" y="135" type="player"/>
 	
 	<entity x="600" y="135" type="enemy"/>
-	
-	
-	
+	<entity x="1000" y="135" type="enemy"/>	
 	
 	<!--<entity x="700" y="200" type="heart"/>
 	<entity x="800" y="200" type="heart"/>-->

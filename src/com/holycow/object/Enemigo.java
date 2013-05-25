@@ -76,7 +76,7 @@ public abstract class Enemigo extends AnimatedSprite
 	{
 		enemigo = this;
 		body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
-		body.setUserData("enemigo");
+		//body.setUserData("enemigo");
 		body.setFixedRotation(true);
 
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, body, true, false)

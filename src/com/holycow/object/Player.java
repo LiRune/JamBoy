@@ -1,9 +1,16 @@
 package com.holycow.object;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.FadeInModifier;
+import org.andengine.entity.modifier.FadeOutModifier;
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -16,6 +23,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.holycow.manager.ResourcesManager;
+import com.holycow.scene.GameScene;
 
 /**
  * Clase que define las características del jugador
@@ -32,14 +40,15 @@ public abstract class Player extends AnimatedSprite
 	// VARIABLES
 	// ---------------------------------------------
 	
+	private Engine engine;
 	private Player player;
 	private Body body;
     private int footContacts = 0;
     private int vida = 3;
     private boolean onGround = true;
-    private Engine engine = ResourcesManager.getInstance().engine;
     private boolean right = false;
     private boolean left = false;
+    private boolean golpeado = false;
 	
 	// ---------------------------------------------
 	// CONSTRUCTOR
@@ -50,6 +59,7 @@ public abstract class Player extends AnimatedSprite
 		super(pX, pY, ResourcesManager.getInstance().player_region, vbo);
 		createPhysics(camera, physicsWorld);
 		camera.setChaseEntity(this);
+		this.engine = ResourcesManager.getInstance().engine;
 	}
 	
 	// ---------------------------------------------
@@ -104,6 +114,14 @@ public abstract class Player extends AnimatedSprite
 		this.left = left;
 	}
 	
+	public boolean isGolpeado() {
+		return golpeado;
+	}
+
+	public void setGolpeado(boolean golpeado) {
+		this.golpeado = golpeado;
+	}
+	
 	// ---------------------------------------------
 	// CLASS LOGIC
 	// ---------------------------------------------
@@ -114,7 +132,7 @@ public abstract class Player extends AnimatedSprite
 	 * @param physicsWorld
 	 */
 	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
-	{		
+	{
 		player = this;
 		body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
 		body.setUserData("player");
@@ -136,18 +154,30 @@ public abstract class Player extends AnimatedSprite
 				
 				if(onGround)
 				{
-					body.getFixtureList().get(0).setFriction(0);
-					
 					if(right)
 					{
 						runRight();
-						animate(100);
 					}
 					else if(left)
 					{
 						runLeft();
-						animate(100);
 					}
+				}
+				
+				if(golpeado && onGround)
+				{
+					player.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new FadeOutModifier(0.1f),
+							new FadeInModifier(0.1f))));
+					
+					engine.registerUpdateHandler(new TimerHandler(2f, true, new ITimerCallback()
+					{                      
+						public void onTimePassed(final TimerHandler pTimerHandler)
+						{
+							engine.unregisterUpdateHandler(pTimerHandler);
+							player.clearEntityModifiers();
+							golpeado=false;
+						}
+					}));
 				}
 	        }
 		});
@@ -161,10 +191,9 @@ public abstract class Player extends AnimatedSprite
 		{ 
 			setFlippedHorizontal(true); 
 		}
+		body.getFixtureList().get(0).setFriction(0);
 		body.setLinearVelocity(new Vector2(-5, body.getLinearVelocity().y)); 
 		final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100 };
-		
-		animate(100);
 	}
 	
 	
@@ -176,34 +205,9 @@ public abstract class Player extends AnimatedSprite
 		{ 
 			setFlippedHorizontal(false); 
 		}
+		body.getFixtureList().get(0).setFriction(0);
 		body.setLinearVelocity(new Vector2(5, body.getLinearVelocity().y)); 
 		final long[] PLAYER_ANIMATE = new long[] {100,100,100 };
-		
-		animate(100);
-	}
-	
-	public boolean isRunningRight()
-	{
-		if(body.getLinearVelocity().x > 0)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	public boolean isRunningLeft()
-	{
-		if(body.getLinearVelocity().x < 0)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
 	
 	/**
@@ -218,7 +222,7 @@ public abstract class Player extends AnimatedSprite
 		{
 			setFlippedHorizontal(false); 
 		}
-		
+		body.getFixtureList().get(0).setFriction(1000);
 		body.setLinearVelocity(new Vector2(0, body.getLinearVelocity().y)); 
 		final long[] PLAYER_ANIMATE = new long[] {0,0,0 };
 		

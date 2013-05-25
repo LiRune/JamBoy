@@ -1,6 +1,8 @@
 package com.holycow.scene;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.Engine;
@@ -80,6 +82,11 @@ import com.holycow.pool.BalasPool;
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener
 {
+	private List<Enemigo> enemigos;
+	private int idEnemigo = 0;
+	private int contactEnemigo1;
+	private int contactEnemigo2;
+	private int enemigoMuerto;
 	private int score = 0;
 	private int tiempo = 20;
 	private HUD gameHUD;
@@ -164,17 +171,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	@Override
 	public void createScene()
 	{
-
+		enemigos = new ArrayList<Enemigo>();
 		createBackground(MainMenuScene.getIdNivel());
 		createHUD();
 		createPhysics();
 		loadLevel(MainMenuScene.getIdNivel());
+		levelCompleteWindow = new LevelCompleteWindow(getVbom());
+		balasPool = new BalasPool(vbom, camera, physicsWorld, player);
 		createGameOverText();
 		//createControllers();
 		crearTemporizador();
 
-		balasPool = new BalasPool(vbom, camera, physicsWorld, player);
-		levelCompleteWindow = new LevelCompleteWindow(getVbom());
+
 
 		//setOnSceneTouchListener(this); 
 	}
@@ -409,12 +417,16 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						@Override
 						public void onDie()
 						{
-							enemigo.setVisible(false);
-							enemigo.detachSelf();
-							enemigo.clearUpdateHandlers();
-							enemigo.getBody().setActive(false);
+							enemigos.get(enemigoMuerto).setVisible(false);
+							enemigos.get(enemigoMuerto).detachSelf();
+							enemigos.get(enemigoMuerto).clearUpdateHandlers();
+							enemigos.get(enemigoMuerto).getBody().setActive(false);
 						}
 					};
+
+					enemigo.getBody().setUserData("enemigo"+idEnemigo);
+					enemigos.add(enemigo);
+					idEnemigo++;
 					levelObject= enemigo;
 				}
 
@@ -580,6 +592,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					switch(pAreaTouchEvent.getAction()) {
 					case TouchEvent.ACTION_DOWN:  
 						player.setLeft(true);
+						player.animate(100);
 						break;
 
 					case TouchEvent.ACTION_UP:  
@@ -604,6 +617,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					switch(pAreaTouchEvent.getAction()) {
 					case TouchEvent.ACTION_DOWN:
 						player.setRight(true);
+						player.animate(100);
 						break;
 
 					case TouchEvent.ACTION_UP:
@@ -658,7 +672,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		});
 
 		pausar = new ButtonSprite(750, 380, getResourcesManager().pausa_region , getVbom(), new OnClickListener() {
-			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) { 	 
+			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				pausa();
 			}
 		});
@@ -970,10 +984,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					if (x2.getBody().getUserData().equals("player"))
 					{
 						player.increaseFootContacts();
-					}
-					
-					if (x1.getBody().getUserData().equals("platform1") && x2.getBody().getUserData().equals("player"))
-					{
 						player.setOnGround(true);
 					}
 
@@ -996,92 +1006,89 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						x1.getBody().setType(BodyType.DynamicBody);
 					}
 
-					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo"))
+					idEnemigo = 0;
+					while(idEnemigo < enemigos.size())
 					{
-						//Si el jugador choca con el enemigo pega un salto hacia atras
-						if(golpeado)
+						if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo"+idEnemigo))
 						{
-							engine.registerUpdateHandler(contador = new TimerHandler(0.5f, true, new ITimerCallback()
-							{                      
-								public void onTimePassed(final TimerHandler pTimerHandler)
+							//Si el jugador choca con el enemigo pega un salto hacia atras
+							if(!player.isGolpeado())
+							{
+								player.setGolpeado(true);
+								player.setOnGround(false);
+								player.setVida(player.getVida() - 1);
+
+								if(player.getX() > enemigos.get(idEnemigo).getX())
 								{
-									System.out.println("DENTRO DEL TEMPORIZADOR");
-									engine.unregisterUpdateHandler(contador);
-									golpeado=false;
+									player.getBody().setLinearVelocity(0,0);
+									player.getBody().setLinearVelocity(new Vector2(4, 6));
+
 								}
-							}));
+								if(player.getX() < enemigos.get(idEnemigo).getX())
+								{
+
+									player.getBody().setLinearVelocity(0,0);
+									player.getBody().setLinearVelocity(new Vector2(-4, 6));
+								}
+
+								if(heart3.isVisible())
+								{
+									heart3.setVisible(false);
+								}
+								else if(heart2.isVisible())
+								{
+									heart2.setVisible(false);
+								}
+								else if(heart1.isVisible())
+								{
+									heart1.setVisible(false);
+								}
+							}
+							
+							break;
 						}
-						else
-						{
-							player.setOnGround(false);
-							player.setVida(player.getVida() - 1);
-							if(player.getX() > enemigo.getX())
-							{
-								player.getBody().setLinearVelocity(0,0);
-								player.getBody().setLinearVelocity(new Vector2(4, 6));
 
-							}
-							if(player.getX() < enemigo.getX())
-							{
-
-								player.getBody().setLinearVelocity(0,0);
-								player.getBody().setLinearVelocity(new Vector2(-4, 6));
-							}
-
-							if(heart3.isVisible())
-							{
-								heart3.setVisible(false);
-							}
-							else if(heart2.isVisible())
-							{
-								heart2.setVisible(false);
-							}
-							else if(heart1.isVisible())
-							{
-								heart1.setVisible(false);
-							}
-
-							golpeado=true;
-							player.getBody().getFixtureList().get(0).setFriction(1000);
-						}
+						idEnemigo++;
 					}
 
-					if (x1.getBody().getUserData().equals("enemigo") && x2.getBody().getUserData().equals("bala"))
+					idEnemigo = 0;
+					while(idEnemigo < enemigos.size())
 					{
-
-
-						enemigo.setVida(enemigo.getVida() - 1);
-
-
-
-						bala.setColisionEnemigo(true);
-
-
-						if(enemigo.getVida() == 0)
+						if (x1.getBody().getUserData().equals("enemigo"+idEnemigo) && x2.getBody().getUserData().equals("bala"))
 						{
-							addToScore(50);
-							ResourcesManager.enemigo_muerte.play();
+							enemigos.get(idEnemigo).setVida(enemigos.get(idEnemigo).getVida() - 1);
+							bala.setColisionEnemigo(true);
+
+							if(enemigos.get(idEnemigo).getVida() == 0)
+							{
+								enemigoMuerto = idEnemigo;
+								addToScore(50);
+								ResourcesManager.enemigo_muerte.play();
+							}
+
+							explosion = new AnimatedSprite(enemigos.get(idEnemigo).getX(), enemigos.get(idEnemigo).getY(), getResourcesManager().explosion_region, vbom)
+							{
+								@Override
+								protected void onManagedUpdate(float pSecondsElapsed) 
+								{
+									super.onManagedUpdate(pSecondsElapsed);
+
+									if(!explosion.isAnimationRunning())
+									{
+										detachChild(explosion);
+										explosion.setVisible(false);
+										setIgnoreUpdate(true);
+									}
+								}
+							};
+
+
+							attachChild(explosion);
+							explosion.animate(100, 0);
+							break;
 						}
 
-						explosion = new AnimatedSprite(enemigo.getX(), enemigo.getY(), getResourcesManager().explosion_region, vbom)
-						{
-							@Override
-							protected void onManagedUpdate(float pSecondsElapsed) 
-							{
-								super.onManagedUpdate(pSecondsElapsed);
-
-								if(!explosion.isAnimationRunning())
-								{
-									detachChild(explosion);
-									explosion.setVisible(false);
-									setIgnoreUpdate(true);
-								}
-							}
-						};
-
-
-						attachChild(explosion);
-						explosion.animate(100, 0);
+						idEnemigo++;
 					}
 				}
 			}
@@ -1105,6 +1112,25 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				final Fixture x1 = contact.getFixtureA();
 				final Fixture x2 = contact.getFixtureB();
 
+				idEnemigo = 0;
+				contactEnemigo1 = 0;
+				contactEnemigo2 = 0;
+				
+				while(idEnemigo < enemigos.size())
+				{
+					if(x1.getBody().getUserData().equals("enemigo"+idEnemigo))
+					{
+						contactEnemigo1 = idEnemigo;
+					}
+					
+					if(x2.getBody().getUserData().equals("enemigo"+idEnemigo))
+					{
+						contactEnemigo2 = idEnemigo;
+					}
+					
+					idEnemigo++;
+				}
+				
 				if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
 				{
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) 
@@ -1117,7 +1143,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						contact.setEnabled(false);
 					}
 
-					if (x1.getBody().getUserData().equals("enemigo") && x2.getBody().getUserData().equals("enemigo")) 
+					if (x1.getBody().getUserData().equals("enemigo"+contactEnemigo1) && x2.getBody().getUserData().equals("enemigo"+contactEnemigo2)) 
 					{
 						contact.setEnabled(false);
 					}
@@ -1127,7 +1153,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 			public void postSolve(Contact contact, ContactImpulse impulse)
 			{
-				
+
 			}
 		};
 
@@ -1160,22 +1186,5 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 			db.execSQL("UPDATE Niveles SET Puntuacion = "+score+", Estrellas= "+estrellas+" WHERE Numero = "+MainMenuScene.getIdNivel());
 		}
 		db.close();
-
-
-		/*SQLiteDatabase db2 = getResourcesManager().getGame().getReadableDatabase();
-
-		Cursor c = db2.rawQuery(" SELECT Puntuacion, Estrellas FROM Niveles", null);
-		if (c.moveToFirst()) {
-			//Recorremos el cursor hasta que no haya más registros
-			do {
-				String algo = c.getString(0);
-				String algo2 = c.getString(1);
-				System.out.println("PUNTUACION: "+algo);				
-				System.out.println("ESTRELLAS: "+algo2);
-
-			} while(c.moveToNext());
-		}
-
-		db2.close();*/
 	}
 }
