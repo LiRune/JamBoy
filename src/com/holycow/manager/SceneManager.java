@@ -165,7 +165,7 @@ public class SceneManager
 			{
 				mEngine.unregisterUpdateHandler(pTimerHandler);
 				ResourcesManager.getInstance().loadGameResources();
-				mEngine.registerUpdateHandler(new TimerHandler(4f, new ITimerCallback() 
+				mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() 
 				{
 					public void onTimePassed(final TimerHandler pTimerHandler) 
 					{
