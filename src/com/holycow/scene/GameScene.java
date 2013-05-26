@@ -86,7 +86,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private int idEnemigo = 0;
 	private int contactEnemigo1;
 	private int contactEnemigo2;
-	private String enemigoMuerto;
+	private int enemigoMuerto;
 	private int score = 0;
 	private int tiempo = 20;
 	private HUD gameHUD;
@@ -417,20 +417,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						@Override
 						public void onDie()
 						{
-							idEnemigo = 0;
-							while(idEnemigo < enemigos.size())
-							{
-								if(enemigos.get(idEnemigo).getBody().getUserData().equals(enemigoMuerto))
-								{
-									enemigos.get(idEnemigo).setVisible(false);
-									enemigos.get(idEnemigo).detachSelf();
-									enemigos.get(idEnemigo).clearUpdateHandlers();
-									enemigos.get(idEnemigo).getBody().setActive(false);
-									break;
-								}
-								
-								idEnemigo++;
-							}
+							enemigos.get(enemigoMuerto).setVisible(false);
+							enemigos.get(enemigoMuerto).detachSelf();
+							enemigos.get(enemigoMuerto).clearUpdateHandlers();
+							enemigos.get(enemigoMuerto).getBody().setActive(false);
 						}
 					};
 
@@ -609,7 +599,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						player.setLeft(false);
 						player.stop();
 						break;
-						
+
 					case TouchEvent.ACTION_CANCEL:
 						player.setLeft(false);
 						player.stop();
@@ -639,7 +629,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						player.setRight(false);
 						player.stop();
 						break;
-						
+
 					case TouchEvent.ACTION_CANCEL:
 						player.setRight(false);
 						player.stop();
@@ -956,6 +946,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public void pausa()
 	{
 		PAUSED=true;
+
+		//El player se para cuando se pausa
 		player.setRight(false);
 		player.setLeft(false);
 
@@ -1036,7 +1028,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 					idEnemigo = 0;
 					while(idEnemigo < enemigos.size())
 					{
-						if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo"+idEnemigo))
+						if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo"+idEnemigo) ||
+								x1.getBody().getUserData().equals("enemigo"+idEnemigo) && x2.getBody().getUserData().equals("player"))
 						{
 							//Si el jugador choca con el enemigo pega un salto hacia atras
 							if(!player.isGolpeado())
@@ -1080,15 +1073,17 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 					idEnemigo = 0;
 					while(idEnemigo < enemigos.size())
-					{
-						if (x1.getBody().getUserData().equals("enemigo"+idEnemigo) && x2.getBody().getUserData().equals("bala"))
+					{					
+
+						if ((x1.getBody().getUserData().equals("enemigo"+idEnemigo) && x2.getBody().getUserData().equals("bala")) ||
+								(x1.getBody().getUserData().equals("bala") && x2.getBody().getUserData().equals("enemigo"+idEnemigo)))
 						{
 							enemigos.get(idEnemigo).setVida(enemigos.get(idEnemigo).getVida() - 1);
 							bala.setColisionEnemigo(true);
 
 							if(enemigos.get(idEnemigo).getVida() == 0)
 							{
-								enemigoMuerto = x1.getBody().getUserData().toString();
+								enemigoMuerto = idEnemigo;
 								addToScore(50);
 								ResourcesManager.enemigo_muerte.play();
 							}
@@ -1136,31 +1131,31 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 			public void preSolve(Contact contact, Manifold oldManifold)
 			{
-				final Fixture x1 = contact.getFixtureA();
+				final Fixture x1 = contact.getFixtureA(); 
 				final Fixture x2 = contact.getFixtureB();
-
-				idEnemigo = 0;
-				contactEnemigo1 = 0;
-				contactEnemigo2 = 0;
-
-				while(idEnemigo < enemigos.size())
-				{
-					if(x1.getBody().getUserData().equals("enemigo"+idEnemigo))
-					{
-						contactEnemigo1 = idEnemigo;
-					}
-
-					if(x2.getBody().getUserData().equals("enemigo"+idEnemigo))
-					{
-						contactEnemigo2 = idEnemigo;
-					}
-
-					idEnemigo++;
-				}
 
 				if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
 				{
-					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) 
+					idEnemigo = 0;
+					contactEnemigo1 = 0;
+					contactEnemigo2 = 0;
+
+					while(idEnemigo < enemigos.size())
+					{
+						if(x1.getBody().getUserData().equals("enemigo"+idEnemigo))
+						{
+							contactEnemigo1 = idEnemigo;
+						}
+
+						if(x2.getBody().getUserData().equals("enemigo"+idEnemigo))
+						{
+							contactEnemigo2 = idEnemigo;
+						}
+
+						idEnemigo++;
+					}
+					
+					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo"+contactEnemigo2)) 
 					{
 						contact.setEnabled(false);
 					}				
