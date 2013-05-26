@@ -151,14 +151,6 @@ public abstract class Player extends AnimatedSprite
 				{					
 					onDie();
 				}
-				if(GameScene.PAUSED){
-					right=false;
-					left=false;	
-					System.out.println("NUMERO DE ANIMACION DEL PLAYER: "+getCurrentTileIndex());
-					setCurrentTileIndex(getCurrentTileIndex());
-					stop();
-					
-				}
 				
 				if(onGround)
 				{
@@ -171,7 +163,6 @@ public abstract class Player extends AnimatedSprite
 						runLeft();
 					}
 				}
-				
 				
 				if(golpeado && onGround)
 				{
@@ -232,14 +223,11 @@ public abstract class Player extends AnimatedSprite
 			setFlippedHorizontal(false); 
 		}
 		body.getFixtureList().get(0).setFriction(1000);
-		body.setLinearVelocity(0, 0); 
+		body.setLinearVelocity(new Vector2(0, body.getLinearVelocity().y)); 
+		final long[] PLAYER_ANIMATE = new long[] {0,0,0 };
 		
-		final long[] PLAYER_ANIMATE = new long[] {0,0,0 };		
-		animate(PLAYER_ANIMATE, 0, 2, false);
-		
-		
-		
-		//stopAnimation();
+		setCurrentTileIndex(0);
+		stopAnimation();
 	}
 	
 	/**

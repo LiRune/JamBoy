@@ -141,7 +141,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private boolean golpeado=false;
 
-	public static boolean PAUSED = false;
+	boolean PAUSED = false;
 
 	private int estrellas;
 
@@ -591,7 +591,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				if(moverPausa){
 					switch(pAreaTouchEvent.getAction()) {
 					case TouchEvent.ACTION_DOWN:  
-						player.setLeft(true);					
+						player.setLeft(true);
 						player.animate(100);
 						break;
 
@@ -616,7 +616,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				if(moverPausa){
 					switch(pAreaTouchEvent.getAction()) {
 					case TouchEvent.ACTION_DOWN:
-						player.setRight(true);						
+						player.setRight(true);
 						player.animate(100);
 						break;
 
@@ -933,7 +933,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public void pausa()
 	{
 		PAUSED=true;
-		player.setCurrentTileIndex(0);
+		player.setRight(false);
+		player.setLeft(false);
+		player.stop();
+		
+		
 		pausar.setVisible(false);
 		pausar.setEnabled(false);
 		reanudar.setVisible(true);
