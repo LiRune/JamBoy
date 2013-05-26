@@ -136,8 +136,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public ButtonSprite reanudar;
 	public Sprite left;
 	public Sprite right;
-	public ButtonSprite jump;
-	public ButtonSprite disp;
+	public Sprite jump;
+	public Sprite disp;
 
 	private boolean golpeado=false;
 
@@ -665,21 +665,50 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		restartJuego.setEnabled(false);
 
 
+		
+		disp = new Sprite(620, 50, getResourcesManager().atacar_region, vbom){
 
-		disp = new ButtonSprite(620, 50, getResourcesManager().atacar_region , getVbom(), new OnClickListener() {
-			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				bala = balasPool.obtainPoolItem();
-				player.disparar(player.getX(), player.getY(), engine, bala);
+			@Override
+			public boolean onAreaTouched(final TouchEvent pAreaTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				if(moverPausa){
+					switch(pAreaTouchEvent.getAction()) {
+					case TouchEvent.ACTION_DOWN:
+						bala = balasPool.obtainPoolItem();
+						player.disparar(player.getX(), player.getY(), engine, bala);
+						break;					
+					}
+				}
+				return true;
 			}
-		});
 
+		};
 
+		this.registerTouchArea(disp);
+		
+		jump = new Sprite(750, 50, getResourcesManager().saltar_region, vbom){
 
-		jump = new ButtonSprite(750, 50, getResourcesManager().saltar_region , getVbom(), new OnClickListener() {
-			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) { 	 
-				player.jump();
+			@Override
+			public boolean onAreaTouched(final TouchEvent pAreaTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				if(moverPausa){
+					switch(pAreaTouchEvent.getAction()) {
+					case TouchEvent.ACTION_DOWN:
+						player.jump();
+						break;
+					}
+				}
+				return true;
 			}
-		});
+
+		};
+
+		this.registerTouchArea(jump);
+		
+
+		
+
+
+
+		
 
 		pausar = new ButtonSprite(750, 380, getResourcesManager().pausa_region , getVbom(), new OnClickListener() {
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -698,10 +727,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				left.setVisible(true);
 				right.setVisible(true);
 				jump.setVisible(true);		
-				jump.setEnabled(true);
-
+					
 				disp.setVisible(true);
-				disp.setEnabled(true );
+				
 
 
 				moverPausa=true;
@@ -872,7 +900,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		volverMenu.setEnabled(true);
 		restartJuego.setEnabled(true);
 		disp.setVisible(false);
-		disp.setEnabled(false);
+		
+		moverPausa=false;
 		engine.unregisterUpdateHandler(temporizador);
 		pausar.setVisible(false);
 		pausar.setEnabled(false);
@@ -913,9 +942,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		right.setVisible(false);
 		reloj.setVisible(false);
 		jump.setVisible(false);		
-		jump.setEnabled(false);
+		
 		disp.setVisible(false);
-		disp.setEnabled(false);
+		
+		
+		moverPausa=false;
+		
 		pausar.setVisible(false);
 		pausar.setEnabled(false);
 		volverMenu.setVisible(true);
@@ -946,12 +978,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public void pausa()
 	{
 		PAUSED=true;
-
-		//El player se para cuando se pausa
-		player.setRight(false);
-		player.setLeft(false);
-
-
 		pausar.setVisible(false);
 		pausar.setEnabled(false);
 		reanudar.setVisible(true);
@@ -960,10 +986,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		right.setVisible(false);
 
 		jump.setVisible(false);		
-		jump.setEnabled(false);
+		
 
 		disp.setVisible(false);
-		disp.setEnabled(false);
+		
 
 		volverMenu.setVisible(true);
 		volverMenu.setEnabled(true);
@@ -1073,13 +1099,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 					idEnemigo = 0;
 					while(idEnemigo < enemigos.size())
-					{					
-
+					{	
 						if ((x1.getBody().getUserData().equals("enemigo"+idEnemigo) && x2.getBody().getUserData().equals("bala")) ||
 								(x1.getBody().getUserData().equals("bala") && x2.getBody().getUserData().equals("enemigo"+idEnemigo)))
 						{
 							enemigos.get(idEnemigo).setVida(enemigos.get(idEnemigo).getVida() - 1);
 							bala.setColisionEnemigo(true);
+
+							System.out.println("A QUE ENEMGIO DISPARA: "+x1.getBody().getUserData());
 
 							if(enemigos.get(idEnemigo).getVida() == 0)
 							{
@@ -1109,7 +1136,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 							explosion.animate(100, 0);
 							break;
 						}
-
+						
 						idEnemigo++;
 					}
 				}
@@ -1133,7 +1160,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 			{
 				final Fixture x1 = contact.getFixtureA(); 
 				final Fixture x2 = contact.getFixtureB();
-
+				
 				if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
 				{
 					idEnemigo = 0;
