@@ -86,7 +86,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private int idEnemigo = 0;
 	private int contactEnemigo1;
 	private int contactEnemigo2;
-	private int enemigoMuerto;
+	private String enemigoMuerto;
 	private int score = 0;
 	private int tiempo = 20;
 	private HUD gameHUD;
@@ -417,10 +417,20 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						@Override
 						public void onDie()
 						{
-							enemigos.get(enemigoMuerto).setVisible(false);
-							enemigos.get(enemigoMuerto).detachSelf();
-							enemigos.get(enemigoMuerto).clearUpdateHandlers();
-							enemigos.get(enemigoMuerto).getBody().setActive(false);
+							idEnemigo = 0;
+							while(idEnemigo < enemigos.size())
+							{
+								if(enemigos.get(idEnemigo).getBody().getUserData().equals(enemigoMuerto))
+								{
+									enemigos.get(idEnemigo).setVisible(false);
+									enemigos.get(idEnemigo).detachSelf();
+									enemigos.get(idEnemigo).clearUpdateHandlers();
+									enemigos.get(idEnemigo).getBody().setActive(false);
+									break;
+								}
+								
+								idEnemigo++;
+							}
 						}
 					};
 
@@ -599,6 +609,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						player.setLeft(false);
 						player.stop();
 						break;
+						
+					case TouchEvent.ACTION_CANCEL:
+						player.setLeft(false);
+						player.stop();
+						break;
 					}
 				}
 				return true;
@@ -621,6 +636,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 						break;
 
 					case TouchEvent.ACTION_UP:
+						player.setRight(false);
+						player.stop();
+						break;
+						
+					case TouchEvent.ACTION_CANCEL:
 						player.setRight(false);
 						player.stop();
 						break;
@@ -701,6 +721,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 				restartJuego.setVisible(false);
 				restartJuego.setEnabled(false);
+
+				player.stop();
+				player.clearEntityModifiers();
 
 				if (getResourcesManager().music != null)
 				{
@@ -935,9 +958,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		PAUSED=true;
 		player.setRight(false);
 		player.setLeft(false);
-		player.stop();
-		
-		
+
+
 		pausar.setVisible(false);
 		pausar.setEnabled(false);
 		reanudar.setVisible(true);
@@ -1049,7 +1071,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 									heart1.setVisible(false);
 								}
 							}
-							
+
 							break;
 						}
 
@@ -1066,7 +1088,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 							if(enemigos.get(idEnemigo).getVida() == 0)
 							{
-								enemigoMuerto = idEnemigo;
+								enemigoMuerto = x1.getBody().getUserData().toString();
 								addToScore(50);
 								ResourcesManager.enemigo_muerte.play();
 							}
@@ -1120,22 +1142,22 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				idEnemigo = 0;
 				contactEnemigo1 = 0;
 				contactEnemigo2 = 0;
-				
+
 				while(idEnemigo < enemigos.size())
 				{
 					if(x1.getBody().getUserData().equals("enemigo"+idEnemigo))
 					{
 						contactEnemigo1 = idEnemigo;
 					}
-					
+
 					if(x2.getBody().getUserData().equals("enemigo"+idEnemigo))
 					{
 						contactEnemigo2 = idEnemigo;
 					}
-					
+
 					idEnemigo++;
 				}
-				
+
 				if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
 				{
 					if (x1.getBody().getUserData().equals("player") && x2.getBody().getUserData().equals("enemigo")) 

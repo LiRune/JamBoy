@@ -5,6 +5,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="C:/Users/Juan José/Desktop/adt-bundle-windows-x86-20130219/sdk/platforms/android-17/android.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Mari Paz/Escritorio/adt-bundle-windows-x86-20130514/sdk/platforms/android-17/android.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
